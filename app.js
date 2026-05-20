@@ -1,8 +1,8 @@
 const APP = {
   name: "Tecnologia ESO · Projectes i reptes",
-  version: "v3",
+  version: "v4",
   line: "B",
-  cacheName: "tecnologia-eso-projectes-reptes-v3"
+  cacheName: "tecnologia-eso-projectes-reptes-v4"
 };
 
 const CURRICULUM = {
@@ -497,7 +497,7 @@ function renderCourseSelect() {
   select.innerHTML = Object.entries(COURSES).map(([id, course]) => {
     const suffix = course.status === "pendent" ? " · pendent" : "";
     return `<option value="${id}">${safeHtml(course.title + suffix)}</option>`;
-  }).join("\\n");
+  }).join("");
   select.value = state.course;
 }
 
@@ -510,14 +510,14 @@ function renderSituationSelect() {
     return;
   }
   select.disabled = false;
-  select.innerHTML = situations.map(s => `<option value="${s.id}">${safeHtml(s.title)}</option>`).join("\\n");
+  select.innerHTML = situations.map(s => `<option value="${s.id}">${safeHtml(s.title)}</option>`).join("");
   if (!situations.some(s => s.id === state.situationId)) state.situationId = situations[0].id;
   select.value = state.situationId;
 }
 
 function renderTabs() {
   const el = document.getElementById("tabs");
-  el.innerHTML = tabs.map(([id, label]) => `<button class="${state.view === id ? "active" : ""}" data-tab="${id}" type="button">${label}</button>`).join("\\n");
+  el.innerHTML = tabs.map(([id, label]) => `<button class="${state.view === id ? "active" : ""}" data-tab="${id}" type="button">${label}</button>`).join("");
 }
 
 function renderAll() {
@@ -560,9 +560,9 @@ function renderSituations() {
     <div class="situation-item ${s.id === state.situationId ? "active" : ""}" data-situation="${s.id}">
       <strong>${safeHtml(s.title)}</strong>
       <p class="small muted">${safeHtml(s.short)}</p>
-      <div class="tagrow">${s.competencies.map(c => `<span class="tag">${c}</span>`).join("\\n")}</div>
+      <div class="tagrow">${s.competencies.map(c => `<span class="tag">${c}</span>`).join("")}</div>
     </div>
-  `).join("\\n");
+  `).join("");
 
   const s = currentSituation();
   title.textContent = s.title;
@@ -570,7 +570,7 @@ function renderSituations() {
   tags.innerHTML = [
     ...s.blocks.map(b => `<span class="tag">${safeHtml(CURRICULUM.knowledgeBlocks[b])}</span>`),
     ...s.competencies.map(c => `<span class="tag warn">${c}</span>`)
-  ].join("\\n");
+  ].join("");
   teacherBox.innerHTML = `<strong>Orientació docent:</strong> ${safeHtml(s.teacher)}`;
 }
 
@@ -584,7 +584,7 @@ function renderTaller() {
       <label for="step-${step.key}" class="small">${safeHtml(step.prompt)}</label>
       <textarea id="step-${step.key}" data-response="${step.key}" placeholder="Escriu aquí la teva resposta...">${safeHtml(state.responses[step.key] || "")}</textarea>
     </div>
-  `).join("\\n");
+  `).join("");
 }
 
 function renderTools() {
@@ -606,10 +606,10 @@ function renderDecisionTool() {
             <label class="tiny">${c} · 1-4</label>
             <input type="number" min="1" max="4" data-decision-score="${opt}|${c}" value="${safeHtml(state.decision[opt]?.scores?.[c] || "")}" />
           </div>
-        `).join("\\n")}
+        `).join("")}
       </div>
     </div>
-  `).join("\\n");
+  `).join("");
 }
 
 function renderSustainabilityTool() {
@@ -626,7 +626,7 @@ function renderSustainabilityTool() {
       <label for="sus-${key}">${safeHtml(label)}</label>
       <textarea id="sus-${key}" data-sustainability="${key}" placeholder="Resposta...">${safeHtml(state.sustainability[key] || "")}</textarea>
     </div>
-  `).join("\\n");
+  `).join("");
 }
 
 function renderCurriculum() {
@@ -647,20 +647,20 @@ function renderCurriculum() {
     <p><strong>Producte final:</strong> ${safeHtml(s.product)}</p>
     <h3>Competències específiques</h3>
     <div class="curriculum-list">
-      ${s.competencies.map(c => `<div><strong>${c}</strong> · ${safeHtml(CURRICULUM.competencies[c])}</div>`).join("\\n")}
+      ${s.competencies.map(c => `<div><strong>${c}</strong> · ${safeHtml(CURRICULUM.competencies[c])}</div>`).join("")}
     </div>
     <h3 style="margin-top:14px;">Criteris d'avaluació</h3>
     <div class="curriculum-list">
-      ${s.criteria.map(c => `<div><strong>${c}</strong> · ${safeHtml(CURRICULUM.criteria[c])}</div>`).join("\\n")}
+      ${s.criteria.map(c => `<div><strong>${c}</strong> · ${safeHtml(CURRICULUM.criteria[c])}</div>`).join("")}
     </div>
   `;
 
   knowledge.innerHTML = `
     <h3>Blocs</h3>
-    <div class="tagrow">${s.blocks.map(b => `<span class="tag">${safeHtml(CURRICULUM.knowledgeBlocks[b])}</span>`).join("\\n")}</div>
+    <div class="tagrow">${s.blocks.map(b => `<span class="tag">${safeHtml(CURRICULUM.knowledgeBlocks[b])}</span>`).join("")}</div>
     <h3 style="margin-top:14px;">Sabers seleccionats</h3>
     <div class="curriculum-list">
-      ${s.knowledge.map(k => `<div>${safeHtml(k)}</div>`).join("\\n")}
+      ${s.knowledge.map(k => `<div>${safeHtml(k)}</div>`).join("")}
     </div>
   `;
 }
@@ -696,7 +696,7 @@ function renderRubric() {
             <td>${safeHtml(row.levels.AN)}</td>
             <td>${safeHtml(row.levels.AE)}</td>
           </tr>
-        `).join("\\n")}
+        `).join("")}
       </tbody>
     </table>
   `;
@@ -747,28 +747,24 @@ function renderReportRubricTable(s) {
             <td>${safeHtml(row.levels.AN)}</td>
             <td>${safeHtml(row.levels.AE)}</td>
           </tr>
-        `).join("\\n")}
+        `).join("")}
       </tbody>
     </table>
   `;
 }
 
-function renderReport() {
-  const s = currentSituation();
-  const report = document.getElementById("report");
-  if (!s) {
-    report.textContent = "Informe pendent: aquest curs encara no té situacions carregades.";
-    renderReportRubricTable(null);
-    return;
-  }
+function buildReportPlainText(s) {
+  if (!s) return "Informe pendent: aquest curs encara no té situacions carregades.";
 
+  const selectedLabel = RUBRIC_LEVELS[state.level];
   const stepText = PROJECT_STEPS.map(step => {
     const value = state.responses[step.key] || "[pendent de completar]";
     return `${step.title}
 ${value}`;
-  }).join("\n\n");
+  }).join("
 
-  const selectedLabel = RUBRIC_LEVELS[state.level];
+");
+
   const rubricText = state.includeRubricInReport
     ? `
 
@@ -776,7 +772,7 @@ Rúbrica formal LOMLOE de la situació d'aprenentatge
 ${buildRubricMarkdown(s)}`
     : "";
 
-  report.textContent = `${APP.name} · ${APP.version}
+  return `${APP.name} · ${APP.version}
 Línia: ${APP.line} · Projecte independent de Matemàtiques ESO
 
 Curs: ${currentCourse().title}
@@ -796,7 +792,8 @@ Criteris d'avaluació
 ${s.criteria.join(", ")}
 
 Sabers treballats
-${s.knowledge.map(k => "- " + k).join("\n")}
+${s.knowledge.map(k => "- " + k).join("
+")}
 
 Procés tecnològic
 ${stepText}
@@ -809,6 +806,99 @@ ${summarizeSustainability()}
 
 Conclusió final
 La proposta s'ha de valorar segons la seva utilitat, viabilitat tècnica, sostenibilitat, qualitat de la justificació i capacitat de comunicar les decisions preses.${rubricText}`;
+}
+
+function paragraphText(value) {
+  const text = value || "[pendent de completar]";
+  return safeHtml(text).replace(/
+/g, "<br>");
+}
+
+function renderReportList(items) {
+  return `<ul>${items.map(item => `<li>${safeHtml(item)}</li>`).join("")}</ul>`;
+}
+
+function renderReport() {
+  const s = currentSituation();
+  const report = document.getElementById("report");
+  if (!s) {
+    report.innerHTML = `<p class="placeholder">Informe pendent: aquest curs encara no té situacions carregades.</p>`;
+    renderReportRubricTable(null);
+    return;
+  }
+
+  const selectedLabel = RUBRIC_LEVELS[state.level];
+  const stepCards = PROJECT_STEPS.map((step, index) => `
+    <article class="report-step">
+      <div class="report-step-number">${index + 1}</div>
+      <div>
+        <h4>${safeHtml(step.title)}</h4>
+        <p>${paragraphText(state.responses[step.key])}</p>
+      </div>
+    </article>
+  `).join("");
+
+  report.innerHTML = `
+    <section class="report-cover">
+      <div>
+        <p class="eyebrow">Informe de projecte tecnològic</p>
+        <h2>${safeHtml(s.title)}</h2>
+        <p>${safeHtml(s.challenge)}</p>
+      </div>
+      <div class="achievement-badge">
+        <span>${state.level}</span>
+        <small>${safeHtml(selectedLabel)}</small>
+      </div>
+    </section>
+
+    <section class="report-meta-grid">
+      <div><strong>Curs</strong><span>${safeHtml(currentCourse().title)}</span></div>
+      <div><strong>Versió</strong><span>${safeHtml(APP.version)}</span></div>
+      <div><strong>Línia</strong><span>${safeHtml(APP.line)} · PWA independent</span></div>
+    </section>
+
+    <section class="report-section highlight">
+      <h3>Producte final</h3>
+      <p>${safeHtml(s.product)}</p>
+    </section>
+
+    <section class="report-grid-2">
+      <article class="report-section">
+        <h3>Competències específiques</h3>
+        <div class="report-tags">${s.competencies.map(c => `<span>${c}</span>`).join("")}</div>
+      </article>
+      <article class="report-section">
+        <h3>Criteris d'avaluació</h3>
+        <div class="report-tags amber">${s.criteria.map(c => `<span>${c}</span>`).join("")}</div>
+      </article>
+    </section>
+
+    <section class="report-section">
+      <h3>Sabers treballats</h3>
+      ${renderReportList(s.knowledge)}
+    </section>
+
+    <section class="report-section">
+      <h3>Procés tecnològic</h3>
+      <div class="report-steps">${stepCards}</div>
+    </section>
+
+    <section class="report-grid-2">
+      <article class="report-section">
+        <h3>Matriu de decisió</h3>
+        <p>${paragraphText(summarizeDecision())}</p>
+      </article>
+      <article class="report-section">
+        <h3>Anàlisi de sostenibilitat</h3>
+        <p>${paragraphText(summarizeSustainability())}</p>
+      </article>
+    </section>
+
+    <section class="report-section conclusion">
+      <h3>Conclusió final</h3>
+      <p>La proposta s'ha de valorar segons la seva utilitat, viabilitat tècnica, sostenibilitat, qualitat de la justificació i capacitat de comunicar les decisions preses.</p>
+    </section>
+  `;
 
   renderReportRubricTable(s);
 }
@@ -904,7 +994,7 @@ function attachGlobalEvents() {
 
   document.getElementById("copyReportBtn").addEventListener("click", async () => {
     renderReport();
-    const text = document.getElementById("report").textContent;
+    const text = buildReportPlainText(currentSituation());
     try {
       await navigator.clipboard.writeText(text);
       alert("Informe copiat al porta-retalls.");

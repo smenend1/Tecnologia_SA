@@ -1,10 +1,10 @@
-# Tecnologia ESO · Projectes i reptes v3
+# Tecnologia ESO · Projectes i reptes v4
 
 PWA educativa en català per a la línia B del projecte: **Tecnologia ESO · Projectes i reptes**.
 
 Aquesta app és independent de **Matemàtiques ESO · Situacions i eines**.
 
-## Canvis principals de la v3
+## Canvis principals de la v4
 
 - Rúbriques formals pròpies per a cada situació d'aprenentatge.
 - Cada rúbrica té com a mínim 4 ítems d'avaluació.
@@ -19,7 +19,7 @@ Aquesta app és independent de **Matemàtiques ESO · Situacions i eines**.
 ## Estructura
 
 ```text
-tecnologia-eso-projectes-reptes-v3/
+tecnologia-eso-projectes-reptes-v4/
   index.html
   styles.css
   app.js
@@ -40,12 +40,20 @@ tecnologia-eso-projectes-reptes-v3/
 
 ## Notes curriculars
 
-La v3 no inventa contingut per a 1r, 2n i 3r. Aquests cursos són contenidors pendents. Quan es disposi del PDF de Tecnologia i Digitalització, caldrà afegir les seves competències, criteris, sabers i situacions pròpies dins `app.js`.
+La v4 no inventa contingut per a 1r, 2n i 3r. Aquests cursos són contenidors pendents. Quan es disposi del PDF de Tecnologia i Digitalització, caldrà afegir les seves competències, criteris, sabers i situacions pròpies dins `app.js`.
 
 ## Cache
 
-La cache de la v3 és:
+La cache de la v4 és:
 
 ```js
-tecnologia-eso-projectes-reptes-v3
+tecnologia-eso-projectes-reptes-v4
 ```
+
+
+## Canvis v4
+
+- Correcció dels salts de línia literals `\n` que apareixien a la interfície.
+- Informe redissenyat amb format visual clar, fons blanc, targetes i seccions.
+- El botó de còpia genera una versió textual neta de l’informe.
+- La rúbrica formal continua adjuntant-se al final de l’informe.
