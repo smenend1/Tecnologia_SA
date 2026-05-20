@@ -1,8 +1,8 @@
 const APP = {
   name: "Tecnologia ESO · Projectes i reptes",
-  version: "v4",
+  version: "v5",
   line: "B",
-  cacheName: "tecnologia-eso-projectes-reptes-v4"
+  cacheName: "tecnologia-eso-projectes-reptes-v5"
 };
 
 const CURRICULUM = {
@@ -599,12 +599,12 @@ function renderDecisionTool() {
   el.innerHTML = options.map(opt => `
     <div class="step">
       <label>${opt}</label>
-      <input data-decision-name="${opt}" value="${safeHtml(state.decision[opt]?.name || "")}" placeholder="Nom o descripció breu de la solució" />
+      <input data-decision-name="${opt}" value="${safeHtml((state.decision[opt] && state.decision[opt].name) || "")}" placeholder="Nom o descripció breu de la solució" />
       <div class="two-cols" style="margin-top:10px;">
         ${criteria.map(c => `
           <div>
             <label class="tiny">${c} · 1-4</label>
-            <input type="number" min="1" max="4" data-decision-score="${opt}|${c}" value="${safeHtml(state.decision[opt]?.scores?.[c] || "")}" />
+            <input type="number" min="1" max="4" data-decision-score="${opt}|${c}" value="${safeHtml((state.decision[opt] && state.decision[opt].scores && state.decision[opt].scores[c]) || "")}" />
           </div>
         `).join("")}
       </div>
@@ -761,9 +761,7 @@ function buildReportPlainText(s) {
     const value = state.responses[step.key] || "[pendent de completar]";
     return `${step.title}
 ${value}`;
-  }).join("
-
-");
+  }).join("\n\n");
 
   const rubricText = state.includeRubricInReport
     ? `
@@ -792,8 +790,7 @@ Criteris d'avaluació
 ${s.criteria.join(", ")}
 
 Sabers treballats
-${s.knowledge.map(k => "- " + k).join("
-")}
+${s.knowledge.map(k => "- " + k).join("\n")}
 
 Procés tecnològic
 ${stepText}
@@ -810,8 +807,7 @@ La proposta s'ha de valorar segons la seva utilitat, viabilitat tècnica, sosten
 
 function paragraphText(value) {
   const text = value || "[pendent de completar]";
-  return safeHtml(text).replace(/
-/g, "<br>");
+  return safeHtml(text).replace(/\n/g, "<br>");
 }
 
 function renderReportList(items) {
@@ -945,7 +941,8 @@ function attachGlobalEvents() {
   });
 
   document.getElementById("tabs").addEventListener("click", e => {
-    const tab = e.target.closest("button")?.dataset.tab;
+    const tabButton = e.target.closest("button");
+    const tab = tabButton ? tabButton.dataset.tab : null;
     if (!tab) return;
     state.view = tab;
     renderAll();
@@ -968,14 +965,14 @@ function attachGlobalEvents() {
 
     const decisionName = e.target.dataset.decisionName;
     if (decisionName) {
-      state.decision[decisionName] ||= { name: "", scores: {} };
+      if (!state.decision[decisionName]) state.decision[decisionName] = { name: "", scores: {} };
       state.decision[decisionName].name = e.target.value;
     }
 
     const decisionScore = e.target.dataset.decisionScore;
     if (decisionScore) {
       const [opt, criterion] = decisionScore.split("|");
-      state.decision[opt] ||= { name: "", scores: {} };
+      if (!state.decision[opt]) state.decision[opt] = { name: "", scores: {} };
       state.decision[opt].scores[criterion] = e.target.value;
     }
 
@@ -1028,4 +1025,9 @@ function registerServiceWorker() {
   });
 }
 
-init();
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init);
+} else {
+  init();
+}
+
