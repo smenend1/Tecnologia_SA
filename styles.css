@@ -673,7 +673,7 @@ textarea { min-height: 92px; resize: vertical; }
 }
 
 
-/* v10: impressió neta de l'informe formal.
+/* v11: impressió neta de l'informe formal.
    L'exportació visual a PDF mostra només l'informe, no la pantalla inicial ni la navegació. */
 @media print {
   body.print-report {
@@ -713,7 +713,7 @@ textarea { min-height: 92px; resize: vertical; }
   }
 }
 
-/* v10: l'informe és una SA neta, sense capçalera auxiliar ni textos d'app. */
+/* v11: l'informe és una SA neta, sense capçalera auxiliar ni textos d'app. */
 .report-host {
   padding: 0;
   background: transparent;
@@ -733,4 +733,24 @@ textarea { min-height: 92px; resize: vertical; }
     border: 0 !important;
     box-shadow: none !important;
   }
+}
+
+.document-import-panel {
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: #f0fdf4;
+}
+
+.document-import-panel h3 {
+  margin-top: 0;
+}
+
+.import-preview {
+  min-height: 180px;
+  margin-top: 8px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.88rem;
+  background: #ffffff;
 }

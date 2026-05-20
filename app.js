@@ -1,8 +1,8 @@
 const APP = {
   name: "Tecnologia ESO · Projectes i reptes",
-  version: "v10",
+  version: "v12",
   line: "B",
-  cacheName: "tecnologia-eso-projectes-reptes-v10"
+  cacheName: "tecnologia-eso-projectes-reptes-v12"
 };
 
 const CURRICULUM_SETS = {
@@ -411,8 +411,8 @@ function safeHtml(text) {
   }[char]));
 }
 
-const STORAGE_KEY_SITUATIONS = "tecnologia-eso-projectes-reptes-custom-situations-v10";
-const STORAGE_KEY_RUBRICS = "tecnologia-eso-projectes-reptes-custom-rubrics-v10";
+const STORAGE_KEY_SITUATIONS = "tecnologia-eso-projectes-reptes-custom-situations-v12";
+const STORAGE_KEY_RUBRICS = "tecnologia-eso-projectes-reptes-custom-rubrics-v12";
 
 function loadJsonFromStorage(key, fallback) {
   try {
@@ -771,6 +771,7 @@ function getSubjectPlainTitle() {
 }
 
 function getTransversalCompetencies(s) {
+  if (s && Array.isArray(s.transversal) && s.transversal.length) return s.transversal;
   return [
     "Competència digital: ús d’eines digitals de cerca, disseny, simulació, documentació o comunicació.",
     "Competència personal, social i d’aprendre a aprendre: planificació, revisió del procés, perseverança i millora a partir de proves.",
@@ -780,6 +781,7 @@ function getTransversalCompetencies(s) {
 }
 
 function getLearningObjectives(s) {
+  if (s && Array.isArray(s.objectives) && s.objectives.length) return s.objectives;
   return [
     `Analitzar una necessitat o repte tecnològic proper per definir requisits d’una solució viable i contextualitzada.`,
     `Dissenyar, construir o simular una proposta tecnològica aplicant sabers de la matèria amb criteris de funcionalitat, sostenibilitat i seguretat.`,
@@ -793,6 +795,8 @@ function getSituationAssessmentCriteria(s) {
 }
 
 function getDevelopmentSummary(s) {
+  if (s && Array.isArray(s.development) && s.development.length) return s.development;
+  if (s && typeof s.development === "string" && s.development.trim()) return s.development.split("\n").map(v => v.trim()).filter(Boolean);
   return [
     "Plantejament del repte i activació de coneixements previs a partir d’una necessitat contextualitzada.",
     "Ideació i planificació de possibles solucions, amb definició de requisits i criteris de decisió.",
@@ -803,6 +807,14 @@ function getDevelopmentSummary(s) {
 }
 
 function getLearningActivities(s) {
+  if (s && s.activities && typeof s.activities === "object") {
+    return [
+      { title: "Activitats inicials", text: s.activities.initial || "Activitats inicials pendents de concretar." },
+      { title: "Activitats de desenvolupament", text: s.activities.development || "Activitats de desenvolupament pendents de concretar." },
+      { title: "Activitats d’estructuració", text: s.activities.structuring || "Activitats d’estructuració pendents de concretar." },
+      { title: "Activitats d’aplicació", text: s.activities.application || "Activitats d’aplicació pendents de concretar." }
+    ];
+  }
   return [
     { title: "Activitats inicials", text: "Observació del context, detecció de necessitats, conversa inicial sobre què se sap i formulació del repte." },
     { title: "Activitats de desenvolupament", text: "Cerca d’informació, anàlisi de requisits, ideació, selecció de materials o eines i disseny de la solució." },
@@ -812,6 +824,7 @@ function getLearningActivities(s) {
 }
 
 function getVectors(s) {
+  if (s && Array.isArray(s.vectors) && s.vectors.length) return s.vectors;
   return [
     "Aprenentatges competencials: el repte demana aplicar sabers en una situació propera i funcional.",
     "Perspectiva de gènere: s’utilitza llenguatge inclusiu i es promou la participació equilibrada en rols tècnics i comunicatius.",
@@ -1035,7 +1048,7 @@ function createGenericRubric(item, criteriaText) {
 }
 
 function clearCreatorForm() {
-  ["newTitle", "newShort", "newChallenge", "newProduct", "newCompetencies", "newCriteria", "newKnowledge", "newRubricItems"].forEach(id => {
+  ["newTitle", "newShort", "newChallenge", "newProduct", "newCompetencies", "newCriteria", "newKnowledge", "newObjectives", "newDevelopment", "newInitialActivities", "newDevelopmentActivities", "newStructuringActivities", "newApplicationActivities", "newVectors", "newRubricItems"].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = "";
   });
@@ -1049,6 +1062,15 @@ function saveCreatedSituation() {
   const competencies = splitList(document.getElementById("newCompetencies").value);
   const criteria = splitList(document.getElementById("newCriteria").value);
   const knowledge = String(document.getElementById("newKnowledge").value || "").split("\n").map(v => v.trim()).filter(Boolean);
+  const objectives = String(document.getElementById("newObjectives")?.value || "").split("\n").map(v => v.trim()).filter(Boolean);
+  const development = String(document.getElementById("newDevelopment")?.value || "").split("\n").map(v => v.trim()).filter(Boolean);
+  const vectors = String(document.getElementById("newVectors")?.value || "").split("\n").map(v => v.trim()).filter(Boolean);
+  const activities = {
+    initial: document.getElementById("newInitialActivities")?.value.trim() || "",
+    development: document.getElementById("newDevelopmentActivities")?.value.trim() || "",
+    structuring: document.getElementById("newStructuringActivities")?.value.trim() || "",
+    application: document.getElementById("newApplicationActivities")?.value.trim() || ""
+  };
   let rubricItems = String(document.getElementById("newRubricItems").value || "").split("\n").map(v => v.trim()).filter(Boolean);
 
   if (!title || !challenge || !product) {
@@ -1075,6 +1097,11 @@ function saveCreatedSituation() {
     competencies: competencies.length ? competencies : ["CE1", "CE2", "CE3"],
     criteria: criteria.length ? criteria : [],
     knowledge: knowledge.length ? knowledge : ["Sabers concretats pel docent segons el context de la situació."],
+    objectives,
+    development,
+    activities,
+    vectors,
+    curriculumKey: currentCourse().curriculumKey,
     teacher: "Situació creada des del formulari intern. Es pot revisar i adaptar abans d’utilitzar-la a l’aula.",
     custom: true
   };
@@ -1126,6 +1153,220 @@ function importCreatedSituations(file) {
   reader.readAsText(file);
 }
 
+
+function showDocumentImportFeedback(message) {
+  const box = document.getElementById("documentImportFeedback");
+  if (!box) return;
+  box.textContent = message;
+  box.classList.remove("hidden");
+}
+
+function setCreatorField(id, value) {
+  const el = document.getElementById(id);
+  if (el && value) el.value = value;
+}
+
+function normalizeImportedText(text) {
+  return String(text || "")
+    .replace(/\r/g, "")
+    .replace(/[ \t]+/g, " ")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
+function parseDocxXml(xmlText) {
+  const parser = new DOMParser();
+  const xml = parser.parseFromString(xmlText, "application/xml");
+  const paragraphs = Array.from(xml.getElementsByTagName("w:p"));
+  return paragraphs.map(p => {
+    return Array.from(p.getElementsByTagName("w:t")).map(t => t.textContent).join("");
+  }).filter(Boolean).join("\n");
+}
+
+function decodePdfString(value) {
+  return value
+    .replace(/\\n/g, "\n")
+    .replace(/\\r/g, "\n")
+    .replace(/\\t/g, " ")
+    .replace(/\\\(/g, "(")
+    .replace(/\\\)/g, ")")
+    .replace(/\\\\/g, "\\");
+}
+
+function extractTextFromPdfBuffer(buffer) {
+  const bytes = new Uint8Array(buffer);
+  let binary = "";
+  for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+  const chunks = [];
+  const re = /\((?:\\.|[^\\)])*\)/g;
+  let match;
+  while ((match = re.exec(binary)) !== null) {
+    const raw = match[0].slice(1, -1);
+    const decoded = decodePdfString(raw);
+    if (decoded.replace(/\s/g, "").length > 2) chunks.push(decoded);
+  }
+  return chunks.join(" ").replace(/\s+/g, " ").trim();
+}
+
+async function readDocumentFile(file) {
+  const name = (file.name || "").toLowerCase();
+  if (name.endsWith(".json")) {
+    const text = await file.text();
+    try {
+      const data = JSON.parse(text);
+      if (data.situations) return JSON.stringify(data, null, 2);
+      return text;
+    } catch (err) {
+      return text;
+    }
+  }
+  if (name.endsWith(".txt") || name.endsWith(".md")) return file.text();
+  if (name.endsWith(".docx")) {
+    if (!window.JSZip) throw new Error("No s’ha carregat el lector DOCX.");
+    const zip = await window.JSZip.loadAsync(file);
+    const doc = zip.file("word/document.xml");
+    if (!doc) throw new Error("El DOCX no conté word/document.xml.");
+    return parseDocxXml(await doc.async("text"));
+  }
+  if (name.endsWith(".pdf")) {
+    const text = extractTextFromPdfBuffer(await file.arrayBuffer());
+    if (!text) throw new Error("No s’ha pogut extreure text del PDF. Pot ser escanejat o tenir el text codificat.");
+    return text;
+  }
+  return file.text();
+}
+
+function extractSection(text, labels, stopLabels) {
+  const lines = normalizeImportedText(text).split("\n");
+  const norm = v => v.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[:：]/g, "").trim();
+  const labelSet = labels.map(norm);
+  const stopSet = stopLabels.map(norm);
+  let start = -1;
+  for (let i = 0; i < lines.length; i++) {
+    const n = norm(lines[i]);
+    if (labelSet.some(l => n === l || n.startsWith(l + " "))) {
+      start = i;
+      const remainder = lines[i].replace(/^.*?[:：]\s*/, "").trim();
+      const collected = remainder ? [remainder] : [];
+      for (let j = i + 1; j < lines.length; j++) {
+        const nj = norm(lines[j]);
+        if (stopSet.some(st => nj === st || nj.startsWith(st + " "))) break;
+        collected.push(lines[j]);
+      }
+      return collected.join("\n").trim();
+    }
+  }
+  return "";
+}
+
+function detectCourseFromText(text) {
+  const t = text.toLowerCase();
+  if (/\b1r\s*eso\b|primer\s+d[’']?eso/.test(t)) return "eso1";
+  if (/\b2n\s*eso\b|segon\s+d[’']?eso/.test(t)) return "eso2";
+  if (/\b3r\s*eso\b|tercer\s+d[’']?eso/.test(t)) return "eso3";
+  if (/\b4t\s*eso\b|quart\s+d[’']?eso/.test(t)) return "eso4";
+  return state.course;
+}
+
+function detectCodes(text, pattern) {
+  return Array.from(new Set((text.match(pattern) || []).map(v => v.toUpperCase().replace(/\s+/g, ""))));
+}
+
+function fillCreatorFromText(text) {
+  const clean = normalizeImportedText(text);
+  if (!clean) {
+    showDocumentImportFeedback("No hi ha text per convertir.");
+    return;
+  }
+
+  if (clean.trim().startsWith("{") || clean.trim().startsWith("[")) {
+    try {
+      const data = JSON.parse(clean);
+      const first = Array.isArray(data) ? data[0] : (data.situations ? Object.values(data.situations).flat()[0] : data);
+      if (first && first.title) {
+        setCreatorField("newTitle", first.title);
+        setCreatorField("newShort", first.short || first.description || "");
+        setCreatorField("newChallenge", first.challenge || first.reptee || "");
+        setCreatorField("newProduct", first.product || first.producte || "");
+        setCreatorField("newCompetencies", (first.competencies || []).join(", "));
+        setCreatorField("newCriteria", (first.criteria || []).join(", "));
+        setCreatorField("newKnowledge", (first.knowledge || first.sabers || []).join("\n"));
+        setCreatorField("newObjectives", (first.objectives || []).join("\n"));
+        setCreatorField("newDevelopment", Array.isArray(first.development) ? first.development.join("\n") : (first.development || ""));
+        if (first.activities) {
+          setCreatorField("newInitialActivities", first.activities.initial || "");
+          setCreatorField("newDevelopmentActivities", first.activities.development || "");
+          setCreatorField("newStructuringActivities", first.activities.structuring || "");
+          setCreatorField("newApplicationActivities", first.activities.application || "");
+        }
+        setCreatorField("newVectors", (first.vectors || []).join("\n"));
+        const rubrics = first.rubricItems || (first.rubric || []).map(r => r.item).filter(Boolean);
+        setCreatorField("newRubricItems", (rubrics || []).join("\n"));
+        showDocumentImportFeedback("JSON convertit a esborrany. Revisa els camps abans de desar.");
+        return;
+      }
+    } catch (err) {
+      // continue with text parsing
+    }
+  }
+
+  const headings = [
+    "Títol", "Curs", "Àrea / Matèria", "Matèria", "Descripció", "Descripció, context i repte", "Producte final",
+    "Competències específiques", "Criteris d’avaluació", "Sabers", "Objectius d’aprenentatge",
+    "Desenvolupament", "Activitats inicials", "Activitats de desenvolupament", "Activitats d’estructuració", "Activitats d’aplicació",
+    "Vectors", "Rúbrica", "Ítems de rúbrica"
+  ];
+  const title = extractSection(clean, ["Títol", "Titol"], headings.filter(h => !/^T[ií]tol$/.test(h))).split("\n")[0] || clean.split("\n").find(Boolean) || "SA importada";
+  const description = extractSection(clean, ["Descripció, context i repte", "Descripció", "Descripcio", "Context i repte"], headings);
+  const product = extractSection(clean, ["Producte final", "Producte"], headings);
+  const objectives = extractSection(clean, ["Objectius d’aprenentatge", "Objectius d'aprenentatge", "Objectius"], headings);
+  const sabers = extractSection(clean, ["Sabers"], headings);
+  const development = extractSection(clean, ["Desenvolupament", "Desenvolupament de la situació d’aprenentatge"], headings);
+  const initial = extractSection(clean, ["Activitats inicials"], headings);
+  const devActs = extractSection(clean, ["Activitats de desenvolupament"], headings);
+  const struct = extractSection(clean, ["Activitats d’estructuració", "Activitats d'estructuració"], headings);
+  const application = extractSection(clean, ["Activitats d’aplicació", "Activitats d'aplicació"], headings);
+  const vectors = extractSection(clean, ["Vectors", "Breu descripció de com s’aborden els vectors"], headings);
+  const rubricText = extractSection(clean, ["Rúbrica", "Rubrica", "Ítems de rúbrica", "Items de rubrica"], headings);
+  const course = detectCourseFromText(clean);
+  if (course !== state.course) {
+    state.course = course;
+    renderCourseSelect();
+    renderSituationSelect();
+  }
+  const competencies = detectCodes(clean, /\bCE\s*[1-7]\b/gi);
+  const criteria = detectCodes(clean, /\b[1-7]\.[1-4]\b/g);
+
+  setCreatorField("newTitle", title.replace(/^SA\s*[:\-·]?\s*/i, "SA · "));
+  setCreatorField("newShort", description.split("\n").slice(0, 2).join(" "));
+  setCreatorField("newChallenge", description || "Repte pendent de concretar a partir del document importat.");
+  setCreatorField("newProduct", product || "Producte final pendent de concretar a partir del document importat.");
+  setCreatorField("newCompetencies", competencies.join(", "));
+  setCreatorField("newCriteria", criteria.join(", "));
+  setCreatorField("newKnowledge", sabers);
+  setCreatorField("newObjectives", objectives);
+  setCreatorField("newDevelopment", development);
+  setCreatorField("newInitialActivities", initial);
+  setCreatorField("newDevelopmentActivities", devActs);
+  setCreatorField("newStructuringActivities", struct);
+  setCreatorField("newApplicationActivities", application);
+  setCreatorField("newVectors", vectors);
+  setCreatorField("newRubricItems", rubricText || "Comprensió del repte i del context\nDisseny i desenvolupament de la proposta\nAplicació de sabers i criteris tècnics\nComunicació, justificació i millora");
+  showDocumentImportFeedback("Document convertit a esborrany. Revisa els camps abans de desar. Els codis CE i CA s’han detectat i es completaran amb el text curricular corresponent quan es generi la fitxa i l’informe.");
+}
+
+async function importDocumentAsDraft(file) {
+  if (!file) return;
+  try {
+    const text = await readDocumentFile(file);
+    const preview = document.getElementById("importPreview");
+    if (preview) preview.value = normalizeImportedText(text);
+    fillCreatorFromText(text);
+  } catch (err) {
+    showDocumentImportFeedback(err.message || "No s’ha pogut llegir el document.");
+  }
+}
+
 function summarizeDecision() {
   const entries = Object.entries(state.decision);
   if (!entries.length) return "[pendent de completar]";
@@ -1147,6 +1388,111 @@ function renderTeacherMode() {
   const toggle = document.getElementById("teacherToggle");
   toggle.textContent = `Mode docent: ${state.teacherMode ? "activat" : "desactivat"}`;
   document.querySelectorAll(".teacher-box").forEach(box => box.classList.toggle("hidden", !state.teacherMode));
+}
+
+
+function openPrintDocument(title, bodyHtml, kind) {
+  const win = window.open("", "_blank", "width=1200,height=900");
+  if (!win) {
+    alert("No s'ha pogut obrir la finestra d'impressió. Revisa si el navegador bloqueja finestres emergents i torna-ho a provar.");
+    return;
+  }
+
+  const safeTitle = safeHtml(title || "Situació d'aprenentatge");
+  const pageClass = kind === "rubric" ? "print-rubric-document" : "print-report-document";
+  const html = `<!doctype html>
+<html lang="ca">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${safeTitle}</title>
+  <link rel="stylesheet" href="./styles.css?v=11">
+  <style>
+    html, body { background: #ffffff !important; }
+    body { margin: 0; color: #172016; }
+    .print-document-shell {
+      width: min(1180px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 18px 0 28px;
+    }
+    .print-document-shell .report-host {
+      border: 0 !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+      background: transparent !important;
+    }
+    .print-document-shell .report-paper {
+      margin: 0 !important;
+    }
+    @page { size: A4 portrait; margin: 10mm; }
+    @media print {
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      html, body { background: #ffffff !important; }
+      .print-document-shell {
+        width: 100% !important;
+        padding: 0 !important;
+      }
+      .report-section, .report-cover, .report-meta-grid > div, .rubric-table {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body class="${pageClass}">
+  <main class="print-document-shell">
+    <article class="card span-12 report-host">
+      ${bodyHtml}
+    </article>
+  </main>
+  <script>
+    function doPrint() {
+      setTimeout(function () {
+        window.focus();
+        window.print();
+      }, 450);
+    }
+    if (document.readyState === "complete") doPrint();
+    else window.addEventListener("load", doPrint);
+    window.addEventListener("afterprint", function () {
+      setTimeout(function () { window.close(); }, 250);
+    });
+  <\/script>
+</body>
+</html>`;
+
+  win.document.open();
+  win.document.write(html);
+  win.document.close();
+}
+
+function printCurrentReport() {
+  state.view = "informe";
+  renderAll();
+  const report = document.getElementById("report");
+  const rubric = document.getElementById("reportRubricTable");
+  const s = currentSituation();
+  const bodyHtml = `
+    <div id="report" class="report">${report ? report.innerHTML : ""}</div>
+    <div id="reportRubricTable" class="report-rubric-table">${rubric ? rubric.innerHTML : ""}</div>
+  `;
+  openPrintDocument(s ? s.title : "Situació d'aprenentatge", bodyHtml, "report");
+}
+
+function printCurrentRubric() {
+  const s = currentSituation();
+  renderRubric();
+  const rubricCard = document.getElementById("rubricCard");
+  const bodyHtml = `
+    <div class="report-rubric-table">
+      <h3>Rúbrica de la situació d'aprenentatge</h3>
+      ${rubricCard ? rubricCard.innerHTML : ""}
+    </div>
+  `;
+  openPrintDocument(s ? `Rúbrica - ${s.title}` : "Rúbrica", bodyHtml, "rubric");
 }
 
 function attachGlobalEvents() {
@@ -1240,27 +1586,15 @@ function attachGlobalEvents() {
   const importInput = document.getElementById("importSituationsInput");
   if (importInput) importInput.addEventListener("change", e => importCreatedSituations(e.target.files[0]));
 
-  document.getElementById("printRubricBtn").addEventListener("click", () => {
-    const previousView = state.view;
-    state.view = "rubrica";
-    renderAll();
-    document.body.classList.add("print-rubric");
-    window.print();
-    setTimeout(() => {
-      document.body.classList.remove("print-rubric");
-      state.view = previousView;
-      renderAll();
-    }, 250);
-  });
+  const importDocumentInput = document.getElementById("importDocumentInput");
+  if (importDocumentInput) importDocumentInput.addEventListener("change", e => importDocumentAsDraft(e.target.files[0]));
 
-  document.getElementById("printBtn").addEventListener("click", () => {
-    // Exporta només l'informe formal, sense capçalera, selectors ni botons.
-    state.view = "informe";
-    renderAll();
-    document.body.classList.add("print-report");
-    window.print();
-    setTimeout(() => document.body.classList.remove("print-report"), 250);
-  });
+  const convertDocumentBtn = document.getElementById("convertDocumentBtn");
+  if (convertDocumentBtn) convertDocumentBtn.addEventListener("click", () => fillCreatorFromText(document.getElementById("importPreview")?.value || ""));
+
+  document.getElementById("printRubricBtn").addEventListener("click", printCurrentRubric);
+
+  document.getElementById("printBtn").addEventListener("click", printCurrentReport);
 }
 
 function registerServiceWorker() {

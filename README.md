@@ -1,35 +1,26 @@
-# Tecnologia ESO · Projectes i reptes v10
+# Tecnologia ESO · Projectes i reptes v12
 
-Projecte PWA educatiu en català per treballar situacions d’aprenentatge de Tecnologia i Tecnologia i Digitalització a l’ESO.
-
-## Novetats v10
-
-- Incorpora cursos 1r, 2n i 3r d’ESO de Tecnologia i Digitalització.
-- Manté 4t d’ESO de Tecnologia.
-- Cada curs té situacions d’aprenentatge pròpies.
-- Cada situació inclou competències, criteris, sabers i rúbrica NA/AS/AN/AE.
-- Manté creador de situacions d’aprenentatge amb exportació/importació JSON.
-- Exportació visual a PDF més fidel a la pantalla.
+PWA educativa en català per treballar situacions d’aprenentatge de Tecnologia i Tecnologia i Digitalització a l’ESO.
 
 ## Fitxers
 
-```text
-index.html
-styles.css
-app.js
-manifest.json
-sw.js
-icons/
-```
+- `index.html`: estructura de l’app.
+- `styles.css`: disseny visual i impressió.
+- `app.js`: dades curriculars, situacions, rúbriques, informe i interaccions.
+- `jszip.min.js`: lector local de documents `.docx` per convertir-los en esborrany de SA.
+- `manifest.json`: configuració PWA.
+- `sw.js`: Service Worker i cache offline.
+- `icons/`: icones de la PWA.
 
-## Publicació
+## Novetats v12
 
-Es pot publicar directament a GitHub Pages. Si ja hi havia una versió anterior instal·lada, convé desinstal·lar-la o fer una recàrrega forta per renovar el Service Worker.
+- Importació de documents des de la pestanya **Crea SA**.
+- Formats admesos: JSON exportat, TXT/Markdown, Word `.docx` i PDF textual.
+- El document importat es converteix en un esborrany editable de SA.
+- Si el docent escriu només codis com `CE1`, `CE2`, `1.1` o `2.3`, l’app mostra el text curricular corresponent segons el curs seleccionat.
+- Camps nous en la creació de SA: objectius, desenvolupament, activitats inicials/desenvolupament/estructuració/aplicació i vectors.
+- La importació no desa automàticament: cal revisar l’esborrany i prémer **Desa la SA**.
 
+## Nota sobre PDF
 
-## Canvis v10
-
-- L’exportació visual a PDF imprimeix només l’informe formal de la situació d’aprenentatge.
-- No s’imprimeixen capçalera, selectors, pestanyes ni botons.
-- S’ha eliminat el text informatiu inicial de la pantalla d’informe.
-- La rúbrica específica de la SA continua adjuntada al final de l’informe.
+La lectura de PDF és bàsica i només funciona bé amb PDFs que contenen text real. Si el PDF és escanejat o té el text codificat, és millor enganxar el text manualment o utilitzar la plantilla Word.
