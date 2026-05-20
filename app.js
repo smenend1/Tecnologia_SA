@@ -1,8 +1,8 @@
 const APP = {
   name: "Tecnologia ESO · Projectes i reptes",
-  version: "v8",
+  version: "v9",
   line: "B",
-  cacheName: "tecnologia-eso-projectes-reptes-v8"
+  cacheName: "tecnologia-eso-projectes-reptes-v9"
 };
 
 const CURRICULUM_SETS = {
@@ -411,8 +411,8 @@ function safeHtml(text) {
   }[char]));
 }
 
-const STORAGE_KEY_SITUATIONS = "tecnologia-eso-projectes-reptes-custom-situations-v8";
-const STORAGE_KEY_RUBRICS = "tecnologia-eso-projectes-reptes-custom-rubrics-v8";
+const STORAGE_KEY_SITUATIONS = "tecnologia-eso-projectes-reptes-custom-situations-v9";
+const STORAGE_KEY_RUBRICS = "tecnologia-eso-projectes-reptes-custom-rubrics-v9";
 
 function loadJsonFromStorage(key, fallback) {
   try {
@@ -1254,9 +1254,12 @@ function attachGlobalEvents() {
   });
 
   document.getElementById("printBtn").addEventListener("click", () => {
-    document.body.classList.add("print-screen");
+    // Exporta només l'informe formal, sense capçalera, selectors ni botons.
+    state.view = "informe";
+    renderAll();
+    document.body.classList.add("print-report");
     window.print();
-    setTimeout(() => document.body.classList.remove("print-screen"), 250);
+    setTimeout(() => document.body.classList.remove("print-report"), 250);
   });
 }
 

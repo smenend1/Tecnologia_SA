@@ -671,3 +671,44 @@ textarea { min-height: 92px; resize: vertical; }
   body.print-rubric #view-rubrica { display: grid !important; }
   body.print-rubric #view-rubrica .card { border: 0 !important; box-shadow: none !important; }
 }
+
+
+/* v9: impressió neta de l'informe formal.
+   L'exportació visual a PDF mostra només l'informe, no la pantalla inicial ni la navegació. */
+@media print {
+  body.print-report {
+    background: #ffffff !important;
+  }
+  body.print-report header,
+  body.print-report .hero,
+  body.print-report .tabs,
+  body.print-report .actions,
+  body.print-report .no-print {
+    display: none !important;
+  }
+  body.print-report main > :not(#view-informe) {
+    display: none !important;
+  }
+  body.print-report #view-informe {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  body.print-report #view-informe .card {
+    display: block !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+  }
+  body.print-report .report-paper {
+    margin: 0 !important;
+    box-shadow: none !important;
+  }
+  body.print-report .wrap {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+}
