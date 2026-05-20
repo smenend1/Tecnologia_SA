@@ -1,8 +1,8 @@
 const APP = {
   name: "Tecnologia ESO · Projectes i reptes",
-  version: "v5",
+  version: "v6",
   line: "B",
-  cacheName: "tecnologia-eso-projectes-reptes-v5"
+  cacheName: "tecnologia-eso-projectes-reptes-v6"
 };
 
 const CURRICULUM = {
@@ -445,7 +445,6 @@ const state = {
   course: "eso4",
   situationId: "sa1-centre",
   view: "situacions",
-  level: "AN",
   teacherMode: false,
   includeRubricInReport: true,
   responses: {},
@@ -719,13 +718,13 @@ ${body}`;
 function renderReportRubricTable(s) {
   const target = document.getElementById("reportRubricTable");
   if (!target) return;
-  if (!state.includeRubricInReport || !s) {
+  if (!s) {
     target.innerHTML = "";
     return;
   }
   const rows = SITUATION_RUBRICS[s.id] || [];
   target.innerHTML = `
-    <h3>Rúbrica formal LOMLOE de la situació d'aprenentatge</h3>
+    <h3>Rúbrica de la situació d'aprenentatge</h3>
     <table class="rubric-table compact" aria-label="Rúbrica adjunta a l'informe">
       <thead>
         <tr>
@@ -753,46 +752,125 @@ function renderReportRubricTable(s) {
   `;
 }
 
+
+function getCoursePlainTitle() {
+  const title = currentCourse().title || "";
+  return title.split(" · ")[0] || title;
+}
+
+function getSubjectPlainTitle() {
+  const title = currentCourse().title || "";
+  return title.includes(" · ") ? title.split(" · ").slice(1).join(" · ") : "Tecnologia";
+}
+
+function getTransversalCompetencies(s) {
+  return [
+    "Competència digital: ús d’eines digitals de cerca, disseny, simulació, documentació o comunicació.",
+    "Competència personal, social i d’aprendre a aprendre: planificació, revisió del procés, perseverança i millora a partir de proves.",
+    "Competència ciutadana: anàlisi de necessitats reals de l’entorn i valoració de l’impacte social i ambiental.",
+    "Competència emprenedora: ideació, presa de decisions, gestió de recursos i proposta de solucions viables."
+  ];
+}
+
+function getLearningObjectives(s) {
+  return [
+    `Analitzar una necessitat o repte tecnològic proper per definir requisits d’una solució viable i contextualitzada.`,
+    `Dissenyar, construir o simular una proposta tecnològica aplicant sabers de la matèria amb criteris de funcionalitat, sostenibilitat i seguretat.`,
+    `Justificar i comunicar el procés i el resultat del projecte amb vocabulari tècnic, evidències i propostes de millora.`
+  ];
+}
+
+function getSituationAssessmentCriteria(s) {
+  const rows = SITUATION_RUBRICS[s.id] || [];
+  return rows.map(row => `${row.item}: evidenciar ${row.item.toLowerCase()} en el desenvolupament de la situació, segons els criteris ${row.criteria}.`);
+}
+
+function getDevelopmentSummary(s) {
+  return [
+    "Plantejament del repte i activació de coneixements previs a partir d’una necessitat contextualitzada.",
+    "Ideació i planificació de possibles solucions, amb definició de requisits i criteris de decisió.",
+    "Disseny, construcció o simulació de la proposta, incorporant materials, eines, components o recursos digitals adequats.",
+    "Prova, revisió i millora de la solució a partir d’evidències del funcionament i de l’impacte previst.",
+    "Comunicació final del procés, de les decisions preses i de les conclusions tècniques."
+  ];
+}
+
+function getLearningActivities(s) {
+  return [
+    { title: "Activitats inicials", text: "Observació del context, detecció de necessitats, conversa inicial sobre què se sap i formulació del repte." },
+    { title: "Activitats de desenvolupament", text: "Cerca d’informació, anàlisi de requisits, ideació, selecció de materials o eines i disseny de la solució." },
+    { title: "Activitats d’estructuració", text: "Organització del procés, justificació de decisions, revisió dels criteris d’avaluació i preparació d’evidències." },
+    { title: "Activitats d’aplicació", text: "Construcció o simulació, proves, millores, valoració de l’impacte i comunicació del producte final." }
+  ];
+}
+
+function getVectors(s) {
+  return [
+    "Aprenentatges competencials: el repte demana aplicar sabers en una situació propera i funcional.",
+    "Perspectiva de gènere: s’utilitza llenguatge inclusiu i es promou la participació equilibrada en rols tècnics i comunicatius.",
+    "Universalitat del currículum: es preveuen diferents formes de participació, representació i expressió del procés.",
+    "Qualitat de l’educació de les llengües: l’alumnat argumenta, documenta i comunica decisions tècniques de manera clara.",
+    "Ciutadania democràtica i consciència global: es valora l’impacte social i ambiental de les decisions tecnològiques.",
+    "Benestar emocional: es fomenta el treball cooperatiu, la revisió constructiva i la millora progressiva."
+  ];
+}
+
 function buildReportPlainText(s) {
   if (!s) return "Informe pendent: aquest curs encara no té situacions carregades.";
 
-  const selectedLabel = RUBRIC_LEVELS[state.level];
   const stepText = PROJECT_STEPS.map(step => {
     const value = state.responses[step.key] || "[pendent de completar]";
-    return `${step.title}
-${value}`;
+    return `${step.title}\n${value}`;
   }).join("\n\n");
 
-  const rubricText = state.includeRubricInReport
-    ? `
+  const activities = getLearningActivities(s).map(item => `${item.title}: ${item.text}`).join("\n");
 
-Rúbrica formal LOMLOE de la situació d'aprenentatge
-${buildRubricMarkdown(s)}`
-    : "";
+  return `PROGRAMACIÓ DE LA SITUACIÓ D’APRENENTATGE
 
-  return `${APP.name} · ${APP.version}
-Línia: ${APP.line} · Projecte independent de Matemàtiques ESO
+Títol
+${s.title}
 
-Curs: ${currentCourse().title}
-Situació: ${s.title}
-Nivell d'assoliment seleccionat: ${state.level} · ${selectedLabel}
+Curs
+${getCoursePlainTitle()}
 
-Repte
+Matèria
+${getSubjectPlainTitle()}
+
+Descripció, context i repte
+${s.short}
 ${s.challenge}
 
 Producte final
 ${s.product}
 
 Competències específiques
-${s.competencies.join(", ")}
+${s.competencies.map(c => `${c}: ${CURRICULUM.competencies[c]}`).join("\n")}
 
-Criteris d'avaluació
-${s.criteria.join(", ")}
+Tractament de les competències transversals
+${getTransversalCompetencies(s).map(item => "- " + item).join("\n")}
 
-Sabers treballats
+Objectius d’aprenentatge
+${getLearningObjectives(s).map(item => "- " + item).join("\n")}
+
+Criteris d’avaluació de la situació d’aprenentatge
+${getSituationAssessmentCriteria(s).map(item => "- " + item).join("\n")}
+
+Criteris curriculars vinculats
+${s.criteria.map(c => `${c}: ${CURRICULUM.criteria[c]}`).join("\n")}
+
+Sabers
 ${s.knowledge.map(k => "- " + k).join("\n")}
 
-Procés tecnològic
+Desenvolupament de la situació d’aprenentatge
+${getDevelopmentSummary(s).map(item => "- " + item).join("\n")}
+
+Activitats d’aprenentatge i d’avaluació
+${activities}
+
+Breu descripció de com s’aborden els vectors
+${getVectors(s).map(item => "- " + item).join("\n")}
+
+Evidències del procés de l’alumnat
 ${stepText}
 
 Matriu de decisió
@@ -801,8 +879,8 @@ ${summarizeDecision()}
 Anàlisi de sostenibilitat
 ${summarizeSustainability()}
 
-Conclusió final
-La proposta s'ha de valorar segons la seva utilitat, viabilitat tècnica, sostenibilitat, qualitat de la justificació i capacitat de comunicar les decisions preses.${rubricText}`;
+Rúbrica de la situació d’aprenentatge
+${buildRubricMarkdown(s)}`;
 }
 
 function paragraphText(value) {
@@ -823,7 +901,6 @@ function renderReport() {
     return;
   }
 
-  const selectedLabel = RUBRIC_LEVELS[state.level];
   const stepCards = PROJECT_STEPS.map((step, index) => `
     <article class="report-step">
       <div class="report-step-number">${index + 1}</div>
@@ -834,23 +911,30 @@ function renderReport() {
     </article>
   `).join("");
 
+  const activities = getLearningActivities(s).map(item => `
+    <article class="report-section">
+      <h3>${safeHtml(item.title)}</h3>
+      <p>${safeHtml(item.text)}</p>
+    </article>
+  `).join("");
+
   report.innerHTML = `
     <section class="report-cover">
       <div>
-        <p class="eyebrow">Informe de projecte tecnològic</p>
+        <p class="eyebrow">Programació de la situació d’aprenentatge</p>
         <h2>${safeHtml(s.title)}</h2>
         <p>${safeHtml(s.challenge)}</p>
       </div>
-      <div class="achievement-badge">
-        <span>${state.level}</span>
-        <small>${safeHtml(selectedLabel)}</small>
-      </div>
     </section>
 
-    <section class="report-meta-grid">
-      <div><strong>Curs</strong><span>${safeHtml(currentCourse().title)}</span></div>
-      <div><strong>Versió</strong><span>${safeHtml(APP.version)}</span></div>
-      <div><strong>Línia</strong><span>${safeHtml(APP.line)} · PWA independent</span></div>
+    <section class="report-meta-grid two-items">
+      <div><strong>Curs</strong><span>${safeHtml(getCoursePlainTitle())}</span></div>
+      <div><strong>Matèria</strong><span>${safeHtml(getSubjectPlainTitle())}</span></div>
+    </section>
+
+    <section class="report-section highlight">
+      <h3>Descripció, context i repte</h3>
+      <p>${safeHtml(s.short)} ${safeHtml(s.challenge)}</p>
     </section>
 
     <section class="report-section highlight">
@@ -861,21 +945,52 @@ function renderReport() {
     <section class="report-grid-2">
       <article class="report-section">
         <h3>Competències específiques</h3>
-        <div class="report-tags">${s.competencies.map(c => `<span>${c}</span>`).join("")}</div>
+        ${renderReportList(s.competencies.map(c => `${c}: ${CURRICULUM.competencies[c]}`))}
       </article>
       <article class="report-section">
-        <h3>Criteris d'avaluació</h3>
-        <div class="report-tags amber">${s.criteria.map(c => `<span>${c}</span>`).join("")}</div>
+        <h3>Tractament de les competències transversals</h3>
+        ${renderReportList(getTransversalCompetencies(s))}
+      </article>
+    </section>
+
+    <section class="report-grid-2">
+      <article class="report-section">
+        <h3>Objectius d’aprenentatge</h3>
+        ${renderReportList(getLearningObjectives(s))}
+      </article>
+      <article class="report-section">
+        <h3>Criteris d’avaluació de la situació</h3>
+        ${renderReportList(getSituationAssessmentCriteria(s))}
+      </article>
+    </section>
+
+    <section class="report-grid-2">
+      <article class="report-section">
+        <h3>Criteris curriculars vinculats</h3>
+        <div class="report-tags amber">${s.criteria.map(c => `<span>${safeHtml(c)}</span>`).join("")}</div>
+      </article>
+      <article class="report-section">
+        <h3>Sabers</h3>
+        ${renderReportList(s.knowledge)}
       </article>
     </section>
 
     <section class="report-section">
-      <h3>Sabers treballats</h3>
-      ${renderReportList(s.knowledge)}
+      <h3>Desenvolupament de la situació d’aprenentatge</h3>
+      ${renderReportList(getDevelopmentSummary(s))}
+    </section>
+
+    <section class="report-grid-2">
+      ${activities}
     </section>
 
     <section class="report-section">
-      <h3>Procés tecnològic</h3>
+      <h3>Breu descripció de com s’aborden els vectors</h3>
+      ${renderReportList(getVectors(s))}
+    </section>
+
+    <section class="report-section">
+      <h3>Evidències del procés de l’alumnat</h3>
       <div class="report-steps">${stepCards}</div>
     </section>
 
@@ -888,11 +1003,6 @@ function renderReport() {
         <h3>Anàlisi de sostenibilitat</h3>
         <p>${paragraphText(summarizeSustainability())}</p>
       </article>
-    </section>
-
-    <section class="report-section conclusion">
-      <h3>Conclusió final</h3>
-      <p>La proposta s'ha de valorar segons la seva utilitat, viabilitat tècnica, sostenibilitat, qualitat de la justificació i capacitat de comunicar les decisions preses.</p>
     </section>
   `;
 
@@ -934,12 +1044,6 @@ function attachGlobalEvents() {
     renderAll();
   });
 
-  document.getElementById("levelSelect").addEventListener("change", e => {
-    state.level = e.target.value;
-    renderRubric();
-    renderReport();
-  });
-
   document.getElementById("tabs").addEventListener("click", e => {
     const tabButton = e.target.closest("button");
     const tab = tabButton ? tabButton.dataset.tab : null;
@@ -979,10 +1083,13 @@ function attachGlobalEvents() {
     renderReport();
   });
 
-  document.getElementById("includeRubricCheck").addEventListener("change", e => {
-    state.includeRubricInReport = e.target.checked;
-    renderReport();
-  });
+  const includeRubricCheck = document.getElementById("includeRubricCheck");
+  if (includeRubricCheck) {
+    includeRubricCheck.addEventListener("change", e => {
+      state.includeRubricInReport = e.target.checked;
+      renderReport();
+    });
+  }
 
   document.getElementById("teacherToggle").addEventListener("click", () => {
     state.teacherMode = !state.teacherMode;

@@ -1,18 +1,25 @@
 {
-  "id": "tecnologia-eso-projectes-reptes-v5",
-  "name": "Tecnologia ESO · Projectes i reptes v5",
-  "short_name": "Tecno ESO v5",
-  "description": "PWA educativa en català per treballar Tecnologia de 4t d'ESO amb situacions d'aprenentatge, projectes, rúbriques LOMLOE NA-AS-AN-AE i informe formal.",
-  "start_url": "./index.html?v=5",
+  "id": "tecnologia-eso-projectes-reptes-v6",
+  "name": "Tecnologia ESO · Projectes i reptes",
+  "short_name": "Tecno ESO",
+  "description": "Eina educativa en català per treballar Tecnologia de 4t d’ESO amb situacions d’aprenentatge, projectes, rúbriques NA-AS-AN-AE i informe formal.",
+  "start_url": "./index.html?v=6",
   "scope": "./",
   "display": "standalone",
-  "display_override": ["standalone", "minimal-ui"],
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
   "background_color": "#f7f8f3",
   "theme_color": "#14532d",
   "lang": "ca",
   "dir": "ltr",
   "orientation": "portrait-primary",
-  "categories": ["education", "productivity", "utilities"],
+  "categories": [
+    "education",
+    "productivity",
+    "utilities"
+  ],
   "icons": [
     {
       "src": "icons/icon-192.png",
@@ -32,15 +39,25 @@
       "name": "Situacions",
       "short_name": "Situacions",
       "description": "Obre les situacions d'aprenentatge",
-      "url": "./index.html?v=5#situacions",
-      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+      "url": "./index.html?v=6#situacions",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
     },
     {
       "name": "Informe",
       "short_name": "Informe",
       "description": "Obre l'informe formal del projecte",
-      "url": "./index.html?v=5#informe",
-      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+      "url": "./index.html?v=6#informe",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
     }
   ]
 }
