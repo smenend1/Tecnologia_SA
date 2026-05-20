@@ -1,4 +1,4 @@
-const CACHE_NAME = "tecnologia-eso-projectes-reptes-v9";
+const CACHE_NAME = "tecnologia-eso-projectes-reptes-v10";
 const APP_SHELL = [
   "./",
   "./index.html",

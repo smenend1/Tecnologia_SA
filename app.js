@@ -1,8 +1,8 @@
 const APP = {
   name: "Tecnologia ESO · Projectes i reptes",
-  version: "v9",
+  version: "v10",
   line: "B",
-  cacheName: "tecnologia-eso-projectes-reptes-v9"
+  cacheName: "tecnologia-eso-projectes-reptes-v10"
 };
 
 const CURRICULUM_SETS = {
@@ -411,8 +411,8 @@ function safeHtml(text) {
   }[char]));
 }
 
-const STORAGE_KEY_SITUATIONS = "tecnologia-eso-projectes-reptes-custom-situations-v9";
-const STORAGE_KEY_RUBRICS = "tecnologia-eso-projectes-reptes-custom-rubrics-v9";
+const STORAGE_KEY_SITUATIONS = "tecnologia-eso-projectes-reptes-custom-situations-v10";
+const STORAGE_KEY_RUBRICS = "tecnologia-eso-projectes-reptes-custom-rubrics-v10";
 
 function loadJsonFromStorage(key, fallback) {
   try {

@@ -1,8 +1,8 @@
-# Tecnologia ESO · Projectes i reptes v9
+# Tecnologia ESO · Projectes i reptes v10
 
 Projecte PWA educatiu en català per treballar situacions d’aprenentatge de Tecnologia i Tecnologia i Digitalització a l’ESO.
 
-## Novetats v9
+## Novetats v10
 
 - Incorpora cursos 1r, 2n i 3r d’ESO de Tecnologia i Digitalització.
 - Manté 4t d’ESO de Tecnologia.
@@ -27,7 +27,7 @@ icons/
 Es pot publicar directament a GitHub Pages. Si ja hi havia una versió anterior instal·lada, convé desinstal·lar-la o fer una recàrrega forta per renovar el Service Worker.
 
 
-## Canvis v9
+## Canvis v10
 
 - L’exportació visual a PDF imprimeix només l’informe formal de la situació d’aprenentatge.
 - No s’imprimeixen capçalera, selectors, pestanyes ni botons.
