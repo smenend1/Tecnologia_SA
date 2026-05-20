@@ -1,0 +1,26 @@
+{
+  "name": "Tecnologia ESO · Projectes i reptes",
+  "short_name": "Tecnologia ESO",
+  "description": "PWA educativa en català per treballar Tecnologia ESO amb situacions, projectes, rúbrica i informe.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f8f3",
+  "theme_color": "#14532d",
+  "lang": "ca",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
