@@ -1,20 +1,27 @@
-# Tecnologia ESO · Projectes i reptes
+# Tecnologia ESO · Projectes i reptes v8
 
-Versió 6. Projecte educatiu per a situacions d’aprenentatge de Tecnologia de 4t d’ESO.
+Projecte PWA educatiu en català per treballar situacions d’aprenentatge de Tecnologia i Tecnologia i Digitalització a l’ESO.
+
+## Novetats v8
+
+- Incorpora cursos 1r, 2n i 3r d’ESO de Tecnologia i Digitalització.
+- Manté 4t d’ESO de Tecnologia.
+- Cada curs té situacions d’aprenentatge pròpies.
+- Cada situació inclou competències, criteris, sabers i rúbrica NA/AS/AN/AE.
+- Manté creador de situacions d’aprenentatge amb exportació/importació JSON.
+- Exportació visual a PDF més fidel a la pantalla.
 
 ## Fitxers
 
-- `index.html`: estructura de la interfície.
-- `styles.css`: estils visuals.
-- `app.js`: dades curriculars, situacions, rúbriques i generació de l’informe.
-- `manifest.json`: configuració PWA.
-- `sw.js`: funcionament offline i neteja de caches anteriors.
-- `icons/`: icones de la PWA.
+```text
+index.html
+styles.css
+app.js
+manifest.json
+sw.js
+icons/
+```
 
-## Canvis de la v6
+## Publicació
 
-- L’informe ja no mostra versió de l’eina, línia del projecte ni referències a l’app.
-- S’ha eliminat el selector global de nivell d’assoliment.
-- S’ha eliminat el bloc visible d’arquitectura per créixer.
-- L’informe segueix una estructura formal de situació d’aprenentatge: títol, curs, matèria, descripció, competències específiques, transversals, objectius, criteris, sabers, desenvolupament, activitats, vectors, evidències i rúbrica final.
-- La rúbrica específica de cada SA s’adjunta automàticament al final de l’informe.
+Es pot publicar directament a GitHub Pages. Si ja hi havia una versió anterior instal·lada, convé desinstal·lar-la o fer una recàrrega forta per renovar el Service Worker.

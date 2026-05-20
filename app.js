@@ -1,65 +1,268 @@
 const APP = {
   name: "Tecnologia ESO · Projectes i reptes",
-  version: "v6",
+  version: "v8",
   line: "B",
-  cacheName: "tecnologia-eso-projectes-reptes-v6"
+  cacheName: "tecnologia-eso-projectes-reptes-v8"
 };
 
-const CURRICULUM = {
-  competencies: {
-    CE1: "Identificar i proposar problemes tecnològics amb iniciativa i creativitat, estudiant necessitats de l'entorn i planificant solucions.",
-    CE2: "Aplicar tècniques i coneixements interdisciplinaris per construir solucions tecnològiques sostenibles.",
-    CE3: "Comunicar, argumentar i difondre idees i solucions tecnològiques amb recursos adequats i treball en equip.",
-    CE4: "Desenvolupar solucions sostenibles amb automatització, tecnologies emergents, sistemes programables i robòtics.",
-    CE5: "Emprar eines digitals de disseny i fabricació per a una producció més eficient i sostenible.",
-    CE6: "Analitzar processos tecnològics i valorar-ne l'impacte social i ambiental amb criteris de sostenibilitat."
+const CURRICULUM_SETS = {
+  tecnologiaDigitalitzacio: {
+    competencies: {
+      CE1: "Buscar, analitzar i seleccionar informació de manera crítica i segura per delimitar problemes tecnològics i proposar solucions.",
+      CE2: "Planificar, dissenyar i desenvolupar solucions a problemes tecnològics aplicant el procés tecnològic amb autonomia, creativitat i cooperació.",
+      CE3: "Aplicar tècniques, operadors, sistemes tecnològics i eines per construir solucions tecnològiques en diferents contextos.",
+      CE4: "Descriure, representar i intercanviar idees o solucions tecnològiques o digitals amb vocabulari, simbologia, formats i eines adequades.",
+      CE5: "Desenvolupar algorismes i aplicacions informàtiques, incorporant pensament computacional, automatització, control o robòtica.",
+      CE6: "Utilitzar dispositius i aplicacions de l’entorn digital d’aprenentatge de manera eficient, segura i ajustada a les necessitats.",
+      CE7: "Fer un ús ètic, sostenible i ecosocialment responsable de la tecnologia, valorant-ne l’impacte social i ambiental."
+    },
+    criteria: {
+      "1.1": "Identificar i definir problemes o necessitats cercant i contrastant informació de fonts diverses de manera crítica i segura.",
+      "1.2": "Analitzar productes tecnològics d’ús habitual mitjançant l’anàlisi d’objectes i sistemes i, si escau, eines de simulació.",
+      "2.1": "Idear i dissenyar solucions tecnològiques originals aplicant el procés tecnològic i documentant la informació en una memòria de projecte.",
+      "2.2": "Seleccionar, planificar i organitzar temps, materials, eines i tasques per construir una solució treballant individualment o en grup.",
+      "2.3": "Aplicar criteris de sostenibilitat en el disseny de solucions considerant el cicle de vida de l’objecte.",
+      "3.1": "Fabricar objectes o models emprant materials, instruments, eines i màquines adequades amb normes de seguretat i salut.",
+      "3.2": "Avaluar el resultat d’una construcció contrastant les seves funcions amb els requeriments tècnics del projecte.",
+      "4.1": "Documentar el procés de creació d’un producte elaborant documentació tècnica i gràfica amb eines digitals.",
+      "4.2": "Representar objectes, diagrames i esquemes tècnics mitjançant eines digitals col·laboratives i normes tècniques.",
+      "4.3": "Utilitzar dispositius i recursos digitals per comunicar, difondre i argumentar els aprenentatges.",
+      "5.1": "Descriure, interpretar i dissenyar solucions a problemes informàtics amb algorismes i diagrames de flux.",
+      "5.2": "Programar aplicacions senzilles per a diferents dispositius amb programari, llenguatges i mòduls adequats.",
+      "5.3": "Automatitzar processos, màquines i objectes amb o sense connexió a Internet mitjançant robots i sistemes de control.",
+      "6.1": "Fer un ús eficient i segur dels dispositius digitals identificant riscos i mesures de protecció de dades i equips.",
+      "6.2": "Crear, elaborar i difondre continguts en plataformes configurant eines digitals i respectant llicències i autoria.",
+      "6.3": "Organitzar la informació de manera estructurada aplicant tècniques d’emmagatzematge segur.",
+      "7.1": "Identificar la influència de l’activitat tecnològica en la societat i la sostenibilitat al llarg de la història.",
+      "7.2": "Fer un ús responsable i ètic de les tecnologies emergents valorant benestar, igualtat i reducció d’impacte ambiental.",
+      "7.3": "Valorar l’economia circular com a aportació tecnològica i social per reduir matèries primeres i residus."
+    }
   },
-  criteria: {
-    "1.1": "Idear i planificar solucions tecnològiques emprenedores que generin valor a la comunitat.",
-    "1.2": "Aplicar estratègies col·laboratives de gestió de projectes amb procés iteratiu de validació.",
-    "1.3": "Gestionar el projecte de manera creativa amb tècniques col·laboratives i mètodes de recerca.",
-    "2.1": "Analitzar el disseny d'un producte, la demanda, l'evolució i el final del cicle de vida.",
-    "2.2": "Fabricar productes i solucions fent ús del disseny assistit i tècniques manuals, mecàniques i digitals.",
-    "2.3": "Argumentar solucions valorant-ne la viabilitat econòmica, funcional, sostenible i eficient.",
-    "3.1": "Intercanviar informació i fomentar el treball en equip amb eines digitals, vocabulari tècnic i esquemes.",
-    "3.2": "Presentar i difondre propostes amb expressió adequada, gestió del temps i llenguatge inclusiu.",
-    "4.1": "Dissenyar, construir, controlar o simular sistemes automàtics programables i robots.",
-    "4.2": "Integrar IoT, big data i IA en màquines i sistemes amb sentit crític, ètic i sostenible.",
-    "5.1": "Resoldre tasques amb aplicacions i eines digitals amb autonomia.",
-    "5.2": "Utilitzar eines de representació 3D i simuladors per construir coneixement tecnològic.",
-    "5.3": "Emprar eines de presentació, difusió o publicació per a tasques col·laboratives.",
-    "5.4": "Configurar programes o aplicacions per controlar automatismes.",
-    "6.1": "Aplicar criteris de sostenibilitat en materials, disseny i fabricació minimitzant l'impacte.",
-    "6.2": "Analitzar la contribució de tecnologies sostenibles, arquitectura bioclimàtica, renovables i mobilitat eficient.",
-    "6.3": "Valorar projectes tecnològics socials, comunitats obertes, voluntariat i servei comunitari."
-  },
-  knowledgeBlocks: {
-    projectes: "Procés de resolució de problemes i projectes",
-    operadors: "Operadors tecnològics",
-    robotica: "Pensament computacional, automatització i robòtica",
-    sostenibilitat: "Tecnologia sostenible"
+  tecnologia4: {
+    competencies: {
+      CE1: "Identificar i proposar problemes tecnològics amb iniciativa i creativitat, estudiant necessitats de l’entorn i planificant solucions.",
+      CE2: "Aplicar tècniques i coneixements interdisciplinaris per construir solucions tecnològiques sostenibles.",
+      CE3: "Comunicar, argumentar i difondre idees i solucions tecnològiques amb recursos adequats i treball en equip.",
+      CE4: "Desenvolupar solucions sostenibles amb automatització, tecnologies emergents, sistemes programables i robòtics.",
+      CE5: "Emprar eines digitals de disseny i fabricació per a una producció més eficient i sostenible.",
+      CE6: "Analitzar processos tecnològics i valorar-ne l’impacte social i ambiental amb criteris de sostenibilitat."
+    },
+    criteria: {
+      "1.1": "Idear i planificar solucions tecnològiques emprenedores que generin valor a la comunitat.",
+      "1.2": "Aplicar estratègies col·laboratives de gestió de projectes amb procés iteratiu de validació.",
+      "1.3": "Gestionar el projecte de manera creativa amb tècniques col·laboratives i mètodes de recerca.",
+      "2.1": "Analitzar el disseny d’un producte, la demanda, l’evolució i el final del cicle de vida.",
+      "2.2": "Fabricar productes i solucions fent ús del disseny assistit i tècniques manuals, mecàniques i digitals.",
+      "2.3": "Argumentar solucions valorant-ne la viabilitat econòmica, funcional, sostenible i eficient.",
+      "3.1": "Intercanviar informació i fomentar el treball en equip amb eines digitals, vocabulari tècnic i esquemes.",
+      "3.2": "Presentar i difondre propostes amb expressió adequada, gestió del temps i llenguatge inclusiu.",
+      "4.1": "Dissenyar, construir, controlar o simular sistemes automàtics programables i robots.",
+      "4.2": "Integrar IoT, big data i IA en màquines i sistemes amb sentit crític, ètic i sostenible.",
+      "5.1": "Resoldre tasques amb aplicacions i eines digitals amb autonomia.",
+      "5.2": "Utilitzar eines de representació 3D i simuladors per construir coneixement tecnològic.",
+      "5.3": "Emprar eines de presentació, difusió o publicació per a tasques col·laboratives.",
+      "5.4": "Configurar programes o aplicacions per controlar automatismes.",
+      "6.1": "Aplicar criteris de sostenibilitat en materials, disseny i fabricació minimitzant l’impacte.",
+      "6.2": "Analitzar la contribució de tecnologies sostenibles, arquitectura bioclimàtica, renovables i mobilitat eficient.",
+      "6.3": "Valorar projectes tecnològics socials, comunitats obertes, voluntariat i servei comunitari."
+    }
   }
+};
+
+const KNOWLEDGE_BLOCKS = {
+  projectes: "Procés de resolució de problemes i de projectes",
+  comunicacio: "Comunicació i difusió d’idees",
+  operadors: "Operadors i sistemes tecnològics",
+  robotica: "Pensament computacional, programació i robòtica",
+  digitalitzacio: "Digitalització de l’entorn personal d’aprenentatge",
+  sostenibilitat: "Tecnologia sostenible"
 };
 
 const COURSES = {
   eso1: {
     title: "1r ESO · Tecnologia i Digitalització",
-    status: "pendent",
-    note: "Contenidor preparat. S'omplirà quan s'incorpori el currículum de Tecnologia i Digitalització."
+    status: "actiu",
+    curriculumKey: "tecnologiaDigitalitzacio",
+    note: "Situacions inicials basades en el currículum de Tecnologia i Digitalització.",
+    situations: [
+      {
+        id: "td1-sa1-objecte-quotidia",
+        title: "SA1 · Per què aquest objecte està fet així?",
+        short: "Anàlisi d’un objecte quotidià per comprendre materials, forma, funció, ús i impacte.",
+        challenge: "Com podem analitzar un objecte quotidià per entendre quina necessitat resol i com es podria millorar?",
+        product: "Fitxa d’anàlisi d’objecte amb funció, parts, materials, ús segur, impacte ambiental i proposta de millora.",
+        blocks: ["projectes", "comunicacio", "sostenibilitat"],
+        competencies: ["CE1", "CE4", "CE7"],
+        criteria: ["1.1", "1.2", "4.1", "4.3", "7.1"],
+        knowledge: ["Anàlisi de productes i sistemes tecnològics d’ús habitual.", "Estratègies de cerca crítica d’informació.", "Vocabulari tècnic bàsic i documentació gràfica.", "Característiques dels materials i impacte ambiental."],
+        rubricItems: ["Definició de la necessitat i funció de l’objecte", "Anàlisi de materials, parts i funcionament", "Ús de vocabulari tècnic i documentació", "Valoració de l’impacte i proposta de millora"],
+        teacher: "Situació d’entrada per activar mirada tecnològica i criteris d’anàlisi abans de construir."
+      },
+      {
+        id: "td1-sa2-estructura-resistent",
+        title: "SA2 · Construïm una estructura resistent",
+        short: "Disseny i construcció d’una estructura senzilla amb criteris d’estabilitat, materials i seguretat.",
+        challenge: "Com podem construir una estructura lleugera que suporti una càrrega determinada amb el mínim material possible?",
+        product: "Model físic o simulat d’una estructura, proves de resistència, registre de resultats i millores.",
+        blocks: ["projectes", "operadors", "comunicacio"],
+        competencies: ["CE2", "CE3", "CE4"],
+        criteria: ["2.1", "2.2", "3.1", "3.2", "4.1"],
+        knowledge: ["Aplicació de fases del procés tecnològic.", "Anàlisi i disseny d’estructures per a la construcció de models.", "Manipulació de materials i normes de seguretat.", "Avaluació del resultat respecte dels requeriments tècnics."],
+        rubricItems: ["Planificació de l’estructura i requisits", "Construcció segura i ús adequat de materials", "Proves de resistència i revisió del model", "Documentació del procés i justificació de millores"],
+        teacher: "Adequada per treballar en equips petits amb proves comparatives i registre de dades senzill."
+      },
+      {
+        id: "td1-sa3-entorn-digital-segur",
+        title: "SA3 · Organitzem un entorn digital segur",
+        short: "Configuració d’un entorn digital d’aprenentatge amb organització, seguretat i ús responsable.",
+        challenge: "Com podem organitzar els nostres arxius, comptes i dispositius per aprendre amb més seguretat i eficàcia?",
+        product: "Guia personal d’organització digital amb estructura de carpetes, criteris de seguretat, còpies i bones pràctiques.",
+        blocks: ["digitalitzacio", "comunicacio"],
+        competencies: ["CE6", "CE4", "CE7"],
+        criteria: ["6.1", "6.2", "6.3", "4.3", "7.2"],
+        knowledge: ["Ús de dispositius digitals i resolució de problemes tècnics senzills.", "Eines i entorns virtuals d’aprenentatge.", "Emmagatzematge segur, còpies de seguretat i organització de la informació.", "Seguretat a la xarxa i benestar digital."],
+        rubricItems: ["Organització de la informació digital", "Identificació de riscos i mesures de seguretat", "Configuració i ús responsable d’eines", "Comunicació de bones pràctiques"],
+        teacher: "Situació transversal que pot fer-se a inici de curs per establir rutines digitals."
+      },
+      {
+        id: "td1-sa4-algorisme-quotidia",
+        title: "SA4 · Programem una rutina quotidiana",
+        short: "Representació d’un procés quotidià amb algorismes, diagrames de flux i programació inicial.",
+        challenge: "Com podem convertir una rutina quotidiana en un algorisme que una màquina pugui seguir?",
+        product: "Diagrama de flux i programa senzill que resolgui una tasca o decisió quotidiana.",
+        blocks: ["robotica", "digitalitzacio", "comunicacio"],
+        competencies: ["CE5", "CE4", "CE6"],
+        criteria: ["5.1", "5.2", "4.2", "6.2"],
+        knowledge: ["Resolució de processos mitjançant algorísmica.", "Representació amb diagrames de flux.", "Implementació d’aplicacions senzilles.", "Depuració iterativa i identificació de l’error com a part de l’aprenentatge."],
+        rubricItems: ["Descomposició del procés en passos", "Representació amb diagrama de flux", "Implementació o simulació del programa", "Depuració i explicació de millores"],
+        teacher: "Es pot treballar amb pseudocodi, Scratch, MakeCode o entorns similars."
+      }
+    ]
   },
   eso2: {
     title: "2n ESO · Tecnologia i Digitalització",
-    status: "pendent",
-    note: "Contenidor preparat. S'omplirà quan s'incorpori el currículum de Tecnologia i Digitalització."
+    status: "actiu",
+    curriculumKey: "tecnologiaDigitalitzacio",
+    note: "Situacions inicials basades en el currículum de Tecnologia i Digitalització.",
+    situations: [
+      {
+        id: "td2-sa1-circuit-util",
+        title: "SA1 · Dissenyem un circuit útil",
+        short: "Disseny, muntatge o simulació d’un circuit elèctric o electrònic senzill per resoldre una necessitat.",
+        challenge: "Com podem dissenyar un circuit senzill que resolgui una necessitat concreta del centre o de casa?",
+        product: "Circuit físic o simulat amb esquema, components, proves de funcionament i valoració de seguretat.",
+        blocks: ["projectes", "operadors", "comunicacio"],
+        competencies: ["CE2", "CE3", "CE4"],
+        criteria: ["2.1", "2.2", "3.1", "3.2", "4.2"],
+        knowledge: ["Muntatge d’esquemes i circuits elèctrics o electrònics físics o simulats.", "Interpretació, disseny i aplicació de circuits en projectes.", "Ús d’eines i normes de seguretat.", "Representació d’esquemes tècnics."],
+        rubricItems: ["Disseny del circuit segons la necessitat", "Ús correcte de components i esquema", "Muntatge o simulació segura", "Prova, diagnosi i millora del funcionament"],
+        teacher: "Situació adequada per treballar amb simuladors abans del muntatge físic."
+      },
+      {
+        id: "td2-sa2-mecanisme-moviment",
+        title: "SA2 · Fem moure un mecanisme",
+        short: "Anàlisi i construcció d’un sistema mecànic bàsic que transformi o transmeti moviment.",
+        challenge: "Com podem crear un mecanisme que transformi un moviment per aconseguir una funció concreta?",
+        product: "Maqueta o simulació d’un mecanisme amb explicació de peces, moviment, proves i millores.",
+        blocks: ["projectes", "operadors", "sostenibilitat"],
+        competencies: ["CE1", "CE2", "CE3", "CE4"],
+        criteria: ["1.2", "2.1", "2.2", "3.1", "3.2", "4.1"],
+        knowledge: ["Anàlisi i disseny de sistemes mecànics bàsics.", "Muntatges físics o ús de simuladors.", "Manipulació de materials per construir prototips.", "Avaluació del resultat segons requeriments tècnics."],
+        rubricItems: ["Comprensió de la funció del mecanisme", "Disseny i planificació del prototip", "Construcció o simulació del moviment", "Avaluació del resultat i proposta de millora"],
+        teacher: "Pot connectar-se amb màquines simples, transmissió de moviment i aprofitament de materials reutilitzats."
+      },
+      {
+        id: "td2-sa3-web-projecte",
+        title: "SA3 · Difonem un projecte tecnològic",
+        short: "Creació de documentació i comunicació digital d’un projecte amb criteris d’autoria, claredat i inclusió.",
+        challenge: "Com podem explicar i difondre un projecte tecnològic perquè altres persones l’entenguin i el puguin millorar?",
+        product: "Pàgina, presentació o document multimèdia amb memòria breu, imatges, esquemes i llicències adequades.",
+        blocks: ["comunicacio", "digitalitzacio", "projectes"],
+        competencies: ["CE4", "CE6", "CE2"],
+        criteria: ["4.1", "4.3", "6.2", "6.3", "2.1"],
+        knowledge: ["Elaboració, publicació i difusió de documentació tècnica.", "Ús de recursos digitals per comunicar i argumentar aprenentatges.", "Organització segura de la informació.", "Propietat intel·lectual, autoria i llicències."],
+        rubricItems: ["Organització de la informació del projecte", "Ús de recursos digitals i multimèdia", "Respecte d’autoria, llicències i seguretat", "Claredat de la comunicació tècnica"],
+        teacher: "Es pot aplicar a qualsevol projecte del curs com a activitat d’estructuració i difusió."
+      },
+      {
+        id: "td2-sa4-eco-redisseny",
+        title: "SA4 · Redissenyem per reduir residus",
+        short: "Redisseny d’un producte o embalatge aplicant criteris d’ecodisseny i economia circular.",
+        challenge: "Com podem redissenyar un producte o embalatge perquè generi menys residus i sigui més fàcil de reutilitzar o reparar?",
+        product: "Proposta de redisseny amb comparació abans/després, materials, cicle de vida i justificació sostenible.",
+        blocks: ["sostenibilitat", "projectes", "comunicacio"],
+        competencies: ["CE1", "CE2", "CE4", "CE7"],
+        criteria: ["1.1", "1.2", "2.1", "2.3", "4.1", "7.3"],
+        knowledge: ["Característiques dels materials i impacte ambiental.", "Ecodisseny, economia circular i reducció de residus.", "Creativitat, innovació i impacte social i ambiental.", "Valoració crítica del desenvolupament sostenible."],
+        rubricItems: ["Anàlisi del producte i dels residus", "Aplicació de criteris d’ecodisseny", "Justificació del cicle de vida i materials", "Comunicació de la proposta i impacte esperat"],
+        teacher: "Situació molt útil per connectar tecnologia, consum responsable i hàbits del centre."
+      }
+    ]
   },
   eso3: {
     title: "3r ESO · Tecnologia i Digitalització",
-    status: "pendent",
-    note: "Contenidor preparat. S'omplirà quan s'incorpori el currículum de Tecnologia i Digitalització."
+    status: "actiu",
+    curriculumKey: "tecnologiaDigitalitzacio",
+    note: "Situacions inicials basades en el currículum de Tecnologia i Digitalització.",
+    situations: [
+      {
+        id: "td3-sa1-robot-sensor",
+        title: "SA1 · Robot o sistema amb sensors",
+        short: "Disseny i programació d’un sistema que recull dades amb sensors i actua mitjançant actuadors.",
+        challenge: "Com podem automatitzar una resposta a partir de dades recollides per un sensor?",
+        product: "Sistema físic o simulat amb sensor, actuador, algorisme, proves, depuració i explicació del funcionament.",
+        blocks: ["robotica", "operadors", "comunicacio"],
+        competencies: ["CE5", "CE3", "CE4", "CE6"],
+        criteria: ["5.1", "5.2", "5.3", "3.2", "4.1", "6.1"],
+        knowledge: ["Disseny i implementació de sistemes de control programat.", "Muntatge físic o ús de simuladors i programació de dispositius.", "Internet de les coses.", "Depuració iterativa d’un programa."],
+        rubricItems: ["Definició de l’automatització i variables", "Disseny de l’algorisme i diagrama", "Programació, sensors i actuadors", "Proves, depuració i explicació tècnica"],
+        teacher: "Situació per integrar programació, electrònica, dades i comunicació del procés."
+      },
+      {
+        id: "td3-sa2-app-necessitat",
+        title: "SA2 · Creem una app per una necessitat propera",
+        short: "Disseny d’una aplicació senzilla per donar resposta a una necessitat concreta d’un usuari o col·lectiu.",
+        challenge: "Com podem crear una aplicació senzilla que ajudi a resoldre una necessitat real d’un grup d’usuaris?",
+        product: "Prototip d’app o simulació amb pantalles, flux d’ús, algorisme, proves amb usuaris i millores.",
+        blocks: ["robotica", "digitalitzacio", "comunicacio", "projectes"],
+        competencies: ["CE1", "CE2", "CE4", "CE5", "CE6"],
+        criteria: ["1.1", "2.1", "2.2", "4.1", "4.3", "5.1", "5.2", "6.2"],
+        knowledge: ["Implementació d’aplicacions informàtiques senzilles.", "Algorismes, diagrames de flux i elements de programació.", "Eines digitals de creació de continguts.", "Documentació tècnica i difusió."],
+        rubricItems: ["Anàlisi d’usuaris i necessitat", "Disseny del flux i pantalles", "Implementació funcional del prototip", "Proves, comunicació i millora"],
+        teacher: "Es pot fer amb entorns de blocs, prototipat de pantalles o eines no-code."
+      },
+      {
+        id: "td3-sa3-dades-segures",
+        title: "SA3 · Dades segures i benestar digital",
+        short: "Anàlisi de riscos digitals i disseny d’un pla de protecció de dades, dispositius i benestar.",
+        challenge: "Com podem reduir riscos digitals i millorar el benestar quan fem servir dispositius i serveis en línia?",
+        product: "Pla de seguretat i benestar digital amb diagnosi, mesures preventives, organització de dades i campanya de difusió.",
+        blocks: ["digitalitzacio", "comunicacio", "sostenibilitat"],
+        competencies: ["CE6", "CE4", "CE7"],
+        criteria: ["6.1", "6.2", "6.3", "4.3", "7.2"],
+        knowledge: ["Seguretat a la xarxa: riscos, amenaces i atacs.", "Protecció de dades i informació.", "Accions preventives per al benestar digital.", "Sistemes de comunicació digital d’ús comú."],
+        rubricItems: ["Identificació de riscos digitals", "Proposta de mesures de protecció", "Organització i emmagatzematge segur", "Campanya de difusió clara i responsable"],
+        teacher: "Situació especialment adequada per treballar hàbits digitals, privacitat i convivència."
+      },
+      {
+        id: "td3-sa4-energia-sostenible",
+        title: "SA4 · Energia i decisions sostenibles",
+        short: "Anàlisi d’un consum energètic proper i proposta de millores amb criteris de sostenibilitat.",
+        challenge: "Com podem reduir el consum energètic d’un espai o procés proper mantenint-ne la funcionalitat?",
+        product: "Diagnosi energètica, proposta de millora, estimació d’impacte i comunicació argumentada.",
+        blocks: ["sostenibilitat", "projectes", "comunicacio"],
+        competencies: ["CE1", "CE2", "CE4", "CE7"],
+        criteria: ["1.1", "2.1", "2.3", "4.1", "4.3", "7.1", "7.2"],
+        knowledge: ["Energia com a factor clau del desenvolupament sostenible.", "Eficiència energètica, consum responsable i energies renovables.", "Aplicació de tecnologia sostenible.", "Valoració crítica de l’impacte tecnològic."],
+        rubricItems: ["Diagnosi del consum o problema energètic", "Proposta de millora viable i sostenible", "Justificació de l’impacte i dels criteris tècnics", "Comunicació i argumentació de la decisió"],
+        teacher: "Pot treballar-se amb dades reals del centre, simulades o estimades segons disponibilitat."
+      }
+    ]
   },
   eso4: {
     title: "4t ESO · Tecnologia",
     status: "actiu",
+    curriculumKey: "tecnologia4",
     note: "Contingut inicial basat en el currículum de Tecnologia.",
     situations: [
       {
@@ -71,47 +274,35 @@ const COURSES = {
         blocks: ["projectes", "sostenibilitat"],
         competencies: ["CE1", "CE2", "CE3", "CE6"],
         criteria: ["1.1", "1.2", "1.3", "2.1", "2.3", "3.1", "3.2", "6.1"],
-        knowledge: [
-          "Cerca i estudi de necessitats del centre educatiu.",
-          "Tècniques d'ideació i gestió de projectes col·laboratius.",
-          "Selecció de materials segons propietats, requisits i sostenibilitat.",
-          "Documentació, presentació i difusió de projectes."
-        ],
-        teacher: "Situació inicial recomanada per introduir el procés tecnològic complet. Es pot fer amb prototip físic senzill, maqueta o proposta digital."
+        knowledge: ["Cerca i estudi de necessitats del centre educatiu.", "Tècniques d’ideació i gestió de projectes col·laboratius.", "Selecció de materials segons propietats, requisits i sostenibilitat.", "Documentació, presentació i difusió de projectes."],
+        rubricItems: ["Anàlisi de la necessitat i definició del repte", "Ideació, planificació i gestió del projecte", "Proposta tècnica, materials i viabilitat", "Comunicació, justificació i millora"],
+        teacher: "Situació inicial recomanada per introduir el procés tecnològic complet."
       },
       {
         id: "sa2-automatic",
         title: "SA2 · Sistema automàtic amb sensors",
-        short: "Dissenyar o simular un automatisme que respongui a dades de l'entorn.",
-        challenge: "Com podem fer que un sistema respongui automàticament a una condició de l'entorn?",
+        short: "Dissenyar o simular un automatisme que respongui a dades de l’entorn.",
+        challenge: "Com podem fer que un sistema respongui automàticament a una condició de l’entorn?",
         product: "Esquema del sistema, sensors i actuadors, lògica de control, simulació o muntatge i proves.",
         blocks: ["operadors", "robotica"],
         competencies: ["CE4", "CE5", "CE2", "CE3"],
         criteria: ["4.1", "4.2", "5.1", "5.4", "2.2", "3.1"],
-        knowledge: [
-          "Components de sistemes de control programat: controladors, sensors i actuadors.",
-          "Disseny, construcció i control de robots o sistemes senzills.",
-          "Simuladors informàtics per verificar sistemes.",
-          "Circuits electrònics bàsics físics o simulats."
-        ],
-        teacher: "Pot treballar-se amb micro:bit, Arduino, simuladors de circuits o entorns de blocs. No cal limitar-ho a un maquinari concret."
+        knowledge: ["Components de sistemes de control programat: controladors, sensors i actuadors.", "Disseny, construcció i control de robots o sistemes senzills.", "Simuladors informàtics per verificar sistemes.", "Circuits electrònics bàsics físics o simulats."],
+        rubricItems: ["Disseny del sistema de control", "Integració de sensors, actuadors o simulació", "Programació, proves i depuració", "Documentació i justificació del funcionament"],
+        teacher: "Pot treballar-se amb micro:bit, Arduino, simuladors de circuits o entorns de blocs."
       },
       {
         id: "sa3-aula-eficient",
         title: "SA3 · Aula energèticament eficient",
-        short: "Analitzar una aula i proposar millores d'eficiència energètica i confort.",
-        challenge: "Com podem reduir el consum energètic d'una aula sense empitjorar-ne el confort?",
+        short: "Analitzar una aula i proposar millores d’eficiència energètica i confort.",
+        challenge: "Com podem reduir el consum energètic d’una aula sense empitjorar-ne el confort?",
         product: "Diagnosi, dades observades, proposta de millores, impacte previst i conclusió argumentada.",
         blocks: ["sostenibilitat", "projectes"],
         competencies: ["CE1", "CE6", "CE3", "CE5"],
         criteria: ["1.1", "1.2", "3.1", "3.2", "5.1", "6.1", "6.2"],
-        knowledge: [
-          "Eficiència energètica, consum responsable i energies renovables.",
-          "Estratègies d'estalvi energètic en edificis.",
-          "Arquitectura bioclimàtica i sostenible.",
-          "Anàlisi de dades i comunicació de resultats."
-        ],
-        teacher: "Adequada per connectar Tecnologia amb ciències, matemàtiques i tutoria ecosocial. Pot fer-se amb dades reals o estimades."
+        knowledge: ["Eficiència energètica, consum responsable i energies renovables.", "Estratègies d’estalvi energètic en edificis.", "Arquitectura bioclimàtica i sostenible.", "Anàlisi de dades i comunicació de resultats."],
+        rubricItems: ["Diagnosi energètica i recollida de dades", "Proposta de millora sostenible", "Justificació tècnica i impacte previst", "Comunicació de conclusions i millores futures"],
+        teacher: "Adequada per connectar Tecnologia amb ciències, matemàtiques i tutoria ecosocial."
       },
       {
         id: "sa4-peca-3d",
@@ -122,29 +313,21 @@ const COURSES = {
         blocks: ["projectes", "operadors"],
         competencies: ["CE2", "CE5", "CE3", "CE6"],
         criteria: ["2.1", "2.2", "2.3", "5.1", "5.2", "3.2", "6.1"],
-        knowledge: [
-          "Disseny assistit per ordinador en 2D i 3D.",
-          "Fabricació digital, impressió 3D i tall.",
-          "Cicle de vida del producte.",
-          "Selecció de materials segons propietats i requisits."
-        ],
-        teacher: "La peça no ha de ser complexa. L'objectiu és justificar decisions i iterar el disseny."
+        knowledge: ["Disseny assistit per ordinador en 2D i 3D.", "Fabricació digital, impressió 3D i tall.", "Cicle de vida del producte.", "Selecció de materials segons propietats i requisits."],
+        rubricItems: ["Definició de la necessitat i requisits de la peça", "Disseny 3D o representació tècnica", "Criteris de fabricació i materials", "Avaluació, millora i comunicació del disseny"],
+        teacher: "La peça no ha de ser complexa. L’objectiu és justificar decisions i iterar el disseny."
       },
       {
         id: "sa5-mobilitat",
-        title: "SA5 · Mobilitat sostenible de l'entorn",
+        title: "SA5 · Mobilitat sostenible de l’entorn",
         short: "Analitzar opcions de mobilitat i proposar una millora sostenible i realista.",
         challenge: "Com podem millorar la mobilitat quotidiana del nostre entorn amb criteris de sostenibilitat?",
         product: "Anàlisi comparativa, proposta de millora, impacte social i ambiental, comunicació final.",
         blocks: ["sostenibilitat", "projectes"],
         competencies: ["CE6", "CE3", "CE1", "CE5"],
         criteria: ["6.2", "6.3", "3.1", "3.2", "1.1", "5.3"],
-        knowledge: [
-          "Mobilitat sostenible dels mitjans de transport públic o privat.",
-          "Impacte ecosocial de les decisions tecnològiques.",
-          "Comunicació i difusió de propostes.",
-          "Projectes de servei a la comunitat."
-        ],
+        knowledge: ["Mobilitat sostenible dels mitjans de transport públic o privat.", "Impacte ecosocial de les decisions tecnològiques.", "Comunicació i difusió de propostes.", "Projectes de servei a la comunitat."],
+        rubricItems: ["Anàlisi de la mobilitat i del context", "Comparació d’alternatives sostenibles", "Proposta de millora i impacte social", "Difusió i argumentació de la proposta"],
         teacher: "Es pot orientar a barri, poble, rutes escolars o mobilitat dins del centre."
       },
       {
@@ -156,17 +339,15 @@ const COURSES = {
         blocks: ["projectes", "robotica", "sostenibilitat", "operadors"],
         competencies: ["CE1", "CE2", "CE3", "CE4", "CE5", "CE6"],
         criteria: ["1.1", "1.2", "1.3", "2.2", "2.3", "3.1", "3.2", "4.1", "5.1", "6.3"],
-        knowledge: [
-          "Projectes col·laboratius i cooperatius.",
-          "Automatització, sensors, actuadors o simulació si escau.",
-          "Comunitats obertes d'aprenentatge i voluntariat tecnològic.",
-          "Presentació i difusió del projecte."
-        ],
+        knowledge: ["Projectes col·laboratius i cooperatius.", "Automatització, sensors, actuadors o simulació si escau.", "Comunitats obertes d’aprenentatge i voluntariat tecnològic.", "Presentació i difusió del projecte."],
+        rubricItems: ["Anàlisi de la necessitat comunitària", "Disseny i desenvolupament del prototip", "Impacte social, sostenibilitat i viabilitat", "Comunicació, proves i proposta de continuïtat"],
         teacher: "Situació de síntesi per final de seqüència. Pot funcionar com a projecte global de trimestre."
       }
     ]
   }
 };
+
+const SITUATION_RUBRICS = {};
 
 const PROJECT_STEPS = [
   { key: "necessitat", title: "Detecto la necessitat", prompt: "Quin problema o necessitat has detectat? A qui afecta? On passa?" },
@@ -186,261 +367,6 @@ const RUBRIC_LEVELS = {
   AE: "Assoliment excel·lent"
 };
 
-const SITUATION_RUBRICS = {
-  "sa1-centre": [
-    {
-      item: "Anàlisi de la necessitat i definició del repte",
-      criteria: "CE1 · 1.1, 1.2",
-      levels: {
-        NA: "Detecta una necessitat de manera confusa o poc vinculada al centre; els requisits són incomplets o no verificables.",
-        AS: "Identifica una necessitat real i formula un repte bàsic amb alguns requisits funcionals.",
-        AN: "Analitza usuaris, context i requisits amb coherència, i justifica per què el repte genera valor al centre.",
-        AE: "Contrasta la necessitat amb evidències, prioritza requisits i reformula el repte amb criteris d'utilitat, inclusió i sostenibilitat."
-      }
-    },
-    {
-      item: "Ideació, planificació i gestió del projecte",
-      criteria: "CE1 · 1.2, 1.3",
-      levels: {
-        NA: "Presenta idees desordenades o sense fases clares; la planificació no permet executar el projecte.",
-        AS: "Proposa una solució i una planificació simple amb tasques bàsiques i repartiment inicial.",
-        AN: "Compara alternatives, organitza fases, reparteix responsabilitats i incorpora revisions del procés.",
-        AE: "Aplica estratègies iteratives, documenta decisions i adapta la planificació segons proves, limitacions i retorn de l'equip."
-      }
-    },
-    {
-      item: "Proposta tècnica, materials i viabilitat",
-      criteria: "CE2 · 2.1, 2.3; CE6 · 6.1",
-      levels: {
-        NA: "La proposta és poc viable o no explica materials, costos, ús o impacte.",
-        AS: "Descriu una proposta funcional i identifica alguns materials o recursos necessaris.",
-        AN: "Justifica materials, funcionament, viabilitat i criteris de sostenibilitat amb arguments tècnics suficients.",
-        AE: "Optimitza la proposta valorant cicle de vida, reparabilitat, cost, seguretat, ús real i reducció d'impacte."
-      }
-    },
-    {
-      item: "Comunicació, documentació i presentació final",
-      criteria: "CE3 · 3.1, 3.2",
-      levels: {
-        NA: "La documentació és incompleta i la presentació no explica clarament la solució.",
-        AS: "Presenta la proposta amb vocabulari comprensible i documentació bàsica del procés.",
-        AN: "Comunica amb vocabulari tècnic, esquemes o evidències, i adapta el discurs al temps i al públic.",
-        AE: "Difon la solució de manera clara, inclusiva i convincent, integrant recursos visuals, justificació i resposta a preguntes."
-      }
-    }
-  ],
-  "sa2-automatic": [
-    {
-      item: "Disseny del sistema de control",
-      criteria: "CE4 · 4.1; CE5 · 5.4",
-      levels: {
-        NA: "No diferencia correctament entrada, procés i sortida, o el sistema no respon al repte.",
-        AS: "Identifica sensor, actuador i controlador, i descriu una lògica de funcionament simple.",
-        AN: "Dissenya un sistema coherent amb condicions, seqüència de control i resposta verificable.",
-        AE: "Optimitza el sistema amb condicions alternatives, seguretat, eficiència i possibles ampliacions."
-      }
-    },
-    {
-      item: "Simulació, muntatge o programació",
-      criteria: "CE4 · 4.1; CE5 · 5.1, 5.4",
-      levels: {
-        NA: "El muntatge, simulació o programa és incomplet o no permet comprovar el funcionament.",
-        AS: "Construeix o simula una versió bàsica que executa parcialment la funció prevista.",
-        AN: "Implementa i comprova el sistema amb proves, correccions i ús adequat d'eines digitals.",
-        AE: "Depura el sistema de manera autònoma, documenta errors i millores, i justifica les decisions de programació o muntatge."
-      }
-    },
-    {
-      item: "Integració de components i operadors tecnològics",
-      criteria: "CE2 · 2.2; CE4 · 4.1",
-      levels: {
-        NA: "Els components no estan ben identificats o la relació entre ells és incorrecta.",
-        AS: "Reconeix components principals i n'explica una funció bàsica dins el sistema.",
-        AN: "Relaciona components mecànics, electrònics o digitals i explica com permeten l'automatització.",
-        AE: "Analitza limitacions, compatibilitats i alternatives de components amb criteris tècnics i sostenibles."
-      }
-    },
-    {
-      item: "Ús crític de tecnologies emergents",
-      criteria: "CE4 · 4.2; CE3 · 3.1",
-      levels: {
-        NA: "Esmenta IoT, dades o IA sense relació clara amb el sistema ni valoració crítica.",
-        AS: "Relaciona alguna tecnologia emergent amb una possible millora del sistema.",
-        AN: "Explica avantatges, riscos i usos ètics de dades, IoT o IA en el sistema proposat.",
-        AE: "Argumenta amb sentit crític com integrar tecnologies emergents preservant privacitat, seguretat, eficiència i sostenibilitat."
-      }
-    }
-  ],
-  "sa3-aula-eficient": [
-    {
-      item: "Diagnosi energètica de l'aula",
-      criteria: "CE1 · 1.1; CE6 · 6.1",
-      levels: {
-        NA: "La diagnosi és superficial o no identifica factors de consum i confort.",
-        AS: "Identifica alguns consums o hàbits millorables amb observacions bàsiques.",
-        AN: "Analitza factors d'il·luminació, climatització, ús d'equips o hàbits, i els relaciona amb possibles millores.",
-        AE: "Fonamenta la diagnosi amb dades, comparacions o evidències, i prioritza actuacions segons impacte i viabilitat."
-      }
-    },
-    {
-      item: "Proposta d'estalvi i eficiència",
-      criteria: "CE6 · 6.1, 6.2",
-      levels: {
-        NA: "La proposta és genèrica, poc realista o sense relació amb la diagnosi.",
-        AS: "Proposa mesures senzilles d'estalvi energètic aplicables a l'aula.",
-        AN: "Justifica mesures d'eficiència, consum responsable o arquitectura bioclimàtica amb coherència.",
-        AE: "Integra mesures tècniques i d'hàbits, estima l'impacte i considera confort, manteniment, cost i sostenibilitat."
-      }
-    },
-    {
-      item: "Ús de dades, eines digitals i representació",
-      criteria: "CE5 · 5.1; CE3 · 3.1",
-      levels: {
-        NA: "No organitza dades o les presenta sense relació amb la proposta.",
-        AS: "Recull o utilitza algunes dades i les presenta de manera entenedora.",
-        AN: "Organitza dades, les interpreta i les usa per justificar decisions o comparar alternatives.",
-        AE: "Representa dades de manera clara, detecta patrons i explica limitacions o incerteses de les estimacions."
-      }
-    },
-    {
-      item: "Argumentació ecosocial i comunicació",
-      criteria: "CE3 · 3.2; CE6 · 6.2",
-      levels: {
-        NA: "La conclusió és poc clara o no valora l'impacte ambiental i social.",
-        AS: "Explica la proposta i indica algun benefici ambiental o de confort.",
-        AN: "Argumenta beneficis, limitacions i millores amb llenguatge tècnic i inclusiu.",
-        AE: "Comunica una proposta convincent, transferible i ecosocialment responsable, amb justificació completa i accions concretes."
-      }
-    }
-  ],
-  "sa4-peca-3d": [
-    {
-      item: "Definició de la funció i requisits de la peça",
-      criteria: "CE2 · 2.1; CE1 · 1.1",
-      levels: {
-        NA: "La peça no respon clarament a una necessitat o no defineix requisits d'ús.",
-        AS: "Defineix una funció bàsica i alguns requisits de mida, ús o resistència.",
-        AN: "Relaciona necessitat, funció, usuaris i requisits tècnics de manera coherent.",
-        AE: "Prioritza requisits, anticipa problemes d'ús i ajusta el disseny per millorar funcionalitat, seguretat i accessibilitat."
-      }
-    },
-    {
-      item: "Disseny 2D/3D i representació tècnica",
-      criteria: "CE5 · 5.2; CE2 · 2.2",
-      levels: {
-        NA: "El model o esbós és incomplet, poc comprensible o no fabricable.",
-        AS: "Crea un esbós o model 3D simple que representa la idea principal.",
-        AN: "Elabora un model coherent amb dimensions, formes i criteris de fabricació.",
-        AE: "Optimitza el model amb precisió, iteracions, justificació geomètrica i adequació al procés de fabricació."
-      }
-    },
-    {
-      item: "Materials, fabricació i cicle de vida",
-      criteria: "CE2 · 2.2, 2.3; CE6 · 6.1",
-      levels: {
-        NA: "No justifica materials ni considera sostenibilitat o final de vida.",
-        AS: "Tria un material o tècnica de fabricació i n'explica algun motiu.",
-        AN: "Justifica material, tècnica, durabilitat, residus i viabilitat de fabricació.",
-        AE: "Avalua cicle de vida, reparabilitat, reutilització i alternatives de menor impacte sense perdre funcionalitat."
-      }
-    },
-    {
-      item: "Proves, millora i documentació del disseny",
-      criteria: "CE3 · 3.2; CE2 · 2.3",
-      levels: {
-        NA: "No comprova si la peça funciona o no documenta millores.",
-        AS: "Fa una comprovació bàsica i proposa alguna millora.",
-        AN: "Avalua el disseny amb criteris d'ús i explica millores justificades.",
-        AE: "Documenta iteracions, evidències de prova i millores futures amb comunicació tècnica clara i precisa."
-      }
-    }
-  ],
-  "sa5-mobilitat": [
-    {
-      item: "Anàlisi del problema de mobilitat",
-      criteria: "CE6 · 6.2; CE1 · 1.1",
-      levels: {
-        NA: "Descriu el problema de manera general sense dades, usuaris ni context clar.",
-        AS: "Identifica un problema de mobilitat i alguns usuaris afectats.",
-        AN: "Analitza causes, conseqüències i context de mobilitat amb criteris socials i ambientals.",
-        AE: "Contrasta informació, considera diversitat d'usuaris i formula un repte de mobilitat concret, inclusiu i sostenible."
-      }
-    },
-    {
-      item: "Comparació d'alternatives sostenibles",
-      criteria: "CE6 · 6.2; CE5 · 5.1",
-      levels: {
-        NA: "No compara alternatives o ho fa sense criteris clars.",
-        AS: "Compara algunes opcions de mobilitat amb criteris senzills.",
-        AN: "Valora alternatives segons emissions, cost, temps, seguretat, accessibilitat i impacte social.",
-        AE: "Integra dades, criteris ponderats i limitacions reals per justificar l'alternativa més adequada."
-      }
-    },
-    {
-      item: "Proposta de millora i servei a la comunitat",
-      criteria: "CE6 · 6.3; CE1 · 1.2",
-      levels: {
-        NA: "La proposta és poc aplicable o no mostra benefici comunitari.",
-        AS: "Planteja una millora senzilla amb algun benefici per a l'entorn.",
-        AN: "Dissenya una proposta realista que connecta sostenibilitat, seguretat i servei a la comunitat.",
-        AE: "Formula una actuació transferible, coordinable amb agents de l'entorn i avaluable amb indicadors de millora."
-      }
-    },
-    {
-      item: "Comunicació i argumentació pública",
-      criteria: "CE3 · 3.1, 3.2; CE5 · 5.3",
-      levels: {
-        NA: "La comunicació és poc clara o sense justificació suficient.",
-        AS: "Presenta la proposta amb arguments bàsics i recursos senzills.",
-        AN: "Comunica dades, comparacions i proposta amb estructura clara i llenguatge inclusiu.",
-        AE: "Elabora una comunicació persuasiva, visual i rigorosa, anticipant objeccions i adaptant-se al públic destinatari."
-      }
-    }
-  ],
-  "sa6-servei-comunitari": [
-    {
-      item: "Identificació d'usuaris i necessitat social",
-      criteria: "CE1 · 1.1; CE6 · 6.3",
-      levels: {
-        NA: "La necessitat social és poc concreta o no identifica usuaris reals.",
-        AS: "Identifica un col·lectiu o necessitat i proposa una orientació general del projecte.",
-        AN: "Analitza usuaris, context, requisits i valor comunitari amb coherència.",
-        AE: "Contrasta la necessitat, incorpora criteris d'inclusió i defineix indicadors per valorar l'impacte social."
-      }
-    },
-    {
-      item: "Desenvolupament del prototip tecnològic",
-      criteria: "CE2 · 2.2, 2.3; CE4 · 4.1",
-      levels: {
-        NA: "El prototip és incomplet o no respon funcionalment al repte.",
-        AS: "Construeix o descriu un prototip bàsic amb funcionament parcial.",
-        AN: "Desenvolupa, prova i millora un prototip coherent amb materials, components o simulació adequats.",
-        AE: "Integra solucions tècniques avançades o ben optimitzades, documenta iteracions i justifica la viabilitat del prototip."
-      }
-    },
-    {
-      item: "Treball col·laboratiu, gestió i documentació",
-      criteria: "CE1 · 1.2, 1.3; CE3 · 3.1",
-      levels: {
-        NA: "Hi ha poca organització de l'equip i documentació insuficient del procés.",
-        AS: "Reparteix tasques bàsiques i documenta algunes fases del projecte.",
-        AN: "Gestiona fases, rols, decisions i revisions de manera col·laborativa i documentada.",
-        AE: "Aplica gestió iterativa, resol conflictes o imprevistos i manté una documentació completa, útil i compartible."
-      }
-    },
-    {
-      item: "Impacte, sostenibilitat i difusió del projecte",
-      criteria: "CE3 · 3.2; CE6 · 6.1, 6.3",
-      levels: {
-        NA: "No valora prou l'impacte o la comunicació final és incompleta.",
-        AS: "Explica alguns beneficis socials o ambientals i presenta el projecte de manera bàsica.",
-        AN: "Argumenta impacte, sostenibilitat, limitacions i millores amb comunicació tècnica clara.",
-        AE: "Difon el projecte amb qualitat, evidències i criteris ecosocials, i proposa continuïtat o escalabilitat comunitària."
-      }
-    }
-  ]
-};
-
 const state = {
   course: "eso4",
   situationId: "sa1-centre",
@@ -458,7 +384,8 @@ const tabs = [
   ["eines", "Eines"],
   ["curricular", "Fitxa curricular"],
   ["rubrica", "Rúbrica"],
-  ["informe", "Informe"]
+  ["informe", "Informe"],
+  ["crea", "Crea SA"]
 ];
 
 function currentCourse() {
@@ -466,7 +393,9 @@ function currentCourse() {
 }
 
 function currentSituations() {
-  return currentCourse().situations || [];
+  const base = currentCourse().situations || [];
+  const custom = customSituations[state.course] || [];
+  return [...base, ...custom];
 }
 
 function currentSituation() {
@@ -482,7 +411,84 @@ function safeHtml(text) {
   }[char]));
 }
 
+const STORAGE_KEY_SITUATIONS = "tecnologia-eso-projectes-reptes-custom-situations-v8";
+const STORAGE_KEY_RUBRICS = "tecnologia-eso-projectes-reptes-custom-rubrics-v8";
+
+function loadJsonFromStorage(key, fallback) {
+  try {
+    return JSON.parse(localStorage.getItem(key)) || fallback;
+  } catch (err) {
+    return fallback;
+  }
+}
+
+let customSituations = loadJsonFromStorage(STORAGE_KEY_SITUATIONS, {});
+let customRubrics = loadJsonFromStorage(STORAGE_KEY_RUBRICS, {});
+
+function saveCustomData() {
+  localStorage.setItem(STORAGE_KEY_SITUATIONS, JSON.stringify(customSituations));
+  localStorage.setItem(STORAGE_KEY_RUBRICS, JSON.stringify(customRubrics));
+}
+
+function getCurriculumSetForSituation(s) {
+  const course = currentCourse();
+  const key = (s && s.curriculumKey) || course.curriculumKey || "tecnologiaDigitalitzacio";
+  return CURRICULUM_SETS[key] || CURRICULUM_SETS.tecnologiaDigitalitzacio;
+}
+
+function getRubricRows(s) {
+  if (!s) return [];
+  if (SITUATION_RUBRICS[s.id]) return SITUATION_RUBRICS[s.id];
+  if (customRubrics[s.id]) return customRubrics[s.id];
+  const items = s.rubricItems && s.rubricItems.length ? s.rubricItems : [
+    "Comprensió del repte i del context",
+    "Disseny i desenvolupament de la proposta",
+    "Aplicació de sabers i criteris tècnics",
+    "Comunicació, justificació i millora"
+  ];
+  return items.map(item => createGenericRubric(item, (s.criteria || []).join(", ")));
+}
+
+function getCompetencyText(code) {
+  const set = getCurriculumSetForSituation(currentSituation());
+  return set.competencies[code] || "Competència concretada pel docent per a aquesta situació.";
+}
+
+function getCriteriaText(code) {
+  const set = getCurriculumSetForSituation(currentSituation());
+  return set.criteria[code] || "Criteri concretat pel docent per a aquesta situació.";
+}
+
+function getKnowledgeBlockText(code) {
+  return KNOWLEDGE_BLOCKS[code] || code;
+}
+
+function splitList(value) {
+  return String(value || "")
+    .split(/[\n,]/)
+    .map(item => item.trim())
+    .filter(Boolean);
+}
+
+function makeSlug(value) {
+  return String(value || "sa")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "") || "sa";
+}
+
+function showCreatorFeedback(message) {
+  const box = document.getElementById("creatorFeedback");
+  if (!box) return;
+  box.textContent = message;
+  box.classList.remove("hidden");
+}
+
 function init() {
+  const hashView = window.location.hash.replace("#", "");
+  if (tabs.some(([id]) => id === hashView)) state.view = hashView;
   renderCourseSelect();
   renderSituationSelect();
   renderTabs();
@@ -528,6 +534,7 @@ function renderAll() {
   renderCurriculum();
   renderRubric();
   renderReport();
+  renderCreator();
   renderTeacherMode();
 }
 
@@ -567,7 +574,7 @@ function renderSituations() {
   title.textContent = s.title;
   desc.innerHTML = `<strong>Repte:</strong> ${safeHtml(s.challenge)}<br><br><strong>Producte final:</strong> ${safeHtml(s.product)}`;
   tags.innerHTML = [
-    ...s.blocks.map(b => `<span class="tag">${safeHtml(CURRICULUM.knowledgeBlocks[b])}</span>`),
+    ...s.blocks.map(b => `<span class="tag">${safeHtml(getKnowledgeBlockText(b))}</span>`),
     ...s.competencies.map(c => `<span class="tag warn">${c}</span>`)
   ].join("");
   teacherBox.innerHTML = `<strong>Orientació docent:</strong> ${safeHtml(s.teacher)}`;
@@ -646,17 +653,17 @@ function renderCurriculum() {
     <p><strong>Producte final:</strong> ${safeHtml(s.product)}</p>
     <h3>Competències específiques</h3>
     <div class="curriculum-list">
-      ${s.competencies.map(c => `<div><strong>${c}</strong> · ${safeHtml(CURRICULUM.competencies[c])}</div>`).join("")}
+      ${s.competencies.map(c => `<div><strong>${c}</strong> · ${safeHtml(getCompetencyText(c))}</div>`).join("")}
     </div>
     <h3 style="margin-top:14px;">Criteris d'avaluació</h3>
     <div class="curriculum-list">
-      ${s.criteria.map(c => `<div><strong>${c}</strong> · ${safeHtml(CURRICULUM.criteria[c])}</div>`).join("")}
+      ${s.criteria.map(c => `<div><strong>${c}</strong> · ${safeHtml(getCriteriaText(c))}</div>`).join("")}
     </div>
   `;
 
   knowledge.innerHTML = `
     <h3>Blocs</h3>
-    <div class="tagrow">${s.blocks.map(b => `<span class="tag">${safeHtml(CURRICULUM.knowledgeBlocks[b])}</span>`).join("")}</div>
+    <div class="tagrow">${s.blocks.map(b => `<span class="tag">${safeHtml(getKnowledgeBlockText(b))}</span>`).join("")}</div>
     <h3 style="margin-top:14px;">Sabers seleccionats</h3>
     <div class="curriculum-list">
       ${s.knowledge.map(k => `<div>${safeHtml(k)}</div>`).join("")}
@@ -672,7 +679,7 @@ function renderRubric() {
     return;
   }
 
-  const rows = SITUATION_RUBRICS[s.id] || [];
+  const rows = getRubricRows(s);
   el.innerHTML = `
     <table class="rubric-table" aria-label="Rúbrica formal de la situació d'aprenentatge">
       <thead>
@@ -705,7 +712,7 @@ function renderRubric() {
 }
 
 function buildRubricMarkdown(s) {
-  const rows = SITUATION_RUBRICS[s.id] || [];
+  const rows = getRubricRows(s);
   if (!rows.length) return "[rúbrica pendent]";
   const header = "| Ítem d'avaluació | Criteris | NA · No assoliment | AS · Assoliment satisfactori | AN · Assoliment notable | AE · Assoliment excel·lent |";
   const sep = "|---|---|---|---|---|---|";
@@ -722,7 +729,7 @@ function renderReportRubricTable(s) {
     target.innerHTML = "";
     return;
   }
-  const rows = SITUATION_RUBRICS[s.id] || [];
+  const rows = getRubricRows(s);
   target.innerHTML = `
     <h3>Rúbrica de la situació d'aprenentatge</h3>
     <table class="rubric-table compact" aria-label="Rúbrica adjunta a l'informe">
@@ -781,7 +788,7 @@ function getLearningObjectives(s) {
 }
 
 function getSituationAssessmentCriteria(s) {
-  const rows = SITUATION_RUBRICS[s.id] || [];
+  const rows = getRubricRows(s);
   return rows.map(row => `${row.item}: evidenciar ${row.item.toLowerCase()} en el desenvolupament de la situació, segons els criteris ${row.criteria}.`);
 }
 
@@ -844,7 +851,7 @@ Producte final
 ${s.product}
 
 Competències específiques
-${s.competencies.map(c => `${c}: ${CURRICULUM.competencies[c]}`).join("\n")}
+${s.competencies.map(c => `${c}: ${getCompetencyText(c)}`).join("\n")}
 
 Tractament de les competències transversals
 ${getTransversalCompetencies(s).map(item => "- " + item).join("\n")}
@@ -856,7 +863,7 @@ Criteris d’avaluació de la situació d’aprenentatge
 ${getSituationAssessmentCriteria(s).map(item => "- " + item).join("\n")}
 
 Criteris curriculars vinculats
-${s.criteria.map(c => `${c}: ${CURRICULUM.criteria[c]}`).join("\n")}
+${s.criteria.map(c => `${c}: ${getCriteriaText(c)}`).join("\n")}
 
 Sabers
 ${s.knowledge.map(k => "- " + k).join("\n")}
@@ -945,7 +952,7 @@ function renderReport() {
     <section class="report-grid-2">
       <article class="report-section">
         <h3>Competències específiques</h3>
-        ${renderReportList(s.competencies.map(c => `${c}: ${CURRICULUM.competencies[c]}`))}
+        ${renderReportList(s.competencies.map(c => `${c}: ${getCompetencyText(c)}`))}
       </article>
       <article class="report-section">
         <h3>Tractament de les competències transversals</h3>
@@ -1009,6 +1016,116 @@ function renderReport() {
   renderReportRubricTable(s);
 }
 
+function renderCreator() {
+  const currentCourseInput = document.getElementById("newTitle");
+  if (!currentCourseInput) return;
+}
+
+function createGenericRubric(item, criteriaText) {
+  return {
+    item,
+    criteria: criteriaText || "Criteris seleccionats de la situació",
+    levels: {
+      NA: `L’alumne/a mostra evidències molt parcials de ${item.toLowerCase()} i necessita molta guia per avançar.`,
+      AS: `L’alumne/a resol de manera bàsica ${item.toLowerCase()} amb alguna justificació o evidència suficient.`,
+      AN: `L’alumne/a desenvolupa correctament ${item.toLowerCase()} amb coherència, justificació i revisió del procés.`,
+      AE: `L’alumne/a integra ${item.toLowerCase()} amb autonomia, criteri tècnic, transferència i argumentació aprofundida.`
+    }
+  };
+}
+
+function clearCreatorForm() {
+  ["newTitle", "newShort", "newChallenge", "newProduct", "newCompetencies", "newCriteria", "newKnowledge", "newRubricItems"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = "";
+  });
+}
+
+function saveCreatedSituation() {
+  const title = document.getElementById("newTitle").value.trim();
+  const short = document.getElementById("newShort").value.trim();
+  const challenge = document.getElementById("newChallenge").value.trim();
+  const product = document.getElementById("newProduct").value.trim();
+  const competencies = splitList(document.getElementById("newCompetencies").value);
+  const criteria = splitList(document.getElementById("newCriteria").value);
+  const knowledge = String(document.getElementById("newKnowledge").value || "").split("\n").map(v => v.trim()).filter(Boolean);
+  let rubricItems = String(document.getElementById("newRubricItems").value || "").split("\n").map(v => v.trim()).filter(Boolean);
+
+  if (!title || !challenge || !product) {
+    showCreatorFeedback("Cal completar com a mínim el títol, el repte i el producte final.");
+    return;
+  }
+  if (rubricItems.length < 4) {
+    rubricItems = [
+      "Comprensió del repte i del context",
+      "Disseny i desenvolupament de la proposta",
+      "Aplicació de sabers i criteris tècnics",
+      "Comunicació, justificació i millora"
+    ];
+  }
+
+  const id = `custom-${Date.now()}-${makeSlug(title)}`;
+  const situation = {
+    id,
+    title,
+    short: short || challenge,
+    challenge,
+    product,
+    blocks: ["projectes"],
+    competencies: competencies.length ? competencies : ["CE1", "CE2", "CE3"],
+    criteria: criteria.length ? criteria : [],
+    knowledge: knowledge.length ? knowledge : ["Sabers concretats pel docent segons el context de la situació."],
+    teacher: "Situació creada des del formulari intern. Es pot revisar i adaptar abans d’utilitzar-la a l’aula.",
+    custom: true
+  };
+
+  if (!customSituations[state.course]) customSituations[state.course] = [];
+  customSituations[state.course].push(situation);
+  customRubrics[id] = rubricItems.map(item => createGenericRubric(item, criteria.join(", ")));
+  saveCustomData();
+
+  state.situationId = id;
+  showCreatorFeedback("SA desada. Ja apareix al selector de situacions del curs actual.");
+  clearCreatorForm();
+  renderSituationSelect();
+  renderAll();
+}
+
+function exportCreatedSituations() {
+  const data = {
+    app: "Tecnologia ESO · Projectes i reptes",
+    exportedAt: new Date().toISOString(),
+    situations: customSituations,
+    rubrics: customRubrics
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "situacions-tecnologia-eso.json";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importCreatedSituations(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const data = JSON.parse(reader.result);
+      customSituations = data.situations || customSituations;
+      customRubrics = data.rubrics || customRubrics;
+      saveCustomData();
+      showCreatorFeedback("SAs importades correctament.");
+      renderSituationSelect();
+      renderAll();
+    } catch (err) {
+      showCreatorFeedback("No s’ha pogut importar el fitxer JSON.");
+    }
+  };
+  reader.readAsText(file);
+}
+
 function summarizeDecision() {
   const entries = Object.entries(state.decision);
   if (!entries.length) return "[pendent de completar]";
@@ -1049,6 +1166,7 @@ function attachGlobalEvents() {
     const tab = tabButton ? tabButton.dataset.tab : null;
     if (!tab) return;
     state.view = tab;
+    history.replaceState(null, "", `#${tab}`);
     renderAll();
   });
 
@@ -1107,6 +1225,21 @@ function attachGlobalEvents() {
     }
   });
 
+  const saveSituationBtn = document.getElementById("saveSituationBtn");
+  if (saveSituationBtn) saveSituationBtn.addEventListener("click", saveCreatedSituation);
+
+  const clearCreatorBtn = document.getElementById("clearCreatorBtn");
+  if (clearCreatorBtn) clearCreatorBtn.addEventListener("click", () => {
+    clearCreatorForm();
+    showCreatorFeedback("Formulari netejat.");
+  });
+
+  const exportSituationsBtn = document.getElementById("exportSituationsBtn");
+  if (exportSituationsBtn) exportSituationsBtn.addEventListener("click", exportCreatedSituations);
+
+  const importInput = document.getElementById("importSituationsInput");
+  if (importInput) importInput.addEventListener("change", e => importCreatedSituations(e.target.files[0]));
+
   document.getElementById("printRubricBtn").addEventListener("click", () => {
     const previousView = state.view;
     state.view = "rubrica";
@@ -1120,7 +1253,11 @@ function attachGlobalEvents() {
     }, 250);
   });
 
-  document.getElementById("printBtn").addEventListener("click", () => window.print());
+  document.getElementById("printBtn").addEventListener("click", () => {
+    document.body.classList.add("print-screen");
+    window.print();
+    setTimeout(() => document.body.classList.remove("print-screen"), 250);
+  });
 }
 
 function registerServiceWorker() {

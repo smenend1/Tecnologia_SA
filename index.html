@@ -18,7 +18,7 @@
         <div class="logo" aria-hidden="true">T</div>
         <div>
           <h1>Tecnologia ESO · Projectes i reptes</h1>
-          <p class="version">4t ESO · Tecnologia · Situacions d’aprenentatge</p>
+          <p class="version">Tecnologia ESO · Situacions d’aprenentatge</p>
         </div>
       </div>
       <div class="actions no-print">
@@ -118,8 +118,56 @@
         <div id="reportRubricTable" class="report-rubric-table"></div>
       </article>
     </section>
+
+    <section id="view-crea" class="view grid hidden">
+      <article class="card span-12">
+        <h2>Crea una situació d’aprenentatge</h2>
+        <p class="muted small">Formulari intern per afegir situacions pròpies al curs seleccionat. Es desen al navegador i es poden exportar o importar en JSON.</p>
+        <div class="creator-grid">
+          <div>
+            <label for="newTitle">Títol de la SA</label>
+            <input id="newTitle" placeholder="Ex. Com podem reduir residus al taller?" />
+          </div>
+          <div>
+            <label for="newShort">Descripció breu</label>
+            <input id="newShort" placeholder="Context i intenció principal" />
+          </div>
+          <div class="span-form-2">
+            <label for="newChallenge">Repte o pregunta</label>
+            <textarea id="newChallenge" placeholder="Quin repte es planteja a l’alumnat?"></textarea>
+          </div>
+          <div class="span-form-2">
+            <label for="newProduct">Producte final</label>
+            <textarea id="newProduct" placeholder="Quina evidència, prototip, document o presentació s’haurà de produir?"></textarea>
+          </div>
+          <div>
+            <label for="newCompetencies">Competències específiques</label>
+            <input id="newCompetencies" placeholder="Ex. CE1, CE2, CE3" />
+          </div>
+          <div>
+            <label for="newCriteria">Criteris vinculats</label>
+            <input id="newCriteria" placeholder="Ex. 1.1, 2.3, 3.2" />
+          </div>
+          <div class="span-form-2">
+            <label for="newKnowledge">Sabers treballats</label>
+            <textarea id="newKnowledge" placeholder="Un saber per línia"></textarea>
+          </div>
+          <div class="span-form-2">
+            <label for="newRubricItems">Ítems de rúbrica</label>
+            <textarea id="newRubricItems" placeholder="Un ítem per línia. Mínim recomanat: 4"></textarea>
+          </div>
+        </div>
+        <div class="creator-actions no-print">
+          <button id="saveSituationBtn" class="primary" type="button">Desa la SA</button>
+          <button id="clearCreatorBtn" type="button">Neteja el formulari</button>
+          <button id="exportSituationsBtn" type="button">Exporta SAs creades</button>
+          <label class="import-button">Importa SAs<input id="importSituationsInput" type="file" accept="application/json" /></label>
+        </div>
+        <div id="creatorFeedback" class="teacher-box hidden"></div>
+      </article>
+    </section>
   </main>
 
-  <script src="app.js?v=6" defer></script>
+  <script src="app.js?v=8" defer></script>
 </body>
 </html>
