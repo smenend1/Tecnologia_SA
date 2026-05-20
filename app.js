@@ -1,8 +1,8 @@
 const APP = {
   name: "Tecnologia ESO · Projectes i reptes",
-  version: "v2",
+  version: "v3",
   line: "B",
-  cacheName: "tecnologia-eso-projectes-reptes-v2"
+  cacheName: "tecnologia-eso-projectes-reptes-v3"
 };
 
 const CURRICULUM = {
@@ -179,23 +179,266 @@ const PROJECT_STEPS = [
   { key: "conclusio", title: "Comunico la conclusió", prompt: "Escriu una conclusió tècnica: què proposes, per què és adequada i quines millores futures faries?" }
 ];
 
-const RUBRIC = {
-  NA: {
-    name: "No assoliment",
-    text: "Identifica el repte de manera parcial o poc clara. La proposta és incompleta, amb poca justificació tècnica, digital o sostenible, i necessita molta guia per avançar."
-  },
-  AS: {
-    name: "Assoliment satisfactori",
-    text: "Identifica el problema i proposa una solució funcional bàsica. Descriu parts del procés i aporta alguna justificació tècnica, digital o sostenible."
-  },
-  AN: {
-    name: "Assoliment notable",
-    text: "Desenvolupa una proposta coherent, prova o simula la solució, justifica decisions amb criteris tècnics i sostenibles, i planteja millores realistes."
-  },
-  AE: {
-    name: "Assoliment excel·lent",
-    text: "Integra criteris tècnics, digitals, socials i ambientals amb autonomia. Argumenta amb solidesa, comunica amb precisió i transfereix l'aprenentatge a noves situacions."
-  }
+const RUBRIC_LEVELS = {
+  NA: "No assoliment",
+  AS: "Assoliment satisfactori",
+  AN: "Assoliment notable",
+  AE: "Assoliment excel·lent"
+};
+
+const SITUATION_RUBRICS = {
+  "sa1-centre": [
+    {
+      item: "Anàlisi de la necessitat i definició del repte",
+      criteria: "CE1 · 1.1, 1.2",
+      levels: {
+        NA: "Detecta una necessitat de manera confusa o poc vinculada al centre; els requisits són incomplets o no verificables.",
+        AS: "Identifica una necessitat real i formula un repte bàsic amb alguns requisits funcionals.",
+        AN: "Analitza usuaris, context i requisits amb coherència, i justifica per què el repte genera valor al centre.",
+        AE: "Contrasta la necessitat amb evidències, prioritza requisits i reformula el repte amb criteris d'utilitat, inclusió i sostenibilitat."
+      }
+    },
+    {
+      item: "Ideació, planificació i gestió del projecte",
+      criteria: "CE1 · 1.2, 1.3",
+      levels: {
+        NA: "Presenta idees desordenades o sense fases clares; la planificació no permet executar el projecte.",
+        AS: "Proposa una solució i una planificació simple amb tasques bàsiques i repartiment inicial.",
+        AN: "Compara alternatives, organitza fases, reparteix responsabilitats i incorpora revisions del procés.",
+        AE: "Aplica estratègies iteratives, documenta decisions i adapta la planificació segons proves, limitacions i retorn de l'equip."
+      }
+    },
+    {
+      item: "Proposta tècnica, materials i viabilitat",
+      criteria: "CE2 · 2.1, 2.3; CE6 · 6.1",
+      levels: {
+        NA: "La proposta és poc viable o no explica materials, costos, ús o impacte.",
+        AS: "Descriu una proposta funcional i identifica alguns materials o recursos necessaris.",
+        AN: "Justifica materials, funcionament, viabilitat i criteris de sostenibilitat amb arguments tècnics suficients.",
+        AE: "Optimitza la proposta valorant cicle de vida, reparabilitat, cost, seguretat, ús real i reducció d'impacte."
+      }
+    },
+    {
+      item: "Comunicació, documentació i presentació final",
+      criteria: "CE3 · 3.1, 3.2",
+      levels: {
+        NA: "La documentació és incompleta i la presentació no explica clarament la solució.",
+        AS: "Presenta la proposta amb vocabulari comprensible i documentació bàsica del procés.",
+        AN: "Comunica amb vocabulari tècnic, esquemes o evidències, i adapta el discurs al temps i al públic.",
+        AE: "Difon la solució de manera clara, inclusiva i convincent, integrant recursos visuals, justificació i resposta a preguntes."
+      }
+    }
+  ],
+  "sa2-automatic": [
+    {
+      item: "Disseny del sistema de control",
+      criteria: "CE4 · 4.1; CE5 · 5.4",
+      levels: {
+        NA: "No diferencia correctament entrada, procés i sortida, o el sistema no respon al repte.",
+        AS: "Identifica sensor, actuador i controlador, i descriu una lògica de funcionament simple.",
+        AN: "Dissenya un sistema coherent amb condicions, seqüència de control i resposta verificable.",
+        AE: "Optimitza el sistema amb condicions alternatives, seguretat, eficiència i possibles ampliacions."
+      }
+    },
+    {
+      item: "Simulació, muntatge o programació",
+      criteria: "CE4 · 4.1; CE5 · 5.1, 5.4",
+      levels: {
+        NA: "El muntatge, simulació o programa és incomplet o no permet comprovar el funcionament.",
+        AS: "Construeix o simula una versió bàsica que executa parcialment la funció prevista.",
+        AN: "Implementa i comprova el sistema amb proves, correccions i ús adequat d'eines digitals.",
+        AE: "Depura el sistema de manera autònoma, documenta errors i millores, i justifica les decisions de programació o muntatge."
+      }
+    },
+    {
+      item: "Integració de components i operadors tecnològics",
+      criteria: "CE2 · 2.2; CE4 · 4.1",
+      levels: {
+        NA: "Els components no estan ben identificats o la relació entre ells és incorrecta.",
+        AS: "Reconeix components principals i n'explica una funció bàsica dins el sistema.",
+        AN: "Relaciona components mecànics, electrònics o digitals i explica com permeten l'automatització.",
+        AE: "Analitza limitacions, compatibilitats i alternatives de components amb criteris tècnics i sostenibles."
+      }
+    },
+    {
+      item: "Ús crític de tecnologies emergents",
+      criteria: "CE4 · 4.2; CE3 · 3.1",
+      levels: {
+        NA: "Esmenta IoT, dades o IA sense relació clara amb el sistema ni valoració crítica.",
+        AS: "Relaciona alguna tecnologia emergent amb una possible millora del sistema.",
+        AN: "Explica avantatges, riscos i usos ètics de dades, IoT o IA en el sistema proposat.",
+        AE: "Argumenta amb sentit crític com integrar tecnologies emergents preservant privacitat, seguretat, eficiència i sostenibilitat."
+      }
+    }
+  ],
+  "sa3-aula-eficient": [
+    {
+      item: "Diagnosi energètica de l'aula",
+      criteria: "CE1 · 1.1; CE6 · 6.1",
+      levels: {
+        NA: "La diagnosi és superficial o no identifica factors de consum i confort.",
+        AS: "Identifica alguns consums o hàbits millorables amb observacions bàsiques.",
+        AN: "Analitza factors d'il·luminació, climatització, ús d'equips o hàbits, i els relaciona amb possibles millores.",
+        AE: "Fonamenta la diagnosi amb dades, comparacions o evidències, i prioritza actuacions segons impacte i viabilitat."
+      }
+    },
+    {
+      item: "Proposta d'estalvi i eficiència",
+      criteria: "CE6 · 6.1, 6.2",
+      levels: {
+        NA: "La proposta és genèrica, poc realista o sense relació amb la diagnosi.",
+        AS: "Proposa mesures senzilles d'estalvi energètic aplicables a l'aula.",
+        AN: "Justifica mesures d'eficiència, consum responsable o arquitectura bioclimàtica amb coherència.",
+        AE: "Integra mesures tècniques i d'hàbits, estima l'impacte i considera confort, manteniment, cost i sostenibilitat."
+      }
+    },
+    {
+      item: "Ús de dades, eines digitals i representació",
+      criteria: "CE5 · 5.1; CE3 · 3.1",
+      levels: {
+        NA: "No organitza dades o les presenta sense relació amb la proposta.",
+        AS: "Recull o utilitza algunes dades i les presenta de manera entenedora.",
+        AN: "Organitza dades, les interpreta i les usa per justificar decisions o comparar alternatives.",
+        AE: "Representa dades de manera clara, detecta patrons i explica limitacions o incerteses de les estimacions."
+      }
+    },
+    {
+      item: "Argumentació ecosocial i comunicació",
+      criteria: "CE3 · 3.2; CE6 · 6.2",
+      levels: {
+        NA: "La conclusió és poc clara o no valora l'impacte ambiental i social.",
+        AS: "Explica la proposta i indica algun benefici ambiental o de confort.",
+        AN: "Argumenta beneficis, limitacions i millores amb llenguatge tècnic i inclusiu.",
+        AE: "Comunica una proposta convincent, transferible i ecosocialment responsable, amb justificació completa i accions concretes."
+      }
+    }
+  ],
+  "sa4-peca-3d": [
+    {
+      item: "Definició de la funció i requisits de la peça",
+      criteria: "CE2 · 2.1; CE1 · 1.1",
+      levels: {
+        NA: "La peça no respon clarament a una necessitat o no defineix requisits d'ús.",
+        AS: "Defineix una funció bàsica i alguns requisits de mida, ús o resistència.",
+        AN: "Relaciona necessitat, funció, usuaris i requisits tècnics de manera coherent.",
+        AE: "Prioritza requisits, anticipa problemes d'ús i ajusta el disseny per millorar funcionalitat, seguretat i accessibilitat."
+      }
+    },
+    {
+      item: "Disseny 2D/3D i representació tècnica",
+      criteria: "CE5 · 5.2; CE2 · 2.2",
+      levels: {
+        NA: "El model o esbós és incomplet, poc comprensible o no fabricable.",
+        AS: "Crea un esbós o model 3D simple que representa la idea principal.",
+        AN: "Elabora un model coherent amb dimensions, formes i criteris de fabricació.",
+        AE: "Optimitza el model amb precisió, iteracions, justificació geomètrica i adequació al procés de fabricació."
+      }
+    },
+    {
+      item: "Materials, fabricació i cicle de vida",
+      criteria: "CE2 · 2.2, 2.3; CE6 · 6.1",
+      levels: {
+        NA: "No justifica materials ni considera sostenibilitat o final de vida.",
+        AS: "Tria un material o tècnica de fabricació i n'explica algun motiu.",
+        AN: "Justifica material, tècnica, durabilitat, residus i viabilitat de fabricació.",
+        AE: "Avalua cicle de vida, reparabilitat, reutilització i alternatives de menor impacte sense perdre funcionalitat."
+      }
+    },
+    {
+      item: "Proves, millora i documentació del disseny",
+      criteria: "CE3 · 3.2; CE2 · 2.3",
+      levels: {
+        NA: "No comprova si la peça funciona o no documenta millores.",
+        AS: "Fa una comprovació bàsica i proposa alguna millora.",
+        AN: "Avalua el disseny amb criteris d'ús i explica millores justificades.",
+        AE: "Documenta iteracions, evidències de prova i millores futures amb comunicació tècnica clara i precisa."
+      }
+    }
+  ],
+  "sa5-mobilitat": [
+    {
+      item: "Anàlisi del problema de mobilitat",
+      criteria: "CE6 · 6.2; CE1 · 1.1",
+      levels: {
+        NA: "Descriu el problema de manera general sense dades, usuaris ni context clar.",
+        AS: "Identifica un problema de mobilitat i alguns usuaris afectats.",
+        AN: "Analitza causes, conseqüències i context de mobilitat amb criteris socials i ambientals.",
+        AE: "Contrasta informació, considera diversitat d'usuaris i formula un repte de mobilitat concret, inclusiu i sostenible."
+      }
+    },
+    {
+      item: "Comparació d'alternatives sostenibles",
+      criteria: "CE6 · 6.2; CE5 · 5.1",
+      levels: {
+        NA: "No compara alternatives o ho fa sense criteris clars.",
+        AS: "Compara algunes opcions de mobilitat amb criteris senzills.",
+        AN: "Valora alternatives segons emissions, cost, temps, seguretat, accessibilitat i impacte social.",
+        AE: "Integra dades, criteris ponderats i limitacions reals per justificar l'alternativa més adequada."
+      }
+    },
+    {
+      item: "Proposta de millora i servei a la comunitat",
+      criteria: "CE6 · 6.3; CE1 · 1.2",
+      levels: {
+        NA: "La proposta és poc aplicable o no mostra benefici comunitari.",
+        AS: "Planteja una millora senzilla amb algun benefici per a l'entorn.",
+        AN: "Dissenya una proposta realista que connecta sostenibilitat, seguretat i servei a la comunitat.",
+        AE: "Formula una actuació transferible, coordinable amb agents de l'entorn i avaluable amb indicadors de millora."
+      }
+    },
+    {
+      item: "Comunicació i argumentació pública",
+      criteria: "CE3 · 3.1, 3.2; CE5 · 5.3",
+      levels: {
+        NA: "La comunicació és poc clara o sense justificació suficient.",
+        AS: "Presenta la proposta amb arguments bàsics i recursos senzills.",
+        AN: "Comunica dades, comparacions i proposta amb estructura clara i llenguatge inclusiu.",
+        AE: "Elabora una comunicació persuasiva, visual i rigorosa, anticipant objeccions i adaptant-se al públic destinatari."
+      }
+    }
+  ],
+  "sa6-servei-comunitari": [
+    {
+      item: "Identificació d'usuaris i necessitat social",
+      criteria: "CE1 · 1.1; CE6 · 6.3",
+      levels: {
+        NA: "La necessitat social és poc concreta o no identifica usuaris reals.",
+        AS: "Identifica un col·lectiu o necessitat i proposa una orientació general del projecte.",
+        AN: "Analitza usuaris, context, requisits i valor comunitari amb coherència.",
+        AE: "Contrasta la necessitat, incorpora criteris d'inclusió i defineix indicadors per valorar l'impacte social."
+      }
+    },
+    {
+      item: "Desenvolupament del prototip tecnològic",
+      criteria: "CE2 · 2.2, 2.3; CE4 · 4.1",
+      levels: {
+        NA: "El prototip és incomplet o no respon funcionalment al repte.",
+        AS: "Construeix o descriu un prototip bàsic amb funcionament parcial.",
+        AN: "Desenvolupa, prova i millora un prototip coherent amb materials, components o simulació adequats.",
+        AE: "Integra solucions tècniques avançades o ben optimitzades, documenta iteracions i justifica la viabilitat del prototip."
+      }
+    },
+    {
+      item: "Treball col·laboratiu, gestió i documentació",
+      criteria: "CE1 · 1.2, 1.3; CE3 · 3.1",
+      levels: {
+        NA: "Hi ha poca organització de l'equip i documentació insuficient del procés.",
+        AS: "Reparteix tasques bàsiques i documenta algunes fases del projecte.",
+        AN: "Gestiona fases, rols, decisions i revisions de manera col·laborativa i documentada.",
+        AE: "Aplica gestió iterativa, resol conflictes o imprevistos i manté una documentació completa, útil i compartible."
+      }
+    },
+    {
+      item: "Impacte, sostenibilitat i difusió del projecte",
+      criteria: "CE3 · 3.2; CE6 · 6.1, 6.3",
+      levels: {
+        NA: "No valora prou l'impacte o la comunicació final és incompleta.",
+        AS: "Explica alguns beneficis socials o ambientals i presenta el projecte de manera bàsica.",
+        AN: "Argumenta impacte, sostenibilitat, limitacions i millores amb comunicació tècnica clara.",
+        AE: "Difon el projecte amb qualitat, evidències i criteris ecosocials, i proposa continuïtat o escalabilitat comunitària."
+      }
+    }
+  ]
 };
 
 const state = {
@@ -204,7 +447,7 @@ const state = {
   view: "situacions",
   level: "AN",
   teacherMode: false,
-  includeRubricInReport: false,
+  includeRubricInReport: true,
   responses: {},
   decision: {},
   sustainability: {}
@@ -254,7 +497,7 @@ function renderCourseSelect() {
   select.innerHTML = Object.entries(COURSES).map(([id, course]) => {
     const suffix = course.status === "pendent" ? " · pendent" : "";
     return `<option value="${id}">${safeHtml(course.title + suffix)}</option>`;
-  }).join("");
+  }).join("\\n");
   select.value = state.course;
 }
 
@@ -267,14 +510,14 @@ function renderSituationSelect() {
     return;
   }
   select.disabled = false;
-  select.innerHTML = situations.map(s => `<option value="${s.id}">${safeHtml(s.title)}</option>`).join("");
+  select.innerHTML = situations.map(s => `<option value="${s.id}">${safeHtml(s.title)}</option>`).join("\\n");
   if (!situations.some(s => s.id === state.situationId)) state.situationId = situations[0].id;
   select.value = state.situationId;
 }
 
 function renderTabs() {
   const el = document.getElementById("tabs");
-  el.innerHTML = tabs.map(([id, label]) => `<button class="${state.view === id ? "active" : ""}" data-tab="${id}" type="button">${label}</button>`).join("");
+  el.innerHTML = tabs.map(([id, label]) => `<button class="${state.view === id ? "active" : ""}" data-tab="${id}" type="button">${label}</button>`).join("\\n");
 }
 
 function renderAll() {
@@ -317,9 +560,9 @@ function renderSituations() {
     <div class="situation-item ${s.id === state.situationId ? "active" : ""}" data-situation="${s.id}">
       <strong>${safeHtml(s.title)}</strong>
       <p class="small muted">${safeHtml(s.short)}</p>
-      <div class="tagrow">${s.competencies.map(c => `<span class="tag">${c}</span>`).join("")}</div>
+      <div class="tagrow">${s.competencies.map(c => `<span class="tag">${c}</span>`).join("\\n")}</div>
     </div>
-  `).join("");
+  `).join("\\n");
 
   const s = currentSituation();
   title.textContent = s.title;
@@ -327,7 +570,7 @@ function renderSituations() {
   tags.innerHTML = [
     ...s.blocks.map(b => `<span class="tag">${safeHtml(CURRICULUM.knowledgeBlocks[b])}</span>`),
     ...s.competencies.map(c => `<span class="tag warn">${c}</span>`)
-  ].join("");
+  ].join("\\n");
   teacherBox.innerHTML = `<strong>Orientació docent:</strong> ${safeHtml(s.teacher)}`;
 }
 
@@ -341,7 +584,7 @@ function renderTaller() {
       <label for="step-${step.key}" class="small">${safeHtml(step.prompt)}</label>
       <textarea id="step-${step.key}" data-response="${step.key}" placeholder="Escriu aquí la teva resposta...">${safeHtml(state.responses[step.key] || "")}</textarea>
     </div>
-  `).join("");
+  `).join("\\n");
 }
 
 function renderTools() {
@@ -363,10 +606,10 @@ function renderDecisionTool() {
             <label class="tiny">${c} · 1-4</label>
             <input type="number" min="1" max="4" data-decision-score="${opt}|${c}" value="${safeHtml(state.decision[opt]?.scores?.[c] || "")}" />
           </div>
-        `).join("")}
+        `).join("\\n")}
       </div>
     </div>
-  `).join("");
+  `).join("\\n");
 }
 
 function renderSustainabilityTool() {
@@ -383,7 +626,7 @@ function renderSustainabilityTool() {
       <label for="sus-${key}">${safeHtml(label)}</label>
       <textarea id="sus-${key}" data-sustainability="${key}" placeholder="Resposta...">${safeHtml(state.sustainability[key] || "")}</textarea>
     </div>
-  `).join("");
+  `).join("\\n");
 }
 
 function renderCurriculum() {
@@ -404,35 +647,110 @@ function renderCurriculum() {
     <p><strong>Producte final:</strong> ${safeHtml(s.product)}</p>
     <h3>Competències específiques</h3>
     <div class="curriculum-list">
-      ${s.competencies.map(c => `<div><strong>${c}</strong> · ${safeHtml(CURRICULUM.competencies[c])}</div>`).join("")}
+      ${s.competencies.map(c => `<div><strong>${c}</strong> · ${safeHtml(CURRICULUM.competencies[c])}</div>`).join("\\n")}
     </div>
     <h3 style="margin-top:14px;">Criteris d'avaluació</h3>
     <div class="curriculum-list">
-      ${s.criteria.map(c => `<div><strong>${c}</strong> · ${safeHtml(CURRICULUM.criteria[c])}</div>`).join("")}
+      ${s.criteria.map(c => `<div><strong>${c}</strong> · ${safeHtml(CURRICULUM.criteria[c])}</div>`).join("\\n")}
     </div>
   `;
 
   knowledge.innerHTML = `
     <h3>Blocs</h3>
-    <div class="tagrow">${s.blocks.map(b => `<span class="tag">${safeHtml(CURRICULUM.knowledgeBlocks[b])}</span>`).join("")}</div>
+    <div class="tagrow">${s.blocks.map(b => `<span class="tag">${safeHtml(CURRICULUM.knowledgeBlocks[b])}</span>`).join("\\n")}</div>
     <h3 style="margin-top:14px;">Sabers seleccionats</h3>
     <div class="curriculum-list">
-      ${s.knowledge.map(k => `<div>${safeHtml(k)}</div>`).join("")}
+      ${s.knowledge.map(k => `<div>${safeHtml(k)}</div>`).join("\\n")}
     </div>
   `;
 }
 
 function renderRubric() {
   const el = document.getElementById("rubricCard");
-  el.innerHTML = Object.entries(RUBRIC).map(([level, item]) => `
-    <div class="level ${state.level === level ? "selected" : ""}">
-      <strong>${level} · ${safeHtml(item.name)}</strong>
-      <p class="small">${safeHtml(item.text)}</p>
-    </div>
-  `).join("");
+  const s = currentSituation();
+  if (!s) {
+    el.innerHTML = `<p class="muted">Rúbrica pendent fins que s'afegeixi el currículum del curs seleccionat.</p>`;
+    return;
+  }
+
+  const rows = SITUATION_RUBRICS[s.id] || [];
+  el.innerHTML = `
+    <table class="rubric-table" aria-label="Rúbrica formal de la situació d'aprenentatge">
+      <thead>
+        <tr>
+          <th>Ítem d'avaluació</th>
+          <th>Criteris</th>
+          <th>NA<br><span>No assoliment</span></th>
+          <th>AS<br><span>Assoliment satisfactori</span></th>
+          <th>AN<br><span>Assoliment notable</span></th>
+          <th>AE<br><span>Assoliment excel·lent</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rows.map(row => `
+          <tr>
+            <td><strong>${safeHtml(row.item)}</strong></td>
+            <td>${safeHtml(row.criteria)}</td>
+            <td>${safeHtml(row.levels.NA)}</td>
+            <td>${safeHtml(row.levels.AS)}</td>
+            <td>${safeHtml(row.levels.AN)}</td>
+            <td>${safeHtml(row.levels.AE)}</td>
+          </tr>
+        `).join("\\n")}
+      </tbody>
+    </table>
+  `;
 
   const check = document.getElementById("includeRubricCheck");
   if (check) check.checked = state.includeRubricInReport;
+}
+
+function buildRubricMarkdown(s) {
+  const rows = SITUATION_RUBRICS[s.id] || [];
+  if (!rows.length) return "[rúbrica pendent]";
+  const header = "| Ítem d'avaluació | Criteris | NA · No assoliment | AS · Assoliment satisfactori | AN · Assoliment notable | AE · Assoliment excel·lent |";
+  const sep = "|---|---|---|---|---|---|";
+  const body = rows.map(row => `| ${row.item} | ${row.criteria} | ${row.levels.NA} | ${row.levels.AS} | ${row.levels.AN} | ${row.levels.AE} |`).join("\n");
+  return `${header}
+${sep}
+${body}`;
+}
+
+function renderReportRubricTable(s) {
+  const target = document.getElementById("reportRubricTable");
+  if (!target) return;
+  if (!state.includeRubricInReport || !s) {
+    target.innerHTML = "";
+    return;
+  }
+  const rows = SITUATION_RUBRICS[s.id] || [];
+  target.innerHTML = `
+    <h3>Rúbrica formal LOMLOE de la situació d'aprenentatge</h3>
+    <table class="rubric-table compact" aria-label="Rúbrica adjunta a l'informe">
+      <thead>
+        <tr>
+          <th>Ítem</th>
+          <th>Criteris</th>
+          <th>NA</th>
+          <th>AS</th>
+          <th>AN</th>
+          <th>AE</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rows.map(row => `
+          <tr>
+            <td><strong>${safeHtml(row.item)}</strong></td>
+            <td>${safeHtml(row.criteria)}</td>
+            <td>${safeHtml(row.levels.NA)}</td>
+            <td>${safeHtml(row.levels.AS)}</td>
+            <td>${safeHtml(row.levels.AN)}</td>
+            <td>${safeHtml(row.levels.AE)}</td>
+          </tr>
+        `).join("\\n")}
+      </tbody>
+    </table>
+  `;
 }
 
 function renderReport() {
@@ -440,16 +758,22 @@ function renderReport() {
   const report = document.getElementById("report");
   if (!s) {
     report.textContent = "Informe pendent: aquest curs encara no té situacions carregades.";
+    renderReportRubricTable(null);
     return;
   }
 
   const stepText = PROJECT_STEPS.map(step => {
     const value = state.responses[step.key] || "[pendent de completar]";
-    return `${step.title}\n${value}`;
+    return `${step.title}
+${value}`;
   }).join("\n\n");
 
+  const selectedLabel = RUBRIC_LEVELS[state.level];
   const rubricText = state.includeRubricInReport
-    ? `\n\nRúbrica completa\n${Object.entries(RUBRIC).map(([level, item]) => `${level} · ${item.name}: ${item.text}`).join("\n")}`
+    ? `
+
+Rúbrica formal LOMLOE de la situació d'aprenentatge
+${buildRubricMarkdown(s)}`
     : "";
 
   report.textContent = `${APP.name} · ${APP.version}
@@ -457,7 +781,7 @@ Línia: ${APP.line} · Projecte independent de Matemàtiques ESO
 
 Curs: ${currentCourse().title}
 Situació: ${s.title}
-Nivell d'assoliment seleccionat: ${state.level} · ${RUBRIC[state.level].name}
+Nivell d'assoliment seleccionat: ${state.level} · ${selectedLabel}
 
 Repte
 ${s.challenge}
@@ -483,11 +807,10 @@ ${summarizeDecision()}
 Anàlisi de sostenibilitat
 ${summarizeSustainability()}
 
-Rúbrica orientativa
-${state.level} · ${RUBRIC[state.level].name}: ${RUBRIC[state.level].text}${rubricText}
-
 Conclusió final
-La proposta s'ha de valorar segons la seva utilitat, viabilitat tècnica, sostenibilitat, qualitat de la justificació i capacitat de comunicar les decisions preses.`;
+La proposta s'ha de valorar segons la seva utilitat, viabilitat tècnica, sostenibilitat, qualitat de la justificació i capacitat de comunicar les decisions preses.${rubricText}`;
+
+  renderReportRubricTable(s);
 }
 
 function summarizeDecision() {

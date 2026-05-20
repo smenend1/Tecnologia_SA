@@ -1,4 +1,4 @@
-const CACHE_NAME = "tecnologia-eso-projectes-reptes-v2";
+const CACHE_NAME = "tecnologia-eso-projectes-reptes-v3";
 const ASSETS = [
   "./",
   "./index.html",

@@ -1,26 +1,25 @@
-# Tecnologia ESO · Projectes i reptes v2
+# Tecnologia ESO · Projectes i reptes v3
 
 PWA educativa en català per a la línia B del projecte: **Tecnologia ESO · Projectes i reptes**.
 
 Aquesta app és independent de **Matemàtiques ESO · Situacions i eines**.
 
-## Canvis principals de la v2
+## Canvis principals de la v3
 
-- `index.html` net i separat.
-- `styles.css` amb tot el disseny visual.
-- `app.js` amb dades curriculars, situacions, rúbrica, eines i informe.
-- `manifest.json` per instal·lació PWA.
-- `sw.js` per funcionament offline.
-- Rúbrica amb nivells **NA, AS, AN i AE**.
-- Botó per imprimir només la rúbrica.
-- Opció per afegir la rúbrica completa a l'informe.
+- Rúbriques formals pròpies per a cada situació d'aprenentatge.
+- Cada rúbrica té com a mínim 4 ítems d'avaluació.
+- Cada ítem es desplega amb els nivells **NA, AS, AN i AE**.
+- La rúbrica es mostra en format de quadre.
+- La rúbrica formal s'adjunta al final de l'informe quan l'opció està activada.
+- El botó **Imprimeix rúbrica** imprimeix només la rúbrica de la situació seleccionada.
+- `index.html`, `styles.css` i `app.js` continuen separats.
 - Contingut inicial per a **4t ESO · Tecnologia**.
 - Contenidors preparats per a 1r, 2n i 3r ESO quan s'incorpori el PDF de Tecnologia i Digitalització.
 
 ## Estructura
 
 ```text
-tecnologia-eso-projectes-reptes-v2/
+tecnologia-eso-projectes-reptes-v3/
   index.html
   styles.css
   app.js
@@ -41,14 +40,12 @@ tecnologia-eso-projectes-reptes-v2/
 
 ## Notes curriculars
 
-La v2 no inventa contingut per a 1r, 2n i 3r. Aquests cursos són contenidors pendents. Quan es disposi del PDF de Tecnologia i Digitalització, caldrà afegir les seves competències, criteris, sabers i situacions pròpies dins `app.js`.
+La v3 no inventa contingut per a 1r, 2n i 3r. Aquests cursos són contenidors pendents. Quan es disposi del PDF de Tecnologia i Digitalització, caldrà afegir les seves competències, criteris, sabers i situacions pròpies dins `app.js`.
 
 ## Cache
 
-La cache de la v2 és:
+La cache de la v3 és:
 
 ```js
-tecnologia-eso-projectes-reptes-v2
+tecnologia-eso-projectes-reptes-v3
 ```
-
-Això evita conflictes amb altres PWAs, especialment amb la línia de Matemàtiques.

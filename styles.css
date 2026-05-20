@@ -245,9 +245,7 @@ textarea { min-height: 92px; resize: vertical; }
 }
 
 .rubric {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
+  overflow-x: auto;
 }
 
 .level {
@@ -297,7 +295,7 @@ textarea { min-height: 92px; resize: vertical; }
 
 @media (max-width: 900px) {
   .hero { grid-template-columns: 1fr; }
-  .selector-row, .two-cols, .rubric { grid-template-columns: 1fr; }
+  .selector-row, .two-cols { grid-template-columns: 1fr; }
   .span-4, .span-5, .span-6, .span-7, .span-8, .span-12 { grid-column: span 12; }
   .topbar { align-items: flex-start; flex-direction: column; }
   .actions { justify-content: flex-start; }
@@ -312,4 +310,50 @@ textarea { min-height: 92px; resize: vertical; }
   body.print-rubric main > :not(#view-rubrica) { display: none !important; }
   body.print-rubric #view-rubrica { display: grid !important; }
   body.print-rubric #view-rubrica .card { border: 0; }
+}
+
+
+.rubric-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  font-size: 0.86rem;
+}
+
+.rubric-table th,
+.rubric-table td {
+  border: 1px solid var(--border);
+  padding: 10px;
+  vertical-align: top;
+  text-align: left;
+}
+
+.rubric-table th {
+  background: #ecfdf5;
+  color: var(--brand);
+  font-weight: 900;
+}
+
+.rubric-table th span {
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.rubric-table.compact {
+  margin-top: 12px;
+  font-size: 0.78rem;
+}
+
+.report-rubric-table {
+  margin-top: 18px;
+}
+
+@media print {
+  .rubric-table { font-size: 0.72rem; }
+  .rubric-table th, .rubric-table td { padding: 6px; }
+  .report-rubric-table { page-break-before: always; }
 }
