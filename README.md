@@ -1,4 +1,4 @@
-# Tecnologia ESO · Projectes i reptes v18
+# Tecnologia ESO · Projectes i reptes v19
 
 PWA educativa en català per treballar situacions d’aprenentatge de Tecnologia i Tecnologia i Digitalització a l’ESO.
 
@@ -12,7 +12,7 @@ PWA educativa en català per treballar situacions d’aprenentatge de Tecnologia
 - `sw.js`: Service Worker i cache offline.
 - `icons/`: icones de la PWA.
 
-## Novetats v18
+## Novetats v19
 
 - Importació de documents des de la pestanya **Crea SA**.
 - Formats admesos: JSON exportat, TXT/Markdown, Word `.docx` i PDF textual.
@@ -26,32 +26,39 @@ PWA educativa en català per treballar situacions d’aprenentatge de Tecnologia
 La lectura de PDF és bàsica i només funciona bé amb PDFs que contenen text real. Si el PDF és escanejat o té el text codificat, és millor enganxar el text manualment o utilitzar la plantilla Word.
 
 
-## Novetats v18
+## Novetats v19
 
 - Tipografia canviada a Arial/Helvetica per evitar artefactes d'impressió amb algunes lletres en Android o en el diàleg de PDF.
 - El document d'impressió força la mateixa font també dins la finestra independent de PDF.
 
 
-## v18
+## v19
 
 - Afegeix selector de font visible: Times New Roman, Arial, Georgia, Verdana i Sistema.
 - Times New Roman és la font per defecte per evitar problemes de renderització en imprimir/PDF.
 - La font triada s’aplica també al document independent d’exportació a PDF.
 
 
-## v18
+## v19
 - Corregeix la importació de JSON amb títols buits o mal interpretats.
 - Afegeix el botó **Edita SA** per modificar títol, repte i producte final de la SA seleccionada.
 - Desa les SA importades al llistat del curs corresponent.
 - Manté camps ampliats com materials, evidències i rúbrica importada.
 
 
-## v18
+## v19
 - Corregeix la integració real de les SA importades al selector.
 - Les SA importades per JSON queden desades a la mateixa estructura interna que les creades des de l’app.
 - El botó **Edita SA** també funciona amb SA importades.
 - La importació JSON des d’“Importa document” desa directament la situació, en lloc de convertir-la en un esborrany textual.
 
 
-## v18
+## v19
 Afegeix 7 situacions noves revisades i adaptades a ESO: 4 a 3r ESO i 3 a 4t ESO. Les propostes originàries de batxillerat han estat adaptades, no copiades literalment.
+
+
+## v19
+- Substitueix el mode docent antic per una alternança real **Vista alumne / Vista docent**.
+- Vista alumne: mostra Situacions, Taller, Eines, Rúbrica i Informe; oculta creació, edició i fitxa curricular.
+- Vista docent: mostra totes les pestanyes, creació/importació, edició, fitxa curricular, criteris, sabers, evidències i orientacions.
+- La vista seleccionada es desa al navegador.

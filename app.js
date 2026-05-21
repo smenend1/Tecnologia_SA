@@ -1,8 +1,8 @@
 const APP = {
   name: "Tecnologia ESO · Projectes i reptes",
-  version: "v18",
+  version: "v19",
   line: "B",
-  cacheName: "tecnologia-eso-projectes-reptes-v18"
+  cacheName: "tecnologia-eso-projectes-reptes-v19"
 };
 
 const CURRICULUM_SETS = {
@@ -367,7 +367,7 @@ const RUBRIC_LEVELS = {
   AE: "Assoliment excel·lent"
 };
 
-const STORAGE_KEY_FONT = "tecnologia-eso-projectes-reptes-font-v18";
+const STORAGE_KEY_FONT = "tecnologia-eso-projectes-reptes-font-v19";
 const DEFAULT_FONT = "Times New Roman, Times, serif";
 const ALLOWED_FONTS = [
   DEFAULT_FONT,
@@ -407,11 +407,26 @@ function getPrintFontCss() {
   return ALLOWED_FONTS.includes(state.fontFamily) ? state.fontFamily : DEFAULT_FONT;
 }
 
+
+function readSavedViewMode() {
+  try {
+    return localStorage.getItem("tecnologia-eso-view-mode-v19") || "student";
+  } catch (err) {
+    return "student";
+  }
+}
+
+function saveViewMode(mode) {
+  try {
+    localStorage.setItem("tecnologia-eso-view-mode-v19", mode);
+  } catch (err) {}
+}
+
 const state = {
   course: "eso4",
   situationId: "sa1-centre",
   view: "situacions",
-  teacherMode: false,
+  teacherMode: readSavedViewMode() === "teacher",
   includeRubricInReport: true,
   responses: {},
   decision: {},
@@ -452,8 +467,8 @@ function safeHtml(text) {
   }[char]));
 }
 
-const STORAGE_KEY_SITUATIONS = "tecnologia-eso-projectes-reptes-custom-situations-v18";
-const STORAGE_KEY_RUBRICS = "tecnologia-eso-projectes-reptes-custom-rubrics-v18";
+const STORAGE_KEY_SITUATIONS = "tecnologia-eso-projectes-reptes-custom-situations-v19";
+const STORAGE_KEY_RUBRICS = "tecnologia-eso-projectes-reptes-custom-rubrics-v19";
 const LEGACY_STORAGE_KEYS = {
   situations: ["tecnologia-eso-projectes-reptes-custom-situations-v16", "tecnologia-eso-projectes-reptes-custom-situations-v15", "tecnologia-eso-projectes-reptes-custom-situations-v12"],
   rubrics: ["tecnologia-eso-projectes-reptes-custom-rubrics-v16", "tecnologia-eso-projectes-reptes-custom-rubrics-v15", "tecnologia-eso-projectes-reptes-custom-rubrics-v12"]
@@ -578,7 +593,18 @@ function renderSituationSelect() {
 
 function renderTabs() {
   const el = document.getElementById("tabs");
-  el.innerHTML = tabs.map(([id, label]) => `<button class="${state.view === id ? "active" : ""}" data-tab="${id}" type="button">${label}</button>`).join("");
+  const teacherTabs = tabs;
+  const studentTabs = tabs.filter(([id]) => ["situacions", "taller", "eines", "rubrica", "informe"].includes(id));
+  const visibleTabs = state.teacherMode ? teacherTabs : studentTabs;
+
+  if (!state.teacherMode && !visibleTabs.some(([id]) => id === state.view)) {
+    state.view = "situacions";
+  }
+
+  el.innerHTML = visibleTabs.map(([id, label]) => {
+    const extraClass = ["curricular", "creador"].includes(id) ? "teacher-only" : "";
+    return `<button class="${state.view === id ? "active" : ""} ${extraClass}" data-tab="${id}" type="button">${label}</button>`;
+  }).join("");
 }
 
 function renderAll() {
@@ -633,7 +659,27 @@ function renderSituations() {
     ...s.blocks.map(b => `<span class="tag">${safeHtml(getKnowledgeBlockText(b))}</span>`),
     ...s.competencies.map(c => `<span class="tag warn">${c}</span>`)
   ].join("");
-  teacherBox.innerHTML = `<strong>Orientació docent:</strong> ${safeHtml(s.teacher)}`;
+  teacherBox.innerHTML = `
+    <strong>Orientació docent:</strong> ${safeHtml(s.teacher)}
+    <div class="teacher-extra-grid">
+      <div class="teacher-extra-card">
+        <h4>Competències específiques</h4>
+        <p>${s.competencies.map(c => `<strong>${c}</strong> · ${safeHtml(getCompetencyText(c))}`).join("<br>")}</p>
+      </div>
+      <div class="teacher-extra-card">
+        <h4>Criteris d’avaluació</h4>
+        <p>${s.criteria.map(c => `<strong>${c}</strong> · ${safeHtml(getCriteriaText(c))}`).join("<br>")}</p>
+      </div>
+      <div class="teacher-extra-card">
+        <h4>Sabers</h4>
+        <p>${s.knowledge.map(k => `• ${safeHtml(k)}`).join("<br>")}</p>
+      </div>
+      <div class="teacher-extra-card">
+        <h4>Evidències</h4>
+        <p>${Array.isArray(s.evidence) && s.evidence.length ? s.evidence.map(e => `• ${safeHtml(e)}`).join("<br>") : "Evidències integrades en el producte final i la rúbrica."}</p>
+      </div>
+    </div>
+  `;
 }
 
 function renderTaller() {
@@ -1622,8 +1668,37 @@ function summarizeSustainability() {
 
 function renderTeacherMode() {
   const toggle = document.getElementById("teacherToggle");
-  toggle.textContent = `Mode docent: ${state.teacherMode ? "activat" : "desactivat"}`;
+  if (toggle) {
+    toggle.textContent = state.teacherMode ? "Vista docent" : "Vista alumne";
+    toggle.title = state.teacherMode
+      ? "Canvia a vista alumne"
+      : "Canvia a vista docent";
+  }
+
+  document.body.classList.toggle("teacher-view", state.teacherMode);
+  document.body.classList.toggle("student-view", !state.teacherMode);
+
   document.querySelectorAll(".teacher-box").forEach(box => box.classList.toggle("hidden", !state.teacherMode));
+
+  const tabsEl = document.getElementById("tabs");
+  if (tabsEl && !document.getElementById("modeNotice")) {
+    const notice = document.createElement("div");
+    notice.id = "modeNotice";
+    notice.className = "mode-notice";
+    tabsEl.insertAdjacentElement("afterend", notice);
+  }
+
+  const notice = document.getElementById("modeNotice");
+  if (notice) {
+    notice.innerHTML = state.teacherMode
+      ? `<span class="view-mode-chip">Vista docent</span> <strong>Gestió i programació.</strong> Es mostren la fitxa curricular, sabers, criteris, creació/importació, edició i orientacions docents.`
+      : `<span class="view-mode-chip">Vista alumne</span> <strong>Treball i consulta.</strong> Es mostren el repte, el taller, les eines, la rúbrica i l’informe. S’oculten les opcions de creació, edició i gestió curricular.`;
+  }
+
+  const editBtn = document.getElementById("editCurrentSABtn");
+  if (editBtn) editBtn.classList.toggle("teacher-only", true);
+
+  saveViewMode(state.teacherMode ? "teacher" : "student");
 }
 
 
@@ -1642,7 +1717,7 @@ function openPrintDocument(title, bodyHtml, kind) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${safeTitle}</title>
-  <link rel="stylesheet" href="./styles.css?v=17">
+  <link rel="stylesheet" href="./styles.css?v=19">
   <style>
     html, body { background: #ffffff !important; font-family: ${getPrintFontCss()} !important; }
     body { margin: 0; color: #172016; }
@@ -1802,7 +1877,11 @@ function attachGlobalEvents() {
 
   document.getElementById("teacherToggle").addEventListener("click", () => {
     state.teacherMode = !state.teacherMode;
-    renderTeacherMode();
+    if (!state.teacherMode && ["curricular", "creador"].includes(state.view)) {
+      state.view = "situacions";
+      history.replaceState(null, "", "#situacions");
+    }
+    renderAll();
   });
 
   document.getElementById("copyReportBtn").addEventListener("click", async () => {
@@ -1859,31 +1938,31 @@ if (document.readyState === "loading") {
 
 
 
-/* v18 · Normalització i edició de situacions importades */
-function v18CleanText(value) {
+/* v19 · Normalització i edició de situacions importades */
+function v19CleanText(value) {
   if (Array.isArray(value)) return value.filter(Boolean).join(" · ").trim();
   if (value && typeof value === "object") return Object.values(value).filter(Boolean).join(" · ").trim();
   return String(value || "").trim();
 }
 
-function v18NormalizeImportedSA(raw) {
+function v19NormalizeImportedSA(raw) {
   const sa = Object.assign({}, raw || {});
-  const title = v18CleanText(sa.title || sa.titol || sa["títol"] || sa.name || sa.nom);
-  const challenge = v18CleanText(sa.challenge || sa.repte || sa.descripcio || sa["descripció"] || sa.short);
-  const product = v18CleanText(sa.product || sa.producte || sa["producte final"]);
-  sa.id = v18CleanText(sa.id) || ("sa-importada-" + Date.now());
+  const title = v19CleanText(sa.title || sa.titol || sa["títol"] || sa.name || sa.nom);
+  const challenge = v19CleanText(sa.challenge || sa.repte || sa.descripcio || sa["descripció"] || sa.short);
+  const product = v19CleanText(sa.product || sa.producte || sa["producte final"]);
+  sa.id = v19CleanText(sa.id) || ("sa-importada-" + Date.now());
   sa.title = title || "SA importada pendent de títol";
-  sa.short = v18CleanText(sa.short) || challenge || "Situació d’aprenentatge importada.";
+  sa.short = v19CleanText(sa.short) || challenge || "Situació d’aprenentatge importada.";
   sa.challenge = challenge || "Repte pendent de concretar.";
   sa.product = product || "Producte final pendent de concretar.";
-  sa.course = v18CleanText(sa.course || sa.curs) || "eso4";
-  sa.subject = v18CleanText(sa.subject || sa.materia || sa["matèria"]) || (sa.course === "eso4" ? "Tecnologia" : "Tecnologia i Digitalització");
-  sa.competencies = Array.isArray(sa.competencies) ? sa.competencies : v18CleanText(sa.competencies || sa.ce).split(/[,; ]+/).filter(Boolean);
-  sa.criteria = Array.isArray(sa.criteria) ? sa.criteria : v18CleanText(sa.criteria || sa.ca).split(/[,;]+/).map(s => s.trim()).filter(Boolean);
-  sa.blocks = Array.isArray(sa.blocks) ? sa.blocks : v18CleanText(sa.blocks).split(/[,;]+/).map(s => s.trim()).filter(Boolean);
-  sa.knowledge = Array.isArray(sa.knowledge) ? sa.knowledge : v18CleanText(sa.knowledge || sa.sabers).split(/\n|;/).map(s => s.trim()).filter(Boolean);
-  sa.objectives = Array.isArray(sa.objectives) ? sa.objectives : v18CleanText(sa.objectives || sa.objectius).split(/\n|;/).map(s => s.trim()).filter(Boolean);
-  sa.transversal = Array.isArray(sa.transversal) ? sa.transversal : v18CleanText(sa.transversal).split(/\n|;/).map(s => s.trim()).filter(Boolean);
+  sa.course = v19CleanText(sa.course || sa.curs) || "eso4";
+  sa.subject = v19CleanText(sa.subject || sa.materia || sa["matèria"]) || (sa.course === "eso4" ? "Tecnologia" : "Tecnologia i Digitalització");
+  sa.competencies = Array.isArray(sa.competencies) ? sa.competencies : v19CleanText(sa.competencies || sa.ce).split(/[,; ]+/).filter(Boolean);
+  sa.criteria = Array.isArray(sa.criteria) ? sa.criteria : v19CleanText(sa.criteria || sa.ca).split(/[,;]+/).map(s => s.trim()).filter(Boolean);
+  sa.blocks = Array.isArray(sa.blocks) ? sa.blocks : v19CleanText(sa.blocks).split(/[,;]+/).map(s => s.trim()).filter(Boolean);
+  sa.knowledge = Array.isArray(sa.knowledge) ? sa.knowledge : v19CleanText(sa.knowledge || sa.sabers).split(/\n|;/).map(s => s.trim()).filter(Boolean);
+  sa.objectives = Array.isArray(sa.objectives) ? sa.objectives : v19CleanText(sa.objectives || sa.objectius).split(/\n|;/).map(s => s.trim()).filter(Boolean);
+  sa.transversal = Array.isArray(sa.transversal) ? sa.transversal : v19CleanText(sa.transversal).split(/\n|;/).map(s => s.trim()).filter(Boolean);
   if (!sa.activities || typeof sa.activities !== "object") {
     sa.activities = {
       initial: "",
@@ -1896,7 +1975,7 @@ function v18NormalizeImportedSA(raw) {
   return sa;
 }
 
-function v18GetCustomSAs() {
+function v19GetCustomSAs() {
   try {
     return JSON.parse(localStorage.getItem("customSituations") || localStorage.getItem("customSAs") || "[]");
   } catch (e) {
@@ -1904,42 +1983,42 @@ function v18GetCustomSAs() {
   }
 }
 
-function v18SaveCustomSAs(list) {
+function v19SaveCustomSAs(list) {
   localStorage.setItem("customSituations", JSON.stringify(list));
   localStorage.setItem("customSAs", JSON.stringify(list));
 }
 
-function v18UpsertCustomSA(sa) {
-  const normalized = v18NormalizeImportedSA(sa);
-  const list = v18GetCustomSAs();
+function v19UpsertCustomSA(sa) {
+  const normalized = v19NormalizeImportedSA(sa);
+  const list = v19GetCustomSAs();
   const idx = list.findIndex(item => item.id === normalized.id);
   if (idx >= 0) list[idx] = normalized;
   else list.push(normalized);
-  v18SaveCustomSAs(list);
+  v19SaveCustomSAs(list);
   return normalized;
 }
 
-function v18OpenEditCurrentSA() {
+function v19OpenEditCurrentSA() {
   const s = (typeof currentSituation === "function") ? currentSituation() : null;
   if (!s) {
     alert("No hi ha cap situació seleccionada per editar.");
     return;
   }
-  const title = prompt("Títol de la situació d’aprenentatge:", v18CleanText(s.title));
+  const title = prompt("Títol de la situació d’aprenentatge:", v19CleanText(s.title));
   if (title === null) return;
-  const challenge = prompt("Repte o pregunta guia:", v18CleanText(s.challenge || s.short));
+  const challenge = prompt("Repte o pregunta guia:", v19CleanText(s.challenge || s.short));
   if (challenge === null) return;
-  const product = prompt("Producte final:", v18CleanText(s.product));
+  const product = prompt("Producte final:", v19CleanText(s.product));
   if (product === null) return;
 
   const updated = Object.assign({}, s, {
-    title: v18CleanText(title) || "SA importada pendent de títol",
-    challenge: v18CleanText(challenge) || "Repte pendent de concretar.",
-    short: v18CleanText(challenge) || s.short || "Situació d’aprenentatge importada.",
-    product: v18CleanText(product) || "Producte final pendent de concretar."
+    title: v19CleanText(title) || "SA importada pendent de títol",
+    challenge: v19CleanText(challenge) || "Repte pendent de concretar.",
+    short: v19CleanText(challenge) || s.short || "Situació d’aprenentatge importada.",
+    product: v19CleanText(product) || "Producte final pendent de concretar."
   });
 
-  v18UpsertCustomSA(updated);
+  v19UpsertCustomSA(updated);
 
   if (typeof loadCustomSituations === "function") loadCustomSituations();
   if (typeof renderSituationSelect === "function") renderSituationSelect();
@@ -1948,23 +2027,24 @@ function v18OpenEditCurrentSA() {
   alert("SA actualitzada i desada al llistat.");
 }
 
-function v18InstallEditButton() {
+function v19InstallEditButton() {
   if (document.getElementById("editCurrentSABtn")) return;
   const tabs = document.getElementById("tabs") || document.querySelector(".tabs");
   const target = tabs || document.querySelector("main") || document.body;
   const btn = document.createElement("button");
   btn.id = "editCurrentSABtn";
+  btn.classList.add("teacher-only");
   btn.type = "button";
   btn.textContent = "Edita SA";
-  btn.addEventListener("click", v18OpenEditCurrentSA);
+  btn.addEventListener("click", v19OpenEditCurrentSA);
   target.appendChild(btn);
 }
-document.addEventListener("DOMContentLoaded", () => setTimeout(v18InstallEditButton, 600));
+document.addEventListener("DOMContentLoaded", () => setTimeout(v19InstallEditButton, 600));
 
 
 
-/* v18 · Correcció visual de títols buits o mal importats */
-function v18FixBrokenDisplayedTitles() {
+/* v19 · Correcció visual de títols buits o mal importats */
+function v19FixBrokenDisplayedTitles() {
   document.querySelectorAll("h1,h2,h3,option,.situation-item,strong").forEach(el => {
     const txt = (el.textContent || "").trim();
     if (txt === "[" || txt === "[]" || txt === "undefined" || txt === "null") {
@@ -1972,17 +2052,17 @@ function v18FixBrokenDisplayedTitles() {
     }
   });
 }
-document.addEventListener("DOMContentLoaded", () => setInterval(v18FixBrokenDisplayedTitles, 1000));
+document.addEventListener("DOMContentLoaded", () => setInterval(v19FixBrokenDisplayedTitles, 1000));
 
 
 
-/* v18 · Gestió real de SA importades i edició */
-function v18CleanTitle(value) {
+/* v19 · Gestió real de SA importades i edició */
+function v19CleanTitle(value) {
   const text = String(value || "").trim();
   return (!text || text === "[" || text === "]" || text === "undefined" || text === "null") ? "SA importada pendent de títol" : text;
 }
 
-function v18MigrateLooseCustomStores() {
+function v19MigrateLooseCustomStores() {
   const keys = ["customSituations", "customSAs"];
   let changed = false;
 
@@ -2016,7 +2096,7 @@ function v18MigrateLooseCustomStores() {
   Object.keys(customSituations).forEach(courseKey => {
     customSituations[courseKey] = (customSituations[courseKey] || []).map((s, index) => {
       const normalized = normalizeImportedSituation(s, index);
-      normalized.title = v18CleanTitle(normalized.title);
+      normalized.title = v19CleanTitle(normalized.title);
       return normalized;
     });
   });
@@ -2025,13 +2105,13 @@ function v18MigrateLooseCustomStores() {
 }
 
 function currentSituations() {
-  v18MigrateLooseCustomStores();
+  v19MigrateLooseCustomStores();
   const base = (currentCourse() && currentCourse().situations) || [];
   const custom = customSituations[state.course] || [];
   return [...base, ...custom];
 }
 
-function v18FindSituationEverywhere(id) {
+function v19FindSituationEverywhere(id) {
   if (!id) return null;
   for (const courseKey of Object.keys(COURSES)) {
     const base = COURSES[courseKey].situations || [];
@@ -2046,9 +2126,9 @@ function v18FindSituationEverywhere(id) {
 }
 
 function v16OpenEditCurrentSA() {
-  v18MigrateLooseCustomStores();
+  v19MigrateLooseCustomStores();
 
-  const found = v18FindSituationEverywhere(state.situationId);
+  const found = v19FindSituationEverywhere(state.situationId);
   const s = found ? found.situation : currentSituation();
 
   if (!s) {
@@ -2056,7 +2136,7 @@ function v16OpenEditCurrentSA() {
     return;
   }
 
-  const title = prompt("Títol de la situació d’aprenentatge:", v18CleanTitle(s.title));
+  const title = prompt("Títol de la situació d’aprenentatge:", v19CleanTitle(s.title));
   if (title === null) return;
 
   const challenge = prompt("Repte o pregunta guia:", String(s.challenge || s.short || "").trim());
@@ -2067,7 +2147,7 @@ function v16OpenEditCurrentSA() {
 
   const courseKey = (found && found.courseKey) || state.course || s.course || "eso4";
   const updated = normalizeImportedSituation(Object.assign({}, s, {
-    title: v18CleanTitle(title),
+    title: v19CleanTitle(title),
     challenge: String(challenge || "").trim() || "Repte pendent de concretar.",
     short: String(challenge || "").trim() || s.short || "Situació d’aprenentatge importada.",
     product: String(product || "").trim() || "Producte final pendent de concretar.",
@@ -2098,19 +2178,19 @@ function v16OpenEditCurrentSA() {
   alert("SA actualitzada i desada al llistat.");
 }
 
-function v18RefreshAfterLoad() {
-  v18MigrateLooseCustomStores();
+function v19RefreshAfterLoad() {
+  v19MigrateLooseCustomStores();
   renderCourseSelect();
   renderSituationSelect();
   renderAll();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  setTimeout(v18RefreshAfterLoad, 700);
+  setTimeout(v19RefreshAfterLoad, 700);
 });
 
 
-/* v18 · Situacions afegides a partir de propostes docents */
+/* v19 · Situacions afegides a partir de propostes docents */
 const V18_ADDITIONAL_SITUATIONS = {
   "eso3": [
     {
@@ -2838,7 +2918,7 @@ const V18_ADDITIONAL_SITUATIONS = {
   ]
 };
 
-function v18InstallAdditionalSituations() {
+function v19InstallAdditionalSituations() {
   Object.entries(V18_ADDITIONAL_SITUATIONS).forEach(([courseKey, list]) => {
     if (!COURSES[courseKey]) return;
     if (!Array.isArray(COURSES[courseKey].situations)) COURSES[courseKey].situations = [];
@@ -2849,12 +2929,12 @@ function v18InstallAdditionalSituations() {
     });
   });
 }
-v18InstallAdditionalSituations();
+v19InstallAdditionalSituations();
 document.addEventListener("DOMContentLoaded", () => {
   try {
-    v18InstallAdditionalSituations();
+    v19InstallAdditionalSituations();
     if (typeof renderCourseSelect === "function") renderCourseSelect();
     if (typeof renderSituationSelect === "function") renderSituationSelect();
     if (typeof renderAll === "function") renderAll();
-  } catch (err) { console.warn("No s'han pogut instal·lar les SA v18", err); }
+  } catch (err) { console.warn("No s'han pogut instal·lar les SA v19", err); }
 });

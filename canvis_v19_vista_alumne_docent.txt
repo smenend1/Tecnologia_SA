@@ -1,0 +1,17 @@
+v19 · Vista alumne / Vista docent
+
+Vista alumne:
+- Situacions
+- Taller
+- Eines
+- Rúbrica
+- Informe
+- S'oculten creació, edició, fitxa curricular i detalls interns.
+
+Vista docent:
+- Totes les pestanyes
+- Fitxa curricular completa
+- Criteris, sabers i evidències
+- Orientacions docents
+- Crea SA / importa / exporta
+- Edita SA

@@ -761,7 +761,7 @@ textarea { min-height: 92px; resize: vertical; }
 }
 
 
-/* v18 · Edició de SA importades */
+/* v19 · Edició de SA importades */
 .sa-edit-panel {
   margin-top: 1rem;
   padding: 1rem;
@@ -797,4 +797,64 @@ textarea { min-height: 92px; resize: vertical; }
   background: #fffbeb;
   color: #92400e;
   margin: 0.5rem 0;
+}
+
+
+/* v19 · Vista alumne / Vista docent */
+.mode-notice {
+  margin: 0 0 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 8px 22px rgba(20, 83, 45, 0.08);
+  line-height: 1.45;
+}
+.mode-notice strong {
+  color: var(--brand);
+}
+body.student-view .teacher-only,
+body.student-view #editCurrentSABtn {
+  display: none !important;
+}
+body.student-view #situationTags,
+body.student-view .situation-item .tagrow {
+  display: none !important;
+}
+body.teacher-view .student-only {
+  display: none !important;
+}
+.view-mode-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid #bbf7d0;
+  background: #ecfdf5;
+  color: #14532d;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+.teacher-extra-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+.teacher-extra-card {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 0.85rem;
+  background: #f7fff8;
+}
+.teacher-extra-card h4 {
+  margin: 0 0 0.35rem;
+  color: var(--brand);
+}
+.teacher-extra-card p {
+  margin: 0;
+}
+@media (max-width: 800px) {
+  .teacher-extra-grid { grid-template-columns: 1fr; }
 }

@@ -1,11 +1,11 @@
-const CACHE_NAME = "tecnologia-eso-projectes-reptes-v18";
+const CACHE_NAME = "tecnologia-eso-projectes-reptes-v19";
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./styles.css?v=18",
-  "./app.js?v=18",
-  "./jszip.min.js?v=18",
-  "./index.html?v=18",
+  "./styles.css?v=19",
+  "./app.js?v=19",
+  "./jszip.min.js?v=19",
+  "./index.html?v=19",
   "./manifest.json",
   "./icons/icon-192.png",
   "./icons/icon-512.png"
