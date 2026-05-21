@@ -8,7 +8,7 @@
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="icons/icon-192.png" />
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
-  <link rel="stylesheet" href="styles.css?v=13" />
+  <link rel="stylesheet" href="styles.css?v=14" />
   <title>Tecnologia ESO · Projectes i reptes</title>
 </head>
 <body>
@@ -22,6 +22,16 @@
         </div>
       </div>
       <div class="actions no-print">
+        <label class="font-control" for="fontSelect">
+          <span>Font</span>
+          <select id="fontSelect" aria-label="Tria la font del document">
+            <option value="Times New Roman, Times, serif">Times New Roman</option>
+            <option value="Arial, Helvetica, sans-serif">Arial</option>
+            <option value="Georgia, serif">Georgia</option>
+            <option value="Verdana, Geneva, sans-serif">Verdana</option>
+            <option value="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Sistema</option>
+          </select>
+        </label>
         <button id="teacherToggle" class="ghost" type="button">Mode docent: desactivat</button>
         <button id="copyReportBtn" type="button">Copia informe</button>
         <button id="printRubricBtn" type="button">Imprimeix rúbrica</button>
@@ -207,7 +217,7 @@
     </section>
   </main>
 
-  <script src="jszip.min.js?v=13" defer></script>
-  <script src="app.js?v=13" defer></script>
+  <script src="jszip.min.js?v=14" defer></script>
+  <script src="app.js?v=14" defer></script>
 </body>
 </html>

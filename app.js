@@ -1,8 +1,8 @@
 const APP = {
   name: "Tecnologia ESO · Projectes i reptes",
-  version: "v13",
+  version: "v14",
   line: "B",
-  cacheName: "tecnologia-eso-projectes-reptes-v13"
+  cacheName: "tecnologia-eso-projectes-reptes-v14"
 };
 
 const CURRICULUM_SETS = {
@@ -367,6 +367,46 @@ const RUBRIC_LEVELS = {
   AE: "Assoliment excel·lent"
 };
 
+const STORAGE_KEY_FONT = "tecnologia-eso-projectes-reptes-font-v14";
+const DEFAULT_FONT = "Times New Roman, Times, serif";
+const ALLOWED_FONTS = [
+  DEFAULT_FONT,
+  "Arial, Helvetica, sans-serif",
+  "Georgia, serif",
+  "Verdana, Geneva, sans-serif",
+  "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+];
+
+function readSavedFont() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY_FONT);
+    return ALLOWED_FONTS.includes(saved) ? saved : DEFAULT_FONT;
+  } catch (err) {
+    return DEFAULT_FONT;
+  }
+}
+
+function applySelectedFont() {
+  const font = ALLOWED_FONTS.includes(state.fontFamily) ? state.fontFamily : DEFAULT_FONT;
+  document.documentElement.style.setProperty("--app-font", font);
+  const select = document.getElementById("fontSelect");
+  if (select) select.value = font;
+}
+
+function saveSelectedFont(font) {
+  state.fontFamily = ALLOWED_FONTS.includes(font) ? font : DEFAULT_FONT;
+  try {
+    localStorage.setItem(STORAGE_KEY_FONT, state.fontFamily);
+  } catch (err) {
+    // Si el navegador no permet localStorage, s'aplica igualment durant la sessió.
+  }
+  applySelectedFont();
+}
+
+function getPrintFontCss() {
+  return ALLOWED_FONTS.includes(state.fontFamily) ? state.fontFamily : DEFAULT_FONT;
+}
+
 const state = {
   course: "eso4",
   situationId: "sa1-centre",
@@ -375,7 +415,8 @@ const state = {
   includeRubricInReport: true,
   responses: {},
   decision: {},
-  sustainability: {}
+  sustainability: {},
+  fontFamily: readSavedFont()
 };
 
 const tabs = [
@@ -487,6 +528,7 @@ function showCreatorFeedback(message) {
 }
 
 function init() {
+  applySelectedFont();
   const hashView = window.location.hash.replace("#", "");
   if (tabs.some(([id]) => id === hashView)) state.view = hashView;
   renderCourseSelect();
@@ -1406,11 +1448,11 @@ function openPrintDocument(title, bodyHtml, kind) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${safeTitle}</title>
-  <link rel="stylesheet" href="./styles.css?v=13">
+  <link rel="stylesheet" href="./styles.css?v=14">
   <style>
-    html, body { background: #ffffff !important; font-family: Arial, Helvetica, sans-serif !important; }
+    html, body { background: #ffffff !important; font-family: ${getPrintFontCss()} !important; }
     body { margin: 0; color: #172016; }
-    .report-paper, .report-paper * { font-family: Arial, Helvetica, sans-serif !important; }
+    .report-paper, .report-paper * { font-family: ${getPrintFontCss()} !important; }
     .print-document-shell {
       width: min(1180px, calc(100% - 28px));
       margin: 0 auto;
@@ -1553,6 +1595,14 @@ function attachGlobalEvents() {
     includeRubricCheck.addEventListener("change", e => {
       state.includeRubricInReport = e.target.checked;
       renderReport();
+    });
+  }
+
+  const fontSelect = document.getElementById("fontSelect");
+  if (fontSelect) {
+    fontSelect.value = state.fontFamily;
+    fontSelect.addEventListener("change", e => {
+      saveSelectedFont(e.target.value);
     });
   }
 
