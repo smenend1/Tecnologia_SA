@@ -1,8 +1,8 @@
 const APP = {
   name: "Tecnologia ESO · Projectes i reptes",
-  version: "v14",
+  version: "v15",
   line: "B",
-  cacheName: "tecnologia-eso-projectes-reptes-v14"
+  cacheName: "tecnologia-eso-projectes-reptes-v15"
 };
 
 const CURRICULUM_SETS = {
@@ -367,7 +367,7 @@ const RUBRIC_LEVELS = {
   AE: "Assoliment excel·lent"
 };
 
-const STORAGE_KEY_FONT = "tecnologia-eso-projectes-reptes-font-v14";
+const STORAGE_KEY_FONT = "tecnologia-eso-projectes-reptes-font-v15";
 const DEFAULT_FONT = "Times New Roman, Times, serif";
 const ALLOWED_FONTS = [
   DEFAULT_FONT,
@@ -452,19 +452,33 @@ function safeHtml(text) {
   }[char]));
 }
 
-const STORAGE_KEY_SITUATIONS = "tecnologia-eso-projectes-reptes-custom-situations-v12";
-const STORAGE_KEY_RUBRICS = "tecnologia-eso-projectes-reptes-custom-rubrics-v12";
+const STORAGE_KEY_SITUATIONS = "tecnologia-eso-projectes-reptes-custom-situations-v15";
+const STORAGE_KEY_RUBRICS = "tecnologia-eso-projectes-reptes-custom-rubrics-v15";
+const LEGACY_STORAGE_KEYS = {
+  situations: ["tecnologia-eso-projectes-reptes-custom-situations-v12"],
+  rubrics: ["tecnologia-eso-projectes-reptes-custom-rubrics-v12"]
+};
 
-function loadJsonFromStorage(key, fallback) {
+function loadJsonFromStorage(key, fallback, legacyKeys = []) {
   try {
-    return JSON.parse(localStorage.getItem(key)) || fallback;
+    const current = localStorage.getItem(key);
+    if (current) return JSON.parse(current) || fallback;
+    for (const legacyKey of legacyKeys) {
+      const legacy = localStorage.getItem(legacyKey);
+      if (legacy) {
+        const parsed = JSON.parse(legacy) || fallback;
+        localStorage.setItem(key, JSON.stringify(parsed));
+        return parsed;
+      }
+    }
+    return fallback;
   } catch (err) {
     return fallback;
   }
 }
 
-let customSituations = loadJsonFromStorage(STORAGE_KEY_SITUATIONS, {});
-let customRubrics = loadJsonFromStorage(STORAGE_KEY_RUBRICS, {});
+let customSituations = loadJsonFromStorage(STORAGE_KEY_SITUATIONS, {}, LEGACY_STORAGE_KEYS.situations);
+let customRubrics = loadJsonFromStorage(STORAGE_KEY_RUBRICS, {}, LEGACY_STORAGE_KEYS.rubrics);
 
 function saveCustomData() {
   localStorage.setItem(STORAGE_KEY_SITUATIONS, JSON.stringify(customSituations));
@@ -480,7 +494,7 @@ function getCurriculumSetForSituation(s) {
 function getRubricRows(s) {
   if (!s) return [];
   if (SITUATION_RUBRICS[s.id]) return SITUATION_RUBRICS[s.id];
-  if (customRubrics[s.id]) return customRubrics[s.id];
+  if (customRubrics[s.id]) return customRubrics[s.id].map(row => normalizeRubricRow(row, (s.criteria || []).join(", ")));
   const items = s.rubricItems && s.rubricItems.length ? s.rubricItems : [
     "Comprensió del repte i del context",
     "Disseny i desenvolupament de la proposta",
@@ -877,6 +891,21 @@ function getVectors(s) {
   ];
 }
 
+function getEvidenceList(s) {
+  if (s && Array.isArray(s.evidence) && s.evidence.length) return s.evidence;
+  return [
+    "Producte o prototip final.",
+    "Documentació del procés de treball.",
+    "Evidències de proves, revisió i millores.",
+    "Rúbrica de la situació d’aprenentatge."
+  ];
+}
+
+function getMaterialsList(s) {
+  if (s && Array.isArray(s.materials) && s.materials.length) return s.materials;
+  return [];
+}
+
 function buildReportPlainText(s) {
   if (!s) return "Informe pendent: aquest curs encara no té situacions carregades.";
 
@@ -905,6 +934,9 @@ ${s.challenge}
 Producte final
 ${s.product}
 
+Materials i recursos
+${getMaterialsList(s).length ? getMaterialsList(s).map(item => "- " + item).join("\n") : "- Materials i recursos concretats pel docent segons el context."}
+
 Competències específiques
 ${s.competencies.map(c => `${c}: ${getCompetencyText(c)}`).join("\n")}
 
@@ -931,6 +963,9 @@ ${activities}
 
 Breu descripció de com s’aborden els vectors
 ${getVectors(s).map(item => "- " + item).join("\n")}
+
+Evidències d’avaluació
+${getEvidenceList(s).map(item => "- " + item).join("\n")}
 
 Evidències del procés de l’alumnat
 ${stepText}
@@ -1002,6 +1037,17 @@ function renderReport() {
     <section class="report-section highlight">
       <h3>Producte final</h3>
       <p>${safeHtml(s.product)}</p>
+    </section>
+
+    <section class="report-grid-2">
+      <article class="report-section">
+        <h3>Materials i recursos</h3>
+        ${renderReportList(getMaterialsList(s).length ? getMaterialsList(s) : ["Materials i recursos concretats pel docent segons el context."])}
+      </article>
+      <article class="report-section">
+        <h3>Evidències d’avaluació</h3>
+        ${renderReportList(getEvidenceList(s))}
+      </article>
     </section>
 
     <section class="report-grid-2">
@@ -1087,6 +1133,118 @@ function createGenericRubric(item, criteriaText) {
       AE: `L’alumne/a integra ${item.toLowerCase()} amb autonomia, criteri tècnic, transferència i argumentació aprofundida.`
     }
   };
+}
+
+
+
+function normalizeRubricRow(row, criteriaText) {
+  if (!row) return createGenericRubric("Ítem d’avaluació", criteriaText);
+  const item = row.item || row.criteri || row.criteriaName || "Ítem d’avaluació";
+  if (row.levels) {
+    return {
+      item,
+      criteria: row.criteria || criteriaText || "Criteris seleccionats de la situació",
+      levels: {
+        NA: row.levels.NA || row.NA || "Pendent de concretar.",
+        AS: row.levels.AS || row.AS || "Pendent de concretar.",
+        AN: row.levels.AN || row.AN || "Pendent de concretar.",
+        AE: row.levels.AE || row.AE || "Pendent de concretar."
+      }
+    };
+  }
+  return {
+    item,
+    criteria: row.criteria || criteriaText || "Criteris seleccionats de la situació",
+    levels: {
+      NA: row.NA || "Pendent de concretar.",
+      AS: row.AS || "Pendent de concretar.",
+      AN: row.AN || "Pendent de concretar.",
+      AE: row.AE || "Pendent de concretar."
+    }
+  };
+}
+
+function normalizeCourseKey(value) {
+  const v = String(value || state.course || "eso4").toLowerCase().trim();
+  if (v.includes("1") || v === "eso1") return "eso1";
+  if (v.includes("2") || v === "eso2") return "eso2";
+  if (v.includes("3") || v === "eso3") return "eso3";
+  if (v.includes("4") || v === "eso4") return "eso4";
+  return state.course || "eso4";
+}
+
+function normalizeImportedSituation(raw, index = 0) {
+  const courseKey = normalizeCourseKey(raw.course || raw.curs);
+  const title = raw.title || raw.titol || raw.títol || `SA importada ${index + 1}`;
+  const criteria = Array.isArray(raw.criteria) ? raw.criteria : splitList(raw.criteria || raw.criteris || "");
+  const competencies = Array.isArray(raw.competencies) ? raw.competencies : splitList(raw.competencies || raw.competencies_especifiques || raw.competències || "");
+  const knowledge = Array.isArray(raw.knowledge) ? raw.knowledge : splitList(raw.knowledge || raw.sabers || "");
+  const objectives = Array.isArray(raw.objectives) ? raw.objectives : splitList(raw.objectives || raw.objectius || "");
+  const blocks = Array.isArray(raw.blocks) ? raw.blocks : (splitList(raw.blocks || raw.blocs || "").length ? splitList(raw.blocks || raw.blocs || "") : ["projectes"]);
+  const idBase = raw.id || `custom-${Date.now()}-${index}-${makeSlug(title)}`;
+  const id = String(idBase).startsWith("custom-") ? String(idBase) : `custom-${idBase}`;
+  return {
+    id,
+    title,
+    short: raw.short || raw.description || raw.descripcio || raw.descripció || raw.challenge || "Situació importada.",
+    challenge: raw.challenge || raw.repte || raw.pregunta || raw.short || "Repte pendent de revisar.",
+    product: raw.product || raw.producte || raw.producteFinal || "Producte final pendent de revisar.",
+    course: courseKey,
+    subject: raw.subject || raw.materia || raw.matèria || (courseKey === "eso4" ? "Tecnologia" : "Tecnologia i Digitalització"),
+    blocks,
+    competencies: competencies.length ? competencies : ["CE1", "CE2", "CE3"],
+    criteria,
+    knowledge: knowledge.length ? knowledge : ["Sabers concretats pel docent segons el context de la situació."],
+    objectives,
+    transversal: Array.isArray(raw.transversal) ? raw.transversal : splitList(raw.transversal || ""),
+    development: raw.development || raw.desenvolupament || [],
+    activities: raw.activities || raw.activitats || {},
+    vectors: raw.vectors || [],
+    evidence: raw.evidence || raw.evidencies || raw.evidències || [],
+    materials: raw.materials || raw.materials_i_eines || [],
+    curriculumKey: raw.curriculumKey || COURSES[courseKey]?.curriculumKey || (courseKey === "eso4" ? "tecnologia4" : "tecnologiaDigitalitzacio"),
+    teacher: raw.teacher || "Situació importada. Revisa-la abans d’utilitzar-la a l’aula.",
+    custom: true
+  };
+}
+
+function extractSituationsFromImportData(data) {
+  if (Array.isArray(data)) return data;
+  if (data && Array.isArray(data.situations)) return data.situations;
+  if (data && data.situations && typeof data.situations === "object") return Object.values(data.situations).flat();
+  if (data && data.title) return [data];
+  return [];
+}
+
+function importSituationObjects(data) {
+  const rawSituations = extractSituationsFromImportData(data);
+  if (!rawSituations.length) throw new Error("El JSON no conté cap situació d’aprenentatge reconeixible.");
+  let firstImported = null;
+  rawSituations.forEach((raw, index) => {
+    const situation = normalizeImportedSituation(raw, index);
+    const courseKey = situation.course || state.course;
+    if (!customSituations[courseKey]) customSituations[courseKey] = [];
+    const existingIndex = customSituations[courseKey].findIndex(item => item.id === situation.id);
+    if (existingIndex >= 0) {
+      customSituations[courseKey][existingIndex] = situation;
+    } else {
+      customSituations[courseKey].push(situation);
+    }
+    const importedRubric = raw.rubric || raw.rubrica || raw.rúbrica || data.rubrics?.[raw.id] || data.rubrics?.[situation.id];
+    if (Array.isArray(importedRubric) && importedRubric.length) {
+      customRubrics[situation.id] = importedRubric.map(row => normalizeRubricRow(row, (situation.criteria || []).join(", ")));
+    }
+    if (!firstImported) firstImported = situation;
+  });
+  saveCustomData();
+  if (firstImported) {
+    state.course = firstImported.course || state.course;
+    state.situationId = firstImported.id;
+  }
+  renderCourseSelect();
+  renderSituationSelect();
+  renderAll();
+  return rawSituations.length;
 }
 
 function clearCreatorForm() {
@@ -1182,14 +1340,10 @@ function importCreatedSituations(file) {
   reader.onload = () => {
     try {
       const data = JSON.parse(reader.result);
-      customSituations = data.situations || customSituations;
-      customRubrics = data.rubrics || customRubrics;
-      saveCustomData();
-      showCreatorFeedback("SAs importades correctament.");
-      renderSituationSelect();
-      renderAll();
+      const count = importSituationObjects(data);
+      showCreatorFeedback(`${count} SA importada/des. Ja apareixen al selector del curs corresponent.`);
     } catch (err) {
-      showCreatorFeedback("No s’ha pogut importar el fitxer JSON.");
+      showCreatorFeedback(err.message || "No s’ha pogut importar el fitxer JSON.");
     }
   };
   reader.readAsText(file);
