@@ -1,25 +1,23 @@
 {
-  "id": "tecnologia-eso-projectes-reptes-v12",
-  "name": "Tecnologia ESO · Projectes i reptes",
-  "short_name": "Tecno ESO",
-  "description": "Eina educativa per crear i treballar situacions d’aprenentatge de Tecnologia i Tecnologia i Digitalització a l’ESO.",
-  "start_url": "./index.html?v=11",
+  "name": "Situacions d’aprenentatge de Matemàtiques ESO",
+  "short_name": "SA Matemàtiques",
+  "description": "Eina educativa per crear, importar, treballar, avaluar i exportar situacions d’aprenentatge, amb impressió en Arial o Times New Roman.",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "orientation": "any",
+  "background_color": "#f8fafc",
+  "theme_color": "#1e40af",
   "lang": "ca",
-  "dir": "ltr",
-  "background_color": "#f7f8f3",
-  "theme_color": "#14532d",
+  "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "icons/icon-192.png",
+      "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "icons/icon-512.png",
+      "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"

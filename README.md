@@ -1,26 +1,14 @@
-# Tecnologia ESO · Projectes i reptes v12
+# Situacions d’aprenentatge de Matemàtiques ESO
 
-PWA educativa en català per treballar situacions d’aprenentatge de Tecnologia i Tecnologia i Digitalització a l’ESO.
+## Correcció de font d’impressió
 
-## Fitxers
+Aquesta versió força la sortida d’impressió amb:
 
-- `index.html`: estructura de l’app.
-- `styles.css`: disseny visual i impressió.
-- `app.js`: dades curriculars, situacions, rúbriques, informe i interaccions.
-- `jszip.min.js`: lector local de documents `.docx` per convertir-los en esborrany de SA.
-- `manifest.json`: configuració PWA.
-- `sw.js`: Service Worker i cache offline.
-- `icons/`: icones de la PWA.
+- Arial per defecte.
+- Times New Roman com a alternativa seleccionable.
 
-## Novetats v12
+També s’ha afegit un selector “Font d’impressió” dins l’aplicació.
 
-- Importació de documents des de la pestanya **Crea SA**.
-- Formats admesos: JSON exportat, TXT/Markdown, Word `.docx` i PDF textual.
-- El document importat es converteix en un esborrany editable de SA.
-- Si el docent escriu només codis com `CE1`, `CE2`, `1.1` o `2.3`, l’app mostra el text curricular corresponent segons el curs seleccionat.
-- Camps nous en la creació de SA: objectius, desenvolupament, activitats inicials/desenvolupament/estructuració/aplicació i vectors.
-- La importació no desa automàticament: cal revisar l’esborrany i prémer **Desa la SA**.
+Si la lletra “l” continua sortint malament amb Arial, selecciona Times New Roman i torna a exportar.
 
-## Nota sobre PDF
-
-La lectura de PDF és bàsica i només funciona bé amb PDFs que contenen text real. Si el PDF és escanejat o té el text codificat, és millor enganxar el text manualment o utilitzar la plantilla Word.
+Després de pujar-la a GitHub Pages, esborra la memòria cau o desinstal·la la PWA anterior.
