@@ -1,8 +1,8 @@
 const APP = {
   name: "Tecnologia ESO · Projectes i reptes",
-  version: "v17",
+  version: "v18",
   line: "B",
-  cacheName: "tecnologia-eso-projectes-reptes-v17"
+  cacheName: "tecnologia-eso-projectes-reptes-v18"
 };
 
 const CURRICULUM_SETS = {
@@ -367,7 +367,7 @@ const RUBRIC_LEVELS = {
   AE: "Assoliment excel·lent"
 };
 
-const STORAGE_KEY_FONT = "tecnologia-eso-projectes-reptes-font-v17";
+const STORAGE_KEY_FONT = "tecnologia-eso-projectes-reptes-font-v18";
 const DEFAULT_FONT = "Times New Roman, Times, serif";
 const ALLOWED_FONTS = [
   DEFAULT_FONT,
@@ -452,8 +452,8 @@ function safeHtml(text) {
   }[char]));
 }
 
-const STORAGE_KEY_SITUATIONS = "tecnologia-eso-projectes-reptes-custom-situations-v17";
-const STORAGE_KEY_RUBRICS = "tecnologia-eso-projectes-reptes-custom-rubrics-v17";
+const STORAGE_KEY_SITUATIONS = "tecnologia-eso-projectes-reptes-custom-situations-v18";
+const STORAGE_KEY_RUBRICS = "tecnologia-eso-projectes-reptes-custom-rubrics-v18";
 const LEGACY_STORAGE_KEYS = {
   situations: ["tecnologia-eso-projectes-reptes-custom-situations-v16", "tecnologia-eso-projectes-reptes-custom-situations-v15", "tecnologia-eso-projectes-reptes-custom-situations-v12"],
   rubrics: ["tecnologia-eso-projectes-reptes-custom-rubrics-v16", "tecnologia-eso-projectes-reptes-custom-rubrics-v15", "tecnologia-eso-projectes-reptes-custom-rubrics-v12"]
@@ -1859,31 +1859,31 @@ if (document.readyState === "loading") {
 
 
 
-/* v17 · Normalització i edició de situacions importades */
-function v17CleanText(value) {
+/* v18 · Normalització i edició de situacions importades */
+function v18CleanText(value) {
   if (Array.isArray(value)) return value.filter(Boolean).join(" · ").trim();
   if (value && typeof value === "object") return Object.values(value).filter(Boolean).join(" · ").trim();
   return String(value || "").trim();
 }
 
-function v17NormalizeImportedSA(raw) {
+function v18NormalizeImportedSA(raw) {
   const sa = Object.assign({}, raw || {});
-  const title = v17CleanText(sa.title || sa.titol || sa["títol"] || sa.name || sa.nom);
-  const challenge = v17CleanText(sa.challenge || sa.repte || sa.descripcio || sa["descripció"] || sa.short);
-  const product = v17CleanText(sa.product || sa.producte || sa["producte final"]);
-  sa.id = v17CleanText(sa.id) || ("sa-importada-" + Date.now());
+  const title = v18CleanText(sa.title || sa.titol || sa["títol"] || sa.name || sa.nom);
+  const challenge = v18CleanText(sa.challenge || sa.repte || sa.descripcio || sa["descripció"] || sa.short);
+  const product = v18CleanText(sa.product || sa.producte || sa["producte final"]);
+  sa.id = v18CleanText(sa.id) || ("sa-importada-" + Date.now());
   sa.title = title || "SA importada pendent de títol";
-  sa.short = v17CleanText(sa.short) || challenge || "Situació d’aprenentatge importada.";
+  sa.short = v18CleanText(sa.short) || challenge || "Situació d’aprenentatge importada.";
   sa.challenge = challenge || "Repte pendent de concretar.";
   sa.product = product || "Producte final pendent de concretar.";
-  sa.course = v17CleanText(sa.course || sa.curs) || "eso4";
-  sa.subject = v17CleanText(sa.subject || sa.materia || sa["matèria"]) || (sa.course === "eso4" ? "Tecnologia" : "Tecnologia i Digitalització");
-  sa.competencies = Array.isArray(sa.competencies) ? sa.competencies : v17CleanText(sa.competencies || sa.ce).split(/[,; ]+/).filter(Boolean);
-  sa.criteria = Array.isArray(sa.criteria) ? sa.criteria : v17CleanText(sa.criteria || sa.ca).split(/[,;]+/).map(s => s.trim()).filter(Boolean);
-  sa.blocks = Array.isArray(sa.blocks) ? sa.blocks : v17CleanText(sa.blocks).split(/[,;]+/).map(s => s.trim()).filter(Boolean);
-  sa.knowledge = Array.isArray(sa.knowledge) ? sa.knowledge : v17CleanText(sa.knowledge || sa.sabers).split(/\n|;/).map(s => s.trim()).filter(Boolean);
-  sa.objectives = Array.isArray(sa.objectives) ? sa.objectives : v17CleanText(sa.objectives || sa.objectius).split(/\n|;/).map(s => s.trim()).filter(Boolean);
-  sa.transversal = Array.isArray(sa.transversal) ? sa.transversal : v17CleanText(sa.transversal).split(/\n|;/).map(s => s.trim()).filter(Boolean);
+  sa.course = v18CleanText(sa.course || sa.curs) || "eso4";
+  sa.subject = v18CleanText(sa.subject || sa.materia || sa["matèria"]) || (sa.course === "eso4" ? "Tecnologia" : "Tecnologia i Digitalització");
+  sa.competencies = Array.isArray(sa.competencies) ? sa.competencies : v18CleanText(sa.competencies || sa.ce).split(/[,; ]+/).filter(Boolean);
+  sa.criteria = Array.isArray(sa.criteria) ? sa.criteria : v18CleanText(sa.criteria || sa.ca).split(/[,;]+/).map(s => s.trim()).filter(Boolean);
+  sa.blocks = Array.isArray(sa.blocks) ? sa.blocks : v18CleanText(sa.blocks).split(/[,;]+/).map(s => s.trim()).filter(Boolean);
+  sa.knowledge = Array.isArray(sa.knowledge) ? sa.knowledge : v18CleanText(sa.knowledge || sa.sabers).split(/\n|;/).map(s => s.trim()).filter(Boolean);
+  sa.objectives = Array.isArray(sa.objectives) ? sa.objectives : v18CleanText(sa.objectives || sa.objectius).split(/\n|;/).map(s => s.trim()).filter(Boolean);
+  sa.transversal = Array.isArray(sa.transversal) ? sa.transversal : v18CleanText(sa.transversal).split(/\n|;/).map(s => s.trim()).filter(Boolean);
   if (!sa.activities || typeof sa.activities !== "object") {
     sa.activities = {
       initial: "",
@@ -1896,7 +1896,7 @@ function v17NormalizeImportedSA(raw) {
   return sa;
 }
 
-function v17GetCustomSAs() {
+function v18GetCustomSAs() {
   try {
     return JSON.parse(localStorage.getItem("customSituations") || localStorage.getItem("customSAs") || "[]");
   } catch (e) {
@@ -1904,42 +1904,42 @@ function v17GetCustomSAs() {
   }
 }
 
-function v17SaveCustomSAs(list) {
+function v18SaveCustomSAs(list) {
   localStorage.setItem("customSituations", JSON.stringify(list));
   localStorage.setItem("customSAs", JSON.stringify(list));
 }
 
-function v17UpsertCustomSA(sa) {
-  const normalized = v17NormalizeImportedSA(sa);
-  const list = v17GetCustomSAs();
+function v18UpsertCustomSA(sa) {
+  const normalized = v18NormalizeImportedSA(sa);
+  const list = v18GetCustomSAs();
   const idx = list.findIndex(item => item.id === normalized.id);
   if (idx >= 0) list[idx] = normalized;
   else list.push(normalized);
-  v17SaveCustomSAs(list);
+  v18SaveCustomSAs(list);
   return normalized;
 }
 
-function v17OpenEditCurrentSA() {
+function v18OpenEditCurrentSA() {
   const s = (typeof currentSituation === "function") ? currentSituation() : null;
   if (!s) {
     alert("No hi ha cap situació seleccionada per editar.");
     return;
   }
-  const title = prompt("Títol de la situació d’aprenentatge:", v17CleanText(s.title));
+  const title = prompt("Títol de la situació d’aprenentatge:", v18CleanText(s.title));
   if (title === null) return;
-  const challenge = prompt("Repte o pregunta guia:", v17CleanText(s.challenge || s.short));
+  const challenge = prompt("Repte o pregunta guia:", v18CleanText(s.challenge || s.short));
   if (challenge === null) return;
-  const product = prompt("Producte final:", v17CleanText(s.product));
+  const product = prompt("Producte final:", v18CleanText(s.product));
   if (product === null) return;
 
   const updated = Object.assign({}, s, {
-    title: v17CleanText(title) || "SA importada pendent de títol",
-    challenge: v17CleanText(challenge) || "Repte pendent de concretar.",
-    short: v17CleanText(challenge) || s.short || "Situació d’aprenentatge importada.",
-    product: v17CleanText(product) || "Producte final pendent de concretar."
+    title: v18CleanText(title) || "SA importada pendent de títol",
+    challenge: v18CleanText(challenge) || "Repte pendent de concretar.",
+    short: v18CleanText(challenge) || s.short || "Situació d’aprenentatge importada.",
+    product: v18CleanText(product) || "Producte final pendent de concretar."
   });
 
-  v17UpsertCustomSA(updated);
+  v18UpsertCustomSA(updated);
 
   if (typeof loadCustomSituations === "function") loadCustomSituations();
   if (typeof renderSituationSelect === "function") renderSituationSelect();
@@ -1948,7 +1948,7 @@ function v17OpenEditCurrentSA() {
   alert("SA actualitzada i desada al llistat.");
 }
 
-function v17InstallEditButton() {
+function v18InstallEditButton() {
   if (document.getElementById("editCurrentSABtn")) return;
   const tabs = document.getElementById("tabs") || document.querySelector(".tabs");
   const target = tabs || document.querySelector("main") || document.body;
@@ -1956,15 +1956,15 @@ function v17InstallEditButton() {
   btn.id = "editCurrentSABtn";
   btn.type = "button";
   btn.textContent = "Edita SA";
-  btn.addEventListener("click", v17OpenEditCurrentSA);
+  btn.addEventListener("click", v18OpenEditCurrentSA);
   target.appendChild(btn);
 }
-document.addEventListener("DOMContentLoaded", () => setTimeout(v17InstallEditButton, 600));
+document.addEventListener("DOMContentLoaded", () => setTimeout(v18InstallEditButton, 600));
 
 
 
-/* v17 · Correcció visual de títols buits o mal importats */
-function v17FixBrokenDisplayedTitles() {
+/* v18 · Correcció visual de títols buits o mal importats */
+function v18FixBrokenDisplayedTitles() {
   document.querySelectorAll("h1,h2,h3,option,.situation-item,strong").forEach(el => {
     const txt = (el.textContent || "").trim();
     if (txt === "[" || txt === "[]" || txt === "undefined" || txt === "null") {
@@ -1972,17 +1972,17 @@ function v17FixBrokenDisplayedTitles() {
     }
   });
 }
-document.addEventListener("DOMContentLoaded", () => setInterval(v17FixBrokenDisplayedTitles, 1000));
+document.addEventListener("DOMContentLoaded", () => setInterval(v18FixBrokenDisplayedTitles, 1000));
 
 
 
-/* v17 · Gestió real de SA importades i edició */
-function v17CleanTitle(value) {
+/* v18 · Gestió real de SA importades i edició */
+function v18CleanTitle(value) {
   const text = String(value || "").trim();
   return (!text || text === "[" || text === "]" || text === "undefined" || text === "null") ? "SA importada pendent de títol" : text;
 }
 
-function v17MigrateLooseCustomStores() {
+function v18MigrateLooseCustomStores() {
   const keys = ["customSituations", "customSAs"];
   let changed = false;
 
@@ -2016,7 +2016,7 @@ function v17MigrateLooseCustomStores() {
   Object.keys(customSituations).forEach(courseKey => {
     customSituations[courseKey] = (customSituations[courseKey] || []).map((s, index) => {
       const normalized = normalizeImportedSituation(s, index);
-      normalized.title = v17CleanTitle(normalized.title);
+      normalized.title = v18CleanTitle(normalized.title);
       return normalized;
     });
   });
@@ -2025,13 +2025,13 @@ function v17MigrateLooseCustomStores() {
 }
 
 function currentSituations() {
-  v17MigrateLooseCustomStores();
+  v18MigrateLooseCustomStores();
   const base = (currentCourse() && currentCourse().situations) || [];
   const custom = customSituations[state.course] || [];
   return [...base, ...custom];
 }
 
-function v17FindSituationEverywhere(id) {
+function v18FindSituationEverywhere(id) {
   if (!id) return null;
   for (const courseKey of Object.keys(COURSES)) {
     const base = COURSES[courseKey].situations || [];
@@ -2046,9 +2046,9 @@ function v17FindSituationEverywhere(id) {
 }
 
 function v16OpenEditCurrentSA() {
-  v17MigrateLooseCustomStores();
+  v18MigrateLooseCustomStores();
 
-  const found = v17FindSituationEverywhere(state.situationId);
+  const found = v18FindSituationEverywhere(state.situationId);
   const s = found ? found.situation : currentSituation();
 
   if (!s) {
@@ -2056,7 +2056,7 @@ function v16OpenEditCurrentSA() {
     return;
   }
 
-  const title = prompt("Títol de la situació d’aprenentatge:", v17CleanTitle(s.title));
+  const title = prompt("Títol de la situació d’aprenentatge:", v18CleanTitle(s.title));
   if (title === null) return;
 
   const challenge = prompt("Repte o pregunta guia:", String(s.challenge || s.short || "").trim());
@@ -2067,7 +2067,7 @@ function v16OpenEditCurrentSA() {
 
   const courseKey = (found && found.courseKey) || state.course || s.course || "eso4";
   const updated = normalizeImportedSituation(Object.assign({}, s, {
-    title: v17CleanTitle(title),
+    title: v18CleanTitle(title),
     challenge: String(challenge || "").trim() || "Repte pendent de concretar.",
     short: String(challenge || "").trim() || s.short || "Situació d’aprenentatge importada.",
     product: String(product || "").trim() || "Producte final pendent de concretar.",
@@ -2098,14 +2098,763 @@ function v16OpenEditCurrentSA() {
   alert("SA actualitzada i desada al llistat.");
 }
 
-function v17RefreshAfterLoad() {
-  v17MigrateLooseCustomStores();
+function v18RefreshAfterLoad() {
+  v18MigrateLooseCustomStores();
   renderCourseSelect();
   renderSituationSelect();
   renderAll();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  setTimeout(v17RefreshAfterLoad, 700);
+  setTimeout(v18RefreshAfterLoad, 700);
 });
 
+
+/* v18 · Situacions afegides a partir de propostes docents */
+const V18_ADDITIONAL_SITUATIONS = {
+  "eso3": [
+    {
+      "id": "sa3-eso3-estructura-pont-tren",
+      "title": "SA · Construïm una estructura resistent?",
+      "short": "Disseny i construcció d’una estructura amb tubs de paper capaç de salvar un desnivell i suportar una càrrega.",
+      "challenge": "Com podem dissenyar i construir una estructura lleugera, sostenible i prou resistent perquè un tren de maqueta pugui salvar un desnivell?",
+      "product": "Pont o estructura construïda amb tubs de paper reciclat, assaig de resistència, explicació dels esforços i presentació del disseny.",
+      "course": "eso3",
+      "subject": "Tecnologia i Digitalització",
+      "competencies": [
+        "CE1",
+        "CE3",
+        "CE4",
+        "CE7"
+      ],
+      "criteria": [
+        "1.1",
+        "1.2",
+        "3.1",
+        "3.2",
+        "4.1",
+        "4.3",
+        "7.1"
+      ],
+      "blocks": [
+        "projectes",
+        "comunicacio",
+        "sostenibilitat"
+      ],
+      "knowledge": [
+        "Cerca crítica d’informació per definir problemes tecnològics.",
+        "Anàlisi i disseny d’estructures per a la construcció de models.",
+        "Forces i esforços: tracció, compressió, flexió, torsió i cisallament.",
+        "Manipulació de materials i construcció de prototips amb normes de seguretat.",
+        "Vocabulari tècnic per explicar el comportament d’una estructura.",
+        "Impacte ambiental dels materials de construcció."
+      ],
+      "objectives": [
+        "Identificar forces i esforços en estructures.",
+        "Analitzar i comparar dissenys estructurals amb proves o simulacions.",
+        "Construir una estructura amb materials reciclats aplicant criteris de resistència i seguretat.",
+        "Avaluar el resultat amb una prova de càrrega i proposar millores."
+      ],
+      "transversal": [
+        "Competència digital: cerca crítica i simuladors.",
+        "CPSAA: treball cooperatiu i autoavaluació.",
+        "Competència ciutadana: seguretat i impacte ambiental."
+      ],
+      "development": "La situació parteix del repte de salvar un desnivell en una maqueta de tren. L’alumnat estudia esforços, fa proves amb models senzills, dissenya una estructura triangulada i la valida amb una prova de càrrega.",
+      "activities": {
+        "initial": "Debat sobre col·lapses d’estructures i coneixements previs sobre esforços.",
+        "development": "Treball sobre elements estructurals, forces, esforços i impacte dels materials.",
+        "structuring": "Simulació o proves amb models per comprovar la resistència de formes triangulades.",
+        "application": "Disseny, construcció i prova de l’estructura final amb tubs de paper."
+      },
+      "vectors": "Treball competencial amb construcció real, materials reciclats, seguretat i comunicació tècnica.",
+      "evidence": [
+        "Esbós i croquis",
+        "Estructura construïda",
+        "Prova de càrrega",
+        "Explicació dels esforços",
+        "Presentació o vídeo"
+      ],
+      "materials": [
+        "Paper reciclat",
+        "Cola",
+        "Regle",
+        "Cúter o tisores",
+        "Pesos de prova"
+      ],
+      "rubric": [
+        {
+          "item": "Anàlisi d’esforços",
+          "NA": "No identifica esforços.",
+          "AS": "Identifica alguns esforços amb ajuda.",
+          "AN": "Relaciona esforços i parts de l’estructura.",
+          "AE": "Explica amb precisió com els esforços condicionen el disseny."
+        },
+        {
+          "item": "Disseny estructural",
+          "NA": "Disseny poc estable.",
+          "AS": "Disseny parcialment adequat.",
+          "AN": "Disseny coherent i justificat.",
+          "AE": "Disseny eficient, triangulat i optimitzat."
+        },
+        {
+          "item": "Construcció",
+          "NA": "Construcció fràgil o insegura.",
+          "AS": "Construcció bàsica amb ajuda.",
+          "AN": "Estructura funcional i segura.",
+          "AE": "Estructura sòlida, precisa i neta."
+        },
+        {
+          "item": "Avaluació",
+          "NA": "No comprova el resultat.",
+          "AS": "Fa una prova simple.",
+          "AN": "Valida i proposa millores.",
+          "AE": "Interpreta errors i millora amb criteri tècnic."
+        }
+      ]
+    },
+    {
+      "id": "sa3-eso3-biciprojecte",
+      "title": "SA · BiciProjecte: autogestionem una bicicleta",
+      "short": "Desmuntatge, diagnosi, reparació i muntatge d’una bicicleta reutilitzant peces i reflexionant sobre mobilitat sostenible.",
+      "challenge": "Com podem recuperar una bicicleta en desús i convertir-la en un mitjà de transport segur, funcional i sostenible?",
+      "product": "Bicicleta reparada o posada a punt, pla de treball, memòria tècnica i presentació del projecte.",
+      "course": "eso3",
+      "subject": "Tecnologia i Digitalització",
+      "competencies": [
+        "CE1",
+        "CE2",
+        "CE3",
+        "CE4",
+        "CE7"
+      ],
+      "criteria": [
+        "1.1",
+        "1.2",
+        "2.1",
+        "2.2",
+        "2.3",
+        "3.1",
+        "3.2",
+        "4.1",
+        "4.3",
+        "7.1",
+        "7.3"
+      ],
+      "blocks": [
+        "projectes",
+        "comunicacio",
+        "sostenibilitat"
+      ],
+      "knowledge": [
+        "Procés tecnològic aplicat a una reparació real.",
+        "Sistemes mecànics bàsics: transmissió, engranatges, frens i rodes.",
+        "Organització de materials, eines i tasques.",
+        "Documentació tècnica del procés.",
+        "Economia circular, reutilització i mobilitat sostenible."
+      ],
+      "objectives": [
+        "Analitzar components i mecanismes d’una bicicleta.",
+        "Planificar una reparació o posada a punt.",
+        "Aplicar procediments de muntatge i comprovació amb seguretat.",
+        "Valorar la bicicleta com a mobilitat saludable i sostenible."
+      ],
+      "transversal": [
+        "Competència ciutadana",
+        "Competència emprenedora",
+        "CPSAA",
+        "Competència digital"
+      ],
+      "development": "L’alumnat diagnostica l’estat d’una bicicleta, identifica components, planifica tasques i executa reparacions o ajustos. El projecte inclou mobilitat sostenible, consum responsable i reutilització.",
+      "activities": {
+        "initial": "Discussió sobre bicicleta, patinets, mobilitat i sostenibilitat.",
+        "development": "Aprenentatge sobre transmissió, frens, rodes i manteniment.",
+        "structuring": "Diagnosi, pla de treball, eines, tasques i seguretat.",
+        "application": "Desmuntatge, reparació, muntatge, comprovació i presentació."
+      },
+      "vectors": "Promou salut, mobilitat sostenible, igualtat d’oportunitats, reutilització i autonomia tecnològica.",
+      "evidence": [
+        "Diagnosi inicial",
+        "Pla de treball",
+        "Memòria tècnica",
+        "Bicicleta reparada",
+        "Presentació final"
+      ],
+      "materials": [
+        "Bicicletes en desús",
+        "Eines de mecànica",
+        "Peces reutilitzades",
+        "Equips de protecció"
+      ],
+      "rubric": [
+        {
+          "item": "Diagnosi tècnica",
+          "NA": "No identifica components.",
+          "AS": "Identifica components bàsics.",
+          "AN": "Fa una diagnosi coherent.",
+          "AE": "Fa una diagnosi precisa i prioritzada."
+        },
+        {
+          "item": "Planificació",
+          "NA": "No organitza tasques.",
+          "AS": "Organitza algunes tasques.",
+          "AN": "Planifica i coopera bé.",
+          "AE": "Gestiona el projecte amb autonomia."
+        },
+        {
+          "item": "Reparació",
+          "NA": "No és funcional.",
+          "AS": "Fa ajustos simples.",
+          "AN": "Valida el funcionament.",
+          "AE": "Reparació segura, neta i justificada."
+        },
+        {
+          "item": "Sostenibilitat",
+          "NA": "No relaciona el projecte amb sostenibilitat.",
+          "AS": "Fa referències generals.",
+          "AN": "Argumenta reutilització i mobilitat.",
+          "AE": "Connecta cicle de vida, residus, salut i desigualtats."
+        }
+      ]
+    },
+    {
+      "id": "sa3-eso3-kit-travessa-autosuficient",
+      "title": "SA · Kit per a una travessa autosuficient",
+      "short": "Disseny d’un objecte o kit lleuger, funcional i sostenible per a una travessa a peu.",
+      "challenge": "Com podem dissenyar i prototipar un element útil, lleuger i sostenible per a una travessa de diversos dies?",
+      "product": "Prototip d’un element del kit de travessa, memòria tècnica, justificació de materials i presentació oral.",
+      "course": "eso3",
+      "subject": "Tecnologia i Digitalització",
+      "competencies": [
+        "CE1",
+        "CE2",
+        "CE3",
+        "CE4",
+        "CE7"
+      ],
+      "criteria": [
+        "1.1",
+        "1.2",
+        "2.1",
+        "2.2",
+        "2.3",
+        "3.1",
+        "4.1",
+        "4.2",
+        "7.1",
+        "7.2"
+      ],
+      "blocks": [
+        "projectes",
+        "comunicacio",
+        "sostenibilitat"
+      ],
+      "knowledge": [
+        "Procés tecnològic i design thinking.",
+        "Anàlisi i comparació de materials.",
+        "Cicle de vida i sostenibilitat.",
+        "Croquis, plànols i metrologia bàsica.",
+        "Prototipatge manual o digital."
+      ],
+      "objectives": [
+        "Analitzar necessitats d’una travessa.",
+        "Comparar materials segons pes, resistència i sostenibilitat.",
+        "Dissenyar i prototipar una solució funcional.",
+        "Comunicar la proposta amb memòria i presentació."
+      ],
+      "transversal": [
+        "Pensament crític",
+        "Treball cooperatiu",
+        "Competència digital",
+        "Competència emprenedora"
+      ],
+      "development": "Adaptació a 3r d’ESO d’un repte de disseny per a una travessa autosuficient. L’alumnat defineix necessitats, investiga materials, dissenya i prototipa un element del kit.",
+      "activities": {
+        "initial": "Pluja d’idees del kit de travessa.",
+        "development": "Recerca sobre materials, cicle de vida i fabricació.",
+        "structuring": "Elecció del producte, croquis, requisits i pla de construcció.",
+        "application": "Construcció o prototipatge i presentació."
+      },
+      "vectors": "Afavoreix sostenibilitat, consum responsable, cooperació i comunicació tècnica.",
+      "evidence": [
+        "Requisits",
+        "Croquis o model 3D",
+        "Prototip",
+        "Memòria tècnica",
+        "Presentació"
+      ],
+      "materials": [
+        "Materials reutilitzats o lleugers",
+        "Eines manuals",
+        "Opcional impressora 3D",
+        "Aplicacions 2D/3D"
+      ],
+      "rubric": [
+        {
+          "item": "Anàlisi de necessitats",
+          "NA": "No defineix requisits.",
+          "AS": "Defineix requisits bàsics.",
+          "AN": "Relaciona necessitats i requisits.",
+          "AE": "Formula requisits complets i justificats."
+        },
+        {
+          "item": "Materials",
+          "NA": "No justifica materials.",
+          "AS": "Tria materials bàsics.",
+          "AN": "Compara propietats i sostenibilitat.",
+          "AE": "Selecciona amb criteris tècnics i ambientals."
+        },
+        {
+          "item": "Prototip",
+          "NA": "Incomplet o no funcional.",
+          "AS": "Resol parcialment el repte.",
+          "AN": "Funcional i coherent.",
+          "AE": "Optimitzat, provat i millorat."
+        },
+        {
+          "item": "Comunicació",
+          "NA": "Confusa.",
+          "AS": "Poc precisa.",
+          "AN": "Ordenada i tècnica.",
+          "AE": "Rigorosa, visual i justificada."
+        }
+      ]
+    },
+    {
+      "id": "sa3-eso3-semafor-acustic",
+      "title": "SA · STOP al xivarri: fem un semàfor acústic",
+      "short": "Disseny i programació d’un semàfor acústic amb sensor de so i leds.",
+      "challenge": "Com podem construir un dispositiu que indiqui visualment quan el nivell de soroll de l’aula és massa alt?",
+      "product": "Prototip de semàfor acústic amb sensor de so, leds de colors, programa de control, proves i pòster informatiu.",
+      "course": "eso3",
+      "subject": "Tecnologia i Digitalització",
+      "competencies": [
+        "CE1",
+        "CE2",
+        "CE4",
+        "CE5",
+        "CE6",
+        "CE7"
+      ],
+      "criteria": [
+        "1.1",
+        "2.1",
+        "2.2",
+        "4.1",
+        "4.2",
+        "4.3",
+        "5.1",
+        "5.2",
+        "5.3",
+        "6.2",
+        "7.2"
+      ],
+      "blocks": [
+        "projectes",
+        "comunicacio",
+        "robotica",
+        "digitalitzacio"
+      ],
+      "knowledge": [
+        "Algorismes i diagrames de flux.",
+        "Sistema de control amb sensors i actuadors.",
+        "Sensor de so i leds.",
+        "Llindars de soroll i anàlisi de dades.",
+        "Pòster informatiu."
+      ],
+      "objectives": [
+        "Dissenyar un sistema de control acústic.",
+        "Programar condicions i llindars.",
+        "Verificar el prototip en situacions d’aula.",
+        "Comunicar els nivells d’alerta."
+      ],
+      "transversal": [
+        "Competència digital",
+        "Resolució de problemes",
+        "Benestar emocional",
+        "Treball cooperatiu"
+      ],
+      "development": "L’alumnat investiga el problema del soroll, defineix nivells d’alerta, dissenya un circuit amb sensor i leds, programa el comportament del semàfor i el prova.",
+      "activities": {
+        "initial": "KPSI i debat sobre soroll, salut auditiva i convivència.",
+        "development": "Estudi de sensors, leds, placa programable i condicions.",
+        "structuring": "Proves, ajustos i documentació.",
+        "application": "Demostració i pòster informatiu."
+      },
+      "vectors": "Connecta tecnologia, salut, convivència, comunicació visual i benestar emocional.",
+      "evidence": [
+        "Circuit o simulació",
+        "Codi o diagrama de flux",
+        "Proves",
+        "Pòster",
+        "Presentació"
+      ],
+      "materials": [
+        "Placa programable",
+        "Sensor de so",
+        "Leds",
+        "Resistències",
+        "Cables",
+        "Ordinador"
+      ],
+      "rubric": [
+        {
+          "item": "Disseny del sistema",
+          "NA": "No defineix entrades ni sortides.",
+          "AS": "Sistema bàsic.",
+          "AN": "Relaciona sensor, leds i llindars.",
+          "AE": "Sistema complet i justificat."
+        },
+        {
+          "item": "Programació",
+          "NA": "No funciona.",
+          "AS": "Funciona parcialment.",
+          "AN": "Respon als llindars.",
+          "AE": "Robust, clar i millorat."
+        },
+        {
+          "item": "Proves",
+          "NA": "No fa proves.",
+          "AS": "Proves simples.",
+          "AN": "Prova i millora.",
+          "AE": "Valida amb dades i ajustos."
+        },
+        {
+          "item": "Comunicació",
+          "NA": "No explica el funcionament.",
+          "AS": "Pòster simple.",
+          "AN": "Explica nivells clarament.",
+          "AE": "Comunicació rigorosa i útil."
+        }
+      ]
+    }
+  ],
+  "eso4": [
+    {
+      "id": "sa4-eso4-lavabo-contactless",
+      "title": "SA · Dissenyem un lavabo contactless",
+      "short": "Disseny, simulació i construcció d’accionaments pneumàtics per evitar tocar elements d’un lavabo públic.",
+      "challenge": "Com podem dissenyar un sistema pneumàtic que permeti accionar una paperera o un dispensador de sabó sense tocar-los amb les mans?",
+      "product": "Circuit pneumàtic simulat i/o muntat, disseny 3D de l’accionament, prototip funcional i demostració.",
+      "course": "eso4",
+      "subject": "Tecnologia",
+      "competencies": [
+        "CE4",
+        "CE5",
+        "CE2",
+        "CE3",
+        "CE6"
+      ],
+      "criteria": [
+        "4.1",
+        "5.1",
+        "5.2",
+        "5.4",
+        "2.2",
+        "2.3",
+        "3.1",
+        "3.2",
+        "6.1"
+      ],
+      "blocks": [
+        "operadors",
+        "robotica",
+        "projectes",
+        "sostenibilitat"
+      ],
+      "knowledge": [
+        "Circuits pneumàtics bàsics.",
+        "Accionaments amb materials reciclats o fabricació digital.",
+        "Simulació pneumàtica i modelatge 3D.",
+        "Automatització i accessibilitat.",
+        "Consum responsable."
+      ],
+      "objectives": [
+        "Representar i simular circuits pneumàtics.",
+        "Muntar i verificar un sistema funcional.",
+        "Dissenyar en 3D un accionament.",
+        "Fabricar i provar accionaments."
+      ],
+      "transversal": [
+        "Salut, higiene i accessibilitat",
+        "Competència digital",
+        "Competència emprenedora",
+        "Treball cooperatiu"
+      ],
+      "development": "El projecte parteix del repte de reduir el contacte manual en lavabos públics. L’alumnat analitza circuits, dissenya una solució pneumàtica, la simula, la modela i la construeix.",
+      "activities": {
+        "initial": "Higiene, accessibilitat i simbologia pneumàtica.",
+        "development": "Anàlisi de circuits, simulador, disseny i modelatge 3D.",
+        "structuring": "Diari d’aprenentatge i revisió del disseny.",
+        "application": "Fabricació, muntatge, prova i demostració."
+      },
+      "vectors": "Treballa salut, inclusió, accessibilitat, consum responsable i tecnologia aplicada.",
+      "evidence": [
+        "Circuit pneumàtic",
+        "Simulació",
+        "Model 3D",
+        "Prototip",
+        "Demostració"
+      ],
+      "materials": [
+        "Components pneumàtics",
+        "Simulador",
+        "Tinkercad",
+        "Materials reciclats",
+        "Opcional impressora 3D"
+      ],
+      "rubric": [
+        {
+          "item": "Circuit pneumàtic",
+          "NA": "No representa el circuit.",
+          "AS": "Circuit bàsic amb errors.",
+          "AN": "Circuit funcional.",
+          "AE": "Circuit optimitzat i justificat."
+        },
+        {
+          "item": "Prototip",
+          "NA": "No funciona.",
+          "AS": "Funciona parcialment.",
+          "AN": "Acciona el dispositiu.",
+          "AE": "Funcional, segur i accessible."
+        },
+        {
+          "item": "Modelatge",
+          "NA": "No genera disseny útil.",
+          "AS": "Model simple.",
+          "AN": "Peça adequada.",
+          "AE": "Peça ajustada i sostenible."
+        },
+        {
+          "item": "Impacte",
+          "NA": "No justifica.",
+          "AS": "Justificació general.",
+          "AN": "Relaciona higiene i tecnologia.",
+          "AE": "Argumenta criteris tècnics, socials i sostenibles."
+        }
+      ]
+    },
+    {
+      "id": "sa4-eso4-reg-intelligent-sequera",
+      "title": "SA · Sequera extrema: reg intel·ligent per a l’hort escolar",
+      "short": "Disseny d’un sistema de reg eficient, monitorat o automatitzat per reduir el consum d’aigua.",
+      "challenge": "Com podem fer que el reg de l’hort escolar sigui més sostenible, eficient i monitorat en un context de sequera?",
+      "product": "Proposta o prototip de sistema de reg eficient amb sensors, dades, pla d’estalvi d’aigua i informe tècnic.",
+      "course": "eso4",
+      "subject": "Tecnologia",
+      "competencies": [
+        "CE1",
+        "CE2",
+        "CE3",
+        "CE4",
+        "CE5",
+        "CE6"
+      ],
+      "criteria": [
+        "1.1",
+        "1.2",
+        "2.1",
+        "2.3",
+        "3.1",
+        "3.2",
+        "4.1",
+        "4.2",
+        "5.1",
+        "5.4",
+        "6.1",
+        "6.2",
+        "6.3"
+      ],
+      "blocks": [
+        "projectes",
+        "robotica",
+        "sostenibilitat"
+      ],
+      "knowledge": [
+        "Projectes i recerca de necessitats reals.",
+        "Sensors, actuadors i automatització.",
+        "IoT i monitoratge de dades.",
+        "Eficiència en l’ús de l’aigua.",
+        "Servei a la comunitat."
+      ],
+      "objectives": [
+        "Analitzar consum i necessitats de reg.",
+        "Dissenyar una solució basada en dades o sensors.",
+        "Argumentar l’impacte ambiental i social.",
+        "Comunicar la solució amb informe tècnic."
+      ],
+      "transversal": [
+        "Competència ciutadana",
+        "Competència digital",
+        "Pensament crític",
+        "Servei comunitari"
+      ],
+      "development": "En context de sequera, l’alumnat analitza el reg de l’hort escolar, investiga sistemes eficients i proposa una solució amb sensors o monitoratge.",
+      "activities": {
+        "initial": "Debat sobre sequera i consum d’aigua.",
+        "development": "Recerca sobre reg eficient, sensors i dades.",
+        "structuring": "Disseny del sistema i criteris d’estalvi.",
+        "application": "Presentació del prototip o proposta."
+      },
+      "vectors": "Connecta tecnologia i emergència climàtica, servei al centre, sostenibilitat i dades.",
+      "evidence": [
+        "Diagnosi",
+        "Esquema",
+        "Proposta o prototip",
+        "Informe",
+        "Presentació"
+      ],
+      "materials": [
+        "Sensors d’humitat o dades simulades",
+        "Placa opcional",
+        "Full de càlcul",
+        "Ordinador"
+      ],
+      "rubric": [
+        {
+          "item": "Diagnosi",
+          "NA": "No identifica necessitats.",
+          "AS": "Descriu el problema.",
+          "AN": "Analitza necessitats i dades.",
+          "AE": "Diagnosi completa amb criteris d’estalvi."
+        },
+        {
+          "item": "Solució",
+          "NA": "No és viable.",
+          "AS": "Solució simple.",
+          "AN": "Solució coherent amb control.",
+          "AE": "Integra monitoratge i sostenibilitat."
+        },
+        {
+          "item": "Impacte",
+          "NA": "No el valora.",
+          "AS": "Referències generals.",
+          "AN": "Argumenta l’estalvi.",
+          "AE": "Estima impacte i millores."
+        },
+        {
+          "item": "Comunicació",
+          "NA": "Incompleta.",
+          "AS": "Poc precisa.",
+          "AN": "Ordenada i tècnica.",
+          "AE": "Amb dades, esquemes i criteris."
+        }
+      ]
+    },
+    {
+      "id": "sa4-eso4-transicio-energetica",
+      "title": "SA · La transició energètica a Catalunya: ho aconseguirem?",
+      "short": "Anàlisi del model energètic català i proposta cap a un sistema més renovable i eficient.",
+      "challenge": "Com pot avançar Catalunya cap a un model energètic més renovable, eficient i sostenible?",
+      "product": "Mapa o infografia de fonts i centrals energètiques, informe tècnic i debat o presentació argumentada.",
+      "course": "eso4",
+      "subject": "Tecnologia",
+      "competencies": [
+        "CE3",
+        "CE5",
+        "CE6"
+      ],
+      "criteria": [
+        "3.1",
+        "3.2",
+        "5.1",
+        "5.3",
+        "6.1",
+        "6.2"
+      ],
+      "blocks": [
+        "sostenibilitat",
+        "projectes"
+      ],
+      "knowledge": [
+        "Eficiència energètica i energies renovables.",
+        "Tecnologies i desenvolupament sostenible.",
+        "Mapes, infografies i presentacions digitals.",
+        "Impacte social, econòmic i ambiental dels sistemes energètics."
+      ],
+      "objectives": [
+        "Identificar fonts i sistemes de generació.",
+        "Analitzar impactes de renovables i no renovables.",
+        "Organitzar informació en mapes i infografies.",
+        "Argumentar una proposta de transició energètica."
+      ],
+      "transversal": [
+        "Pensament crític",
+        "Competència digital",
+        "Ciutadania global"
+      ],
+      "development": "L’alumnat investiga el model energètic, situa fonts en un mapa, crea infografies i participa en un debat o informe sobre un model més renovable.",
+      "activities": {
+        "initial": "Vídeo o notícia sobre renovables i qüestionari.",
+        "development": "Mapa col·laboratiu i recerca de tecnologies energètiques.",
+        "structuring": "Infografies sobre fonts, transformacions i impactes.",
+        "application": "Debat o informe tècnic."
+      },
+      "vectors": "Fomenta consciència global, sostenibilitat, alfabetització energètica i ús crític de dades.",
+      "evidence": [
+        "Mapa",
+        "Infografia",
+        "Informe",
+        "Debat o presentació"
+      ],
+      "materials": [
+        "Ordinador",
+        "Mapes digitals",
+        "Full de càlcul",
+        "Canva/Genially",
+        "Fonts contrastades"
+      ],
+      "rubric": [
+        {
+          "item": "Recerca",
+          "NA": "Informació insuficient.",
+          "AS": "Dades bàsiques.",
+          "AN": "Informació pertinent.",
+          "AE": "Dades diverses i fonts contrastades."
+        },
+        {
+          "item": "Comprensió energètica",
+          "NA": "No diferencia fonts.",
+          "AS": "Identifica fonts principals.",
+          "AN": "Explica transformacions i impactes.",
+          "AE": "Compara sistemes i eficiència."
+        },
+        {
+          "item": "Comunicació visual",
+          "NA": "Incompleta.",
+          "AS": "Bàsica.",
+          "AN": "Clara i ordenada.",
+          "AE": "Rigorosa i molt llegible."
+        },
+        {
+          "item": "Argumentació",
+          "NA": "No defensa cap posició.",
+          "AS": "Opinió poc justificada.",
+          "AN": "Argumenta amb criteris tècnics.",
+          "AE": "Posició sòlida basada en evidències."
+        }
+      ]
+    }
+  ]
+};
+
+function v18InstallAdditionalSituations() {
+  Object.entries(V18_ADDITIONAL_SITUATIONS).forEach(([courseKey, list]) => {
+    if (!COURSES[courseKey]) return;
+    if (!Array.isArray(COURSES[courseKey].situations)) COURSES[courseKey].situations = [];
+    list.forEach(sa => {
+      if (!COURSES[courseKey].situations.some(existing => existing.id === sa.id)) {
+        COURSES[courseKey].situations.push(sa);
+      }
+    });
+  });
+}
+v18InstallAdditionalSituations();
+document.addEventListener("DOMContentLoaded", () => {
+  try {
+    v18InstallAdditionalSituations();
+    if (typeof renderCourseSelect === "function") renderCourseSelect();
+    if (typeof renderSituationSelect === "function") renderSituationSelect();
+    if (typeof renderAll === "function") renderAll();
+  } catch (err) { console.warn("No s'han pogut instal·lar les SA v18", err); }
+});
