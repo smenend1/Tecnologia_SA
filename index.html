@@ -1,80 +1,213 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ca">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#1e40af">
-  <meta name="description" content="Matemàtiques ESO: situacions d’aprenentatge per curs, eines, mode docent i PDF visual.">
-  <link rel="manifest" href="./manifest.json">
-  <link rel="icon" href="./icon-192.png">
-  <link rel="apple-touch-icon" href="./icon-192.png">
-  <link rel="stylesheet" href="./styles.css?v=19">
-  <title>Situacions d’aprenentatge de Matemàtiques ESO</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#14532d" />
+  <meta name="description" content="Eina educativa de Tecnologia ESO per treballar situacions d’aprenentatge, projectes, rúbriques i informe formal." />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="stylesheet" href="styles.css?v=13" />
+  <title>Tecnologia ESO · Projectes i reptes</title>
 </head>
 <body>
-<header class="app-header">
-  <p class="eyebrow">eina educativa</p>
-  <h1>Matemàtiques ESO</h1>
-  <p class="subtitle">Situacions d’aprenentatge per curs, càlcul guiat, mode docent, rúbrica i exportació PDF visual.</p>
-</header>
-<nav class="tabs" aria-label="Navegació principal">
-  <button type="button" class="tab active" data-view="home">Inici</button>
-  <button type="button" class="tab" data-view="situations">SA</button>
-  <button type="button" class="tab" data-view="tools">Eines</button>
-  <button type="button" class="tab" data-view="teacher">Docent</button>
-  <button type="button" class="tab" data-view="assessment">Autoavaluació</button>
-</nav>
-<main>
-  <section id="home" class="view active">
-    <div class="hero-grid">
-      <article class="panel"><img src="./assets/situacions.png" alt="Situacions"><h2>Situacions diferents segons curs</h2><p>Aquesta versió organitza les SA per 1r, 2n, 3r i 4t d’ESO, amb nivells de càlcul, representació, modelització i decisió.</p></article>
-      <article class="panel"><img src="./assets/sentits.png" alt="Currículum"><h2>Ús docent</h2><p>Cada SA inclou competències, criteris, sabers codificats, rúbrica imprimible i informe visual exportable a PDF.</p></article>
-    </div>
-  </section>
-  <section id="situations" class="view">
-    <div class="section-head"><img src="./assets/situacions.png" alt="SA"><div><p class="eyebrow">Situacions d’aprenentatge</p><h2>Treball per curs</h2><p>Tria curs, situació i nivell. Les dades són editables i el resultat inclou procediment i connexió curricular.</p></div></div>
-    <form id="sa-form" class="panel" action="javascript:void(0)">
-      <div class="form-grid">
-        <label>Curs<select id="sa-course"><option value="1eso">1r ESO</option><option value="2eso">2n ESO</option><option value="3eso">3r ESO</option><option value="4eso">4t ESO</option></select></label>
-        <label>Situació<select id="sa-select"></select></label>
-        <label>Nivell<select id="sa-level"><option value="1">N1 · entendre i calcular</option><option value="2">N2 · representar i comparar</option><option value="3">N3 · modelitzar i justificar</option><option value="4">N4 · crear proposta pròpia</option></select></label>
+  <header>
+    <div class="wrap topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">T</div>
+        <div>
+          <h1>Tecnologia ESO · Projectes i reptes</h1>
+          <p class="version">Tecnologia ESO · Situacions d’aprenentatge</p>
+        </div>
       </div>
-      <div id="sa-inputs" class="dynamic-inputs"></div>
-      <label class="wide">Conclusió de l’alumne o grup<textarea id="student-conclusion" rows="4" placeholder="Escriu aquí la decisió, justificació o conclusió final..."></textarea></label>
-      <button type="submit">Calcular situació</button>
-    </form>
-  </section>
-  <section id="tools" class="view">
-    <div class="section-head"><img src="./assets/eines.png" alt="Eines"><div><p class="eyebrow">Eines ràpides</p><h2>Calculadores bàsiques</h2><p>Petites eines de suport per a càlculs freqüents.</p></div></div>
-    <form id="tool-form" class="panel" action="javascript:void(0)">
-      <div class="form-grid"><label>Eina<select id="tool-select"><option value="linear">Equació lineal</option><option value="quadratic">Equació quadràtica</option><option value="percent">Percentatge</option></select></label></div>
-      <div id="tool-inputs" class="dynamic-inputs"></div>
-      <button type="submit">Calcular</button>
-    </form>
-  </section>
-  <section id="teacher" class="view">
-    <div class="section-head"><img src="./assets/sentits.png" alt="Docent"><div><p class="eyebrow">Mode docent</p><h2>Fitxa curricular i rúbrica</h2><p>Genera una fitxa docent numerada i imprimeix la rúbrica.</p></div></div>
-    <form id="teacher-form" class="panel form-grid" action="javascript:void(0)">
-      <label>Curs<select id="teacher-course"><option value="1eso">1r ESO</option><option value="2eso">2n ESO</option><option value="3eso">3r ESO</option><option value="4eso">4t ESO</option></select></label>
-      <label>Situació<select id="teacher-sa"></select></label>
-      <button type="submit">Generar fitxa docent</button>
-    </form>
-  </section>
-  <section id="assessment" class="view">
-    <div class="section-head"><img src="./assets/autoavaluacio.png" alt="Autoavaluació"><div><p class="eyebrow">Reflexió</p><h2>Autoavaluació competencial</h2></div></div>
-    <form id="assessment-form" class="panel checklist" action="javascript:void(0)">
-      <label><input type="checkbox" name="a"> He entès l’enunciat i el context.</label>
-      <label><input type="checkbox" name="a"> He identificat dades i unitats.</label>
-      <label><input type="checkbox" name="a"> He triat una estratègia adequada.</label>
-      <label><input type="checkbox" name="a"> He representat o modelitzat quan calia.</label>
-      <label><input type="checkbox" name="a"> He comprovat el resultat.</label>
-      <label><input type="checkbox" name="a"> He escrit una conclusió clara.</label>
-      <button type="submit">Avaluar procés</button>
-    </form>
-  </section>
-  <section class="result-section" aria-live="polite"><div id="result" class="result-card"><h2>Resultat i procediment</h2><p>Tria una situació o una eina per començar.</p></div></section>
-</main>
-<footer><p>Situacions d’aprenentatge de Matemàtiques ESO. eina offline quan queda en memòria cau.</p></footer>
-<script src="./app.js?v=19" defer></script>
+      <div class="actions no-print">
+        <button id="teacherToggle" class="ghost" type="button">Mode docent: desactivat</button>
+        <button id="copyReportBtn" type="button">Copia informe</button>
+        <button id="printRubricBtn" type="button">Imprimeix rúbrica</button>
+        <button id="printBtn" class="primary" type="button">Exporta visualment a PDF</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <article class="card">
+        <h2>Quadern tecnològic interactiu</h2>
+        <p>
+          Eina de treball per guiar l'alumnat en situacions d'aprenentatge de Tecnologia: detectar necessitats,
+          idear solucions, dissenyar, construir o simular, provar, millorar, comunicar i valorar l'impacte.
+        </p>
+        <div class="selector-row">
+          <div>
+            <label for="courseSelect">Curs</label>
+            <select id="courseSelect"></select>
+          </div>
+          <div>
+            <label for="situationSelect">Situació</label>
+            <select id="situationSelect"></select>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <nav class="tabs no-print" id="tabs" aria-label="Seccions de l'aplicació"></nav>
+
+    <section id="view-situacions" class="view grid">
+      <article class="card span-5">
+        <h2>Situacions d'aprenentatge</h2>
+        <p class="muted small">Tria un repte. Cada situació genera fitxa curricular, rúbrica i informe.</p>
+        <div id="situationList" class="situation-list"></div>
+      </article>
+      <article class="card span-7">
+        <h2 id="situationTitle">Situació</h2>
+        <p id="situationDescription"></p>
+        <div class="tagrow" id="situationTags"></div>
+        <div class="teacher-box hidden" id="teacherSituationBox"></div>
+      </article>
+    </section>
+
+    <section id="view-taller" class="view grid hidden">
+      <article class="card span-12">
+        <h2>Taller del projecte</h2>
+        <p class="muted small">Completa el procés tecnològic. Les respostes s'incorporen a l'informe final.</p>
+        <div id="projectSteps" class="stepper"></div>
+      </article>
+    </section>
+
+    <section id="view-eines" class="view grid hidden">
+      <article class="card span-6">
+        <h2>Matriu de decisió</h2>
+        <p class="small muted">Compara tres possibles solucions. Puntua de 1 a 4 cada criteri.</p>
+        <div id="decisionTool"></div>
+      </article>
+      <article class="card span-6">
+        <h2>Anàlisi de sostenibilitat</h2>
+        <p class="small muted">Valora l'impacte de la proposta i escriu una millora concreta.</p>
+        <div id="sustainabilityTool"></div>
+      </article>
+    </section>
+
+    <section id="view-curricular" class="view grid hidden">
+      <article class="card span-6">
+        <h2>Fitxa curricular</h2>
+        <div id="curriculumCard"></div>
+      </article>
+      <article class="card span-6">
+        <h2>Sabers de la situació</h2>
+        <div id="knowledgeCard"></div>
+      </article>
+    </section>
+
+    <section id="view-rubrica" class="view grid hidden print-target-rubric">
+      <article class="card span-12">
+        <h2>Rúbrica NA-AS-AN-AE</h2>
+        <p class="small muted">La rúbrica és específica de la situació d'aprenentatge seleccionada i s'adjunta automàticament al final de l'informe.</p>
+        <div id="rubricCard" class="rubric"></div>
+        <div class="teacher-box hidden" id="teacherRubricBox">
+          <strong>Ús docent:</strong> aquesta rúbrica és competencial i es pot adaptar segons el projecte, el grau de bastida i els recursos disponibles.
+        </div>
+      </article>
+    </section>
+
+    <section id="view-informe" class="view grid hidden">
+      <article class="card span-12 report-host">
+        <div id="report" class="report"></div>
+        <div id="reportRubricTable" class="report-rubric-table"></div>
+      </article>
+    </section>
+
+    <section id="view-crea" class="view grid hidden">
+      <article class="card span-12">
+        <h2>Crea una situació d’aprenentatge</h2>
+        <p class="muted small">Formulari intern per afegir situacions pròpies al curs seleccionat. Es desen al navegador. També pots importar un document Word, PDF textual, TXT/Markdown o un JSON exportat.</p>
+        <div class="creator-grid">
+          <div>
+            <label for="newTitle">Títol de la SA</label>
+            <input id="newTitle" placeholder="Ex. Com podem reduir residus al taller?" />
+          </div>
+          <div>
+            <label for="newShort">Descripció breu</label>
+            <input id="newShort" placeholder="Context i intenció principal" />
+          </div>
+          <div class="span-form-2">
+            <label for="newChallenge">Repte o pregunta</label>
+            <textarea id="newChallenge" placeholder="Quin repte es planteja a l’alumnat?"></textarea>
+          </div>
+          <div class="span-form-2">
+            <label for="newProduct">Producte final</label>
+            <textarea id="newProduct" placeholder="Quina evidència, prototip, document o presentació s’haurà de produir?"></textarea>
+          </div>
+          <div>
+            <label for="newCompetencies">Competències específiques</label>
+            <input id="newCompetencies" placeholder="Ex. CE1, CE2, CE3" />
+          </div>
+          <div>
+            <label for="newCriteria">Criteris vinculats</label>
+            <input id="newCriteria" placeholder="Ex. 1.1, 2.3, 3.2" />
+          </div>
+          <div class="span-form-2">
+            <label for="newKnowledge">Sabers treballats</label>
+            <textarea id="newKnowledge" placeholder="Un saber per línia"></textarea>
+          </div>
+          <div class="span-form-2">
+            <label for="newObjectives">Objectius d’aprenentatge</label>
+            <textarea id="newObjectives" placeholder="Un objectiu per línia. Si ho deixes buit, l’app en proposarà uns de generals."></textarea>
+          </div>
+          <div class="span-form-2">
+            <label for="newDevelopment">Desenvolupament de la situació</label>
+            <textarea id="newDevelopment" placeholder="Una fase o idea per línia."></textarea>
+          </div>
+          <div>
+            <label for="newInitialActivities">Activitats inicials</label>
+            <textarea id="newInitialActivities" placeholder="Què en sabem? Activació i objectius."></textarea>
+          </div>
+          <div>
+            <label for="newDevelopmentActivities">Activitats de desenvolupament</label>
+            <textarea id="newDevelopmentActivities" placeholder="Aprenem nous continguts."></textarea>
+          </div>
+          <div>
+            <label for="newStructuringActivities">Activitats d’estructuració</label>
+            <textarea id="newStructuringActivities" placeholder="Què hem après? Organització i síntesi."></textarea>
+          </div>
+          <div>
+            <label for="newApplicationActivities">Activitats d’aplicació</label>
+            <textarea id="newApplicationActivities" placeholder="Apliquem el que hem après."></textarea>
+          </div>
+          <div class="span-form-2">
+            <label for="newVectors">Vectors</label>
+            <textarea id="newVectors" placeholder="Un vector o concreció per línia. Si ho deixes buit, l’app en proposarà uns de generals."></textarea>
+          </div>
+          <div class="span-form-2">
+            <label for="newRubricItems">Ítems de rúbrica</label>
+            <textarea id="newRubricItems" placeholder="Un ítem per línia. Mínim recomanat: 4"></textarea>
+          </div>
+        </div>
+
+        <div class="document-import-panel no-print">
+          <h3>Importa document i converteix-lo en esborrany</h3>
+          <p class="muted small">Accepta JSON de l’app, TXT/Markdown, Word .docx i PDF textual. La importació genera un esborrany: revisa’l abans de desar-lo.</p>
+          <div class="creator-actions">
+            <label class="import-button">Importa document<input id="importDocumentInput" type="file" accept=".json,.txt,.md,.docx,.pdf,application/json,text/plain,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf" /></label>
+            <button id="convertDocumentBtn" type="button">Converteix text a esborrany</button>
+          </div>
+          <label for="importPreview">Text extret del document</label>
+          <textarea id="importPreview" class="import-preview" placeholder="Aquí apareixerà el text extret. També hi pots enganxar una SA o un llistat de requisits i convertir-lo a esborrany."></textarea>
+          <div id="documentImportFeedback" class="teacher-box hidden"></div>
+        </div>
+
+        <div class="creator-actions no-print">
+          <button id="saveSituationBtn" class="primary" type="button">Desa la SA</button>
+          <button id="clearCreatorBtn" type="button">Neteja el formulari</button>
+          <button id="exportSituationsBtn" type="button">Exporta SAs creades</button>
+          <label class="import-button">Importa JSON<input id="importSituationsInput" type="file" accept="application/json" /></label>
+        </div>
+        <div id="creatorFeedback" class="teacher-box hidden"></div>
+      </article>
+    </section>
+  </main>
+
+  <script src="jszip.min.js?v=13" defer></script>
+  <script src="app.js?v=13" defer></script>
 </body>
 </html>
