@@ -1,9 +1,9 @@
 {
-  "id": "tecnologia-eso-projectes-reptes-v15",
-  "name": "Tecnologia ESO · Projectes i reptes",
-  "short_name": "Tecno ESO",
+  "id": "tecnologia-eso-projectes-reptes-v16",
+  "name": "Tecnologia ESO · Projectes i reptes v16",
+  "short_name": "Tecno ESO v16",
   "description": "Eina educativa per crear i treballar situacions d’aprenentatge de Tecnologia i Tecnologia i Digitalització a l’ESO.",
-  "start_url": "./index.html?v=14",
+  "start_url": "./index.html?v=16",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",

@@ -1,8 +1,8 @@
 const APP = {
   name: "Tecnologia ESO · Projectes i reptes",
-  version: "v15",
+  version: "v16",
   line: "B",
-  cacheName: "tecnologia-eso-projectes-reptes-v15"
+  cacheName: "tecnologia-eso-projectes-reptes-v16"
 };
 
 const CURRICULUM_SETS = {
@@ -367,7 +367,7 @@ const RUBRIC_LEVELS = {
   AE: "Assoliment excel·lent"
 };
 
-const STORAGE_KEY_FONT = "tecnologia-eso-projectes-reptes-font-v15";
+const STORAGE_KEY_FONT = "tecnologia-eso-projectes-reptes-font-v16";
 const DEFAULT_FONT = "Times New Roman, Times, serif";
 const ALLOWED_FONTS = [
   DEFAULT_FONT,
@@ -452,8 +452,8 @@ function safeHtml(text) {
   }[char]));
 }
 
-const STORAGE_KEY_SITUATIONS = "tecnologia-eso-projectes-reptes-custom-situations-v15";
-const STORAGE_KEY_RUBRICS = "tecnologia-eso-projectes-reptes-custom-rubrics-v15";
+const STORAGE_KEY_SITUATIONS = "tecnologia-eso-projectes-reptes-custom-situations-v16";
+const STORAGE_KEY_RUBRICS = "tecnologia-eso-projectes-reptes-custom-rubrics-v16";
 const LEGACY_STORAGE_KEYS = {
   situations: ["tecnologia-eso-projectes-reptes-custom-situations-v12"],
   rubrics: ["tecnologia-eso-projectes-reptes-custom-rubrics-v12"]
@@ -1816,4 +1816,154 @@ if (document.readyState === "loading") {
 } else {
   init();
 }
+
+
+
+/* v16 · Normalització i edició de situacions importades */
+function v16CleanText(value) {
+  if (Array.isArray(value)) return value.filter(Boolean).join(" · ").trim();
+  if (value && typeof value === "object") return Object.values(value).filter(Boolean).join(" · ").trim();
+  return String(value || "").trim();
+}
+
+function v16NormalizeImportedSA(raw) {
+  const sa = Object.assign({}, raw || {});
+  const title = v16CleanText(sa.title || sa.titol || sa["títol"] || sa.name || sa.nom);
+  const challenge = v16CleanText(sa.challenge || sa.repte || sa.descripcio || sa["descripció"] || sa.short);
+  const product = v16CleanText(sa.product || sa.producte || sa["producte final"]);
+  sa.id = v16CleanText(sa.id) || ("sa-importada-" + Date.now());
+  sa.title = title || "SA importada pendent de títol";
+  sa.short = v16CleanText(sa.short) || challenge || "Situació d’aprenentatge importada.";
+  sa.challenge = challenge || "Repte pendent de concretar.";
+  sa.product = product || "Producte final pendent de concretar.";
+  sa.course = v16CleanText(sa.course || sa.curs) || "eso4";
+  sa.subject = v16CleanText(sa.subject || sa.materia || sa["matèria"]) || (sa.course === "eso4" ? "Tecnologia" : "Tecnologia i Digitalització");
+  sa.competencies = Array.isArray(sa.competencies) ? sa.competencies : v16CleanText(sa.competencies || sa.ce).split(/[,; ]+/).filter(Boolean);
+  sa.criteria = Array.isArray(sa.criteria) ? sa.criteria : v16CleanText(sa.criteria || sa.ca).split(/[,;]+/).map(s => s.trim()).filter(Boolean);
+  sa.blocks = Array.isArray(sa.blocks) ? sa.blocks : v16CleanText(sa.blocks).split(/[,;]+/).map(s => s.trim()).filter(Boolean);
+  sa.knowledge = Array.isArray(sa.knowledge) ? sa.knowledge : v16CleanText(sa.knowledge || sa.sabers).split(/\n|;/).map(s => s.trim()).filter(Boolean);
+  sa.objectives = Array.isArray(sa.objectives) ? sa.objectives : v16CleanText(sa.objectives || sa.objectius).split(/\n|;/).map(s => s.trim()).filter(Boolean);
+  sa.transversal = Array.isArray(sa.transversal) ? sa.transversal : v16CleanText(sa.transversal).split(/\n|;/).map(s => s.trim()).filter(Boolean);
+  if (!sa.activities || typeof sa.activities !== "object") {
+    sa.activities = {
+      initial: "",
+      development: "",
+      structuring: "",
+      application: ""
+    };
+  }
+  if (!Array.isArray(sa.rubric)) sa.rubric = [];
+  return sa;
+}
+
+function v16GetCustomSAs() {
+  try {
+    return JSON.parse(localStorage.getItem("customSituations") || localStorage.getItem("customSAs") || "[]");
+  } catch (e) {
+    return [];
+  }
+}
+
+function v16SaveCustomSAs(list) {
+  localStorage.setItem("customSituations", JSON.stringify(list));
+  localStorage.setItem("customSAs", JSON.stringify(list));
+}
+
+function v16UpsertCustomSA(sa) {
+  const normalized = v16NormalizeImportedSA(sa);
+  const list = v16GetCustomSAs();
+  const idx = list.findIndex(item => item.id === normalized.id);
+  if (idx >= 0) list[idx] = normalized;
+  else list.push(normalized);
+  v16SaveCustomSAs(list);
+  return normalized;
+}
+
+function v16OpenEditCurrentSA() {
+  const s = (typeof currentSituation === "function") ? currentSituation() : null;
+  if (!s) {
+    alert("No hi ha cap situació seleccionada per editar.");
+    return;
+  }
+  const title = prompt("Títol de la situació d’aprenentatge:", v16CleanText(s.title));
+  if (title === null) return;
+  const challenge = prompt("Repte o pregunta guia:", v16CleanText(s.challenge || s.short));
+  if (challenge === null) return;
+  const product = prompt("Producte final:", v16CleanText(s.product));
+  if (product === null) return;
+
+  const updated = Object.assign({}, s, {
+    title: v16CleanText(title) || "SA importada pendent de títol",
+    challenge: v16CleanText(challenge) || "Repte pendent de concretar.",
+    short: v16CleanText(challenge) || s.short || "Situació d’aprenentatge importada.",
+    product: v16CleanText(product) || "Producte final pendent de concretar."
+  });
+
+  v16UpsertCustomSA(updated);
+
+  if (typeof loadCustomSituations === "function") loadCustomSituations();
+  if (typeof renderSituationSelect === "function") renderSituationSelect();
+  if (typeof renderAll === "function") renderAll();
+
+  alert("SA actualitzada i desada al llistat.");
+}
+
+function v16InstallEditButton() {
+  if (document.getElementById("editCurrentSABtn")) return;
+  const tabs = document.getElementById("tabs") || document.querySelector(".tabs");
+  const target = tabs || document.querySelector("main") || document.body;
+  const btn = document.createElement("button");
+  btn.id = "editCurrentSABtn";
+  btn.type = "button";
+  btn.textContent = "Edita SA";
+  btn.addEventListener("click", v16OpenEditCurrentSA);
+  target.appendChild(btn);
+}
+document.addEventListener("DOMContentLoaded", () => setTimeout(v16InstallEditButton, 600));
+
+
+
+/* v16 · Importació JSON directa robusta */
+document.addEventListener("change", async function(ev) {
+  const input = ev.target;
+  if (!input || input.type !== "file" || !input.files || !input.files[0]) return;
+  const file = input.files[0];
+  if (!/\.json$/i.test(file.name)) return;
+
+  // Només actuem en inputs relacionats amb importació, per no interferir amb altres usos.
+  const idName = ((input.id || "") + " " + (input.name || "") + " " + (input.className || "")).toLowerCase();
+  if (!idName.includes("import") && !idName.includes("json") && !idName.includes("sa")) return;
+
+  try {
+    const text = await file.text();
+    const parsed = JSON.parse(text);
+    const items = Array.isArray(parsed) ? parsed : [parsed];
+    const normalized = items.map(v16NormalizeImportedSA);
+    normalized.forEach(v16UpsertCustomSA);
+    if (typeof loadCustomSituations === "function") loadCustomSituations();
+    if (normalized[0] && typeof state === "object") {
+      state.course = normalized[0].course || state.course;
+      state.situationId = normalized[0].id || state.situationId;
+    }
+    if (typeof renderCourseSelect === "function") renderCourseSelect();
+    if (typeof renderSituationSelect === "function") renderSituationSelect();
+    if (typeof renderAll === "function") renderAll();
+    alert("SA importada i afegida al llistat. Ja la pots seleccionar al curs corresponent.");
+  } catch (err) {
+    console.warn("No s'ha pogut importar el JSON amb el gestor v16:", err);
+  }
+}, true);
+
+
+
+/* v16 · Correcció visual de títols buits o mal importats */
+function v16FixBrokenDisplayedTitles() {
+  document.querySelectorAll("h1,h2,h3,option,.situation-item,strong").forEach(el => {
+    const txt = (el.textContent || "").trim();
+    if (txt === "[" || txt === "[]" || txt === "undefined" || txt === "null") {
+      el.textContent = "SA importada pendent de títol";
+    }
+  });
+}
+document.addEventListener("DOMContentLoaded", () => setInterval(v16FixBrokenDisplayedTitles, 1000));
 
