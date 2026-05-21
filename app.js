@@ -1,8 +1,8 @@
 const APP = {
   name: "Tecnologia ESO · Projectes i reptes",
-  version: "v16",
+  version: "v17",
   line: "B",
-  cacheName: "tecnologia-eso-projectes-reptes-v16"
+  cacheName: "tecnologia-eso-projectes-reptes-v17"
 };
 
 const CURRICULUM_SETS = {
@@ -367,7 +367,7 @@ const RUBRIC_LEVELS = {
   AE: "Assoliment excel·lent"
 };
 
-const STORAGE_KEY_FONT = "tecnologia-eso-projectes-reptes-font-v16";
+const STORAGE_KEY_FONT = "tecnologia-eso-projectes-reptes-font-v17";
 const DEFAULT_FONT = "Times New Roman, Times, serif";
 const ALLOWED_FONTS = [
   DEFAULT_FONT,
@@ -452,11 +452,11 @@ function safeHtml(text) {
   }[char]));
 }
 
-const STORAGE_KEY_SITUATIONS = "tecnologia-eso-projectes-reptes-custom-situations-v16";
-const STORAGE_KEY_RUBRICS = "tecnologia-eso-projectes-reptes-custom-rubrics-v16";
+const STORAGE_KEY_SITUATIONS = "tecnologia-eso-projectes-reptes-custom-situations-v17";
+const STORAGE_KEY_RUBRICS = "tecnologia-eso-projectes-reptes-custom-rubrics-v17";
 const LEGACY_STORAGE_KEYS = {
-  situations: ["tecnologia-eso-projectes-reptes-custom-situations-v12"],
-  rubrics: ["tecnologia-eso-projectes-reptes-custom-rubrics-v12"]
+  situations: ["tecnologia-eso-projectes-reptes-custom-situations-v16", "tecnologia-eso-projectes-reptes-custom-situations-v15", "tecnologia-eso-projectes-reptes-custom-situations-v12"],
+  rubrics: ["tecnologia-eso-projectes-reptes-custom-rubrics-v16", "tecnologia-eso-projectes-reptes-custom-rubrics-v15", "tecnologia-eso-projectes-reptes-custom-rubrics-v12"]
 };
 
 function loadJsonFromStorage(key, fallback, legacyKeys = []) {
@@ -1174,37 +1174,57 @@ function normalizeCourseKey(value) {
 }
 
 function normalizeImportedSituation(raw, index = 0) {
-  const courseKey = normalizeCourseKey(raw.course || raw.curs);
-  const title = raw.title || raw.titol || raw.títol || `SA importada ${index + 1}`;
-  const criteria = Array.isArray(raw.criteria) ? raw.criteria : splitList(raw.criteria || raw.criteris || "");
-  const competencies = Array.isArray(raw.competencies) ? raw.competencies : splitList(raw.competencies || raw.competencies_especifiques || raw.competències || "");
+  raw = raw || {};
+  const clean = value => {
+    if (Array.isArray(value)) return value.filter(Boolean).join(" · ").trim();
+    if (value && typeof value === "object") return Object.values(value).filter(Boolean).join(" · ").trim();
+    return String(value || "").trim();
+  };
+
+  const courseKey = normalizeCourseKey(raw.course || raw.curs || state.course);
+  const rawTitle = clean(raw.title || raw.titol || raw["títol"] || raw.name || raw.nom);
+  const title = rawTitle && rawTitle !== "[" && rawTitle !== "]" ? rawTitle : `SA importada ${index + 1}`;
+
+  const criteria = Array.isArray(raw.criteria) ? raw.criteria : splitList(raw.criteria || raw.criteris || raw.ca || "");
+  const competencies = Array.isArray(raw.competencies) ? raw.competencies : splitList(raw.competencies || raw.competencies_especifiques || raw["competències"] || raw.ce || "");
   const knowledge = Array.isArray(raw.knowledge) ? raw.knowledge : splitList(raw.knowledge || raw.sabers || "");
   const objectives = Array.isArray(raw.objectives) ? raw.objectives : splitList(raw.objectives || raw.objectius || "");
   const blocks = Array.isArray(raw.blocks) ? raw.blocks : (splitList(raw.blocks || raw.blocs || "").length ? splitList(raw.blocks || raw.blocs || "") : ["projectes"]);
-  const idBase = raw.id || `custom-${Date.now()}-${index}-${makeSlug(title)}`;
+
+  const idBase = clean(raw.id) || `custom-${Date.now()}-${index}-${makeSlug(title)}`;
   const id = String(idBase).startsWith("custom-") ? String(idBase) : `custom-${idBase}`;
+
+  const activities = raw.activities || raw.activitats || {};
+  const rubric = Array.isArray(raw.rubric) ? raw.rubric : (Array.isArray(raw.rubrica) ? raw.rubrica : (Array.isArray(raw["rúbrica"]) ? raw["rúbrica"] : []));
+
   return {
     id,
     title,
-    short: raw.short || raw.description || raw.descripcio || raw.descripció || raw.challenge || "Situació importada.",
-    challenge: raw.challenge || raw.repte || raw.pregunta || raw.short || "Repte pendent de revisar.",
-    product: raw.product || raw.producte || raw.producteFinal || "Producte final pendent de revisar.",
+    short: clean(raw.short || raw.description || raw.descripcio || raw["descripció"]) || clean(raw.challenge || raw.repte) || "Situació importada.",
+    challenge: clean(raw.challenge || raw.repte || raw.pregunta) || clean(raw.short) || "Repte pendent de revisar.",
+    product: clean(raw.product || raw.producte || raw.producteFinal || raw["producte final"]) || "Producte final pendent de revisar.",
     course: courseKey,
-    subject: raw.subject || raw.materia || raw.matèria || (courseKey === "eso4" ? "Tecnologia" : "Tecnologia i Digitalització"),
+    subject: clean(raw.subject || raw.materia || raw["matèria"]) || (courseKey === "eso4" ? "Tecnologia" : "Tecnologia i Digitalització"),
     blocks,
     competencies: competencies.length ? competencies : ["CE1", "CE2", "CE3"],
     criteria,
     knowledge: knowledge.length ? knowledge : ["Sabers concretats pel docent segons el context de la situació."],
     objectives,
     transversal: Array.isArray(raw.transversal) ? raw.transversal : splitList(raw.transversal || ""),
-    development: raw.development || raw.desenvolupament || [],
-    activities: raw.activities || raw.activitats || {},
-    vectors: raw.vectors || [],
-    evidence: raw.evidence || raw.evidencies || raw.evidències || [],
+    development: raw.development || raw.desenvolupament || "",
+    activities: {
+      initial: activities.initial || activities.inicials || activities["activitats inicials"] || "",
+      development: activities.development || activities.desenvolupament || activities["activitats de desenvolupament"] || "",
+      structuring: activities.structuring || activities.estructuracio || activities["estructuració"] || "",
+      application: activities.application || activities.aplicacio || activities["aplicació"] || ""
+    },
+    vectors: raw.vectors || "",
+    evidence: raw.evidence || raw.evidencies || raw["evidències"] || [],
     materials: raw.materials || raw.materials_i_eines || [],
     curriculumKey: raw.curriculumKey || COURSES[courseKey]?.curriculumKey || (courseKey === "eso4" ? "tecnologia4" : "tecnologiaDigitalitzacio"),
     teacher: raw.teacher || "Situació importada. Revisa-la abans d’utilitzar-la a l’aula.",
-    custom: true
+    custom: true,
+    rubric
   };
 }
 
@@ -1219,31 +1239,38 @@ function extractSituationsFromImportData(data) {
 function importSituationObjects(data) {
   const rawSituations = extractSituationsFromImportData(data);
   if (!rawSituations.length) throw new Error("El JSON no conté cap situació d’aprenentatge reconeixible.");
+
   let firstImported = null;
+
   rawSituations.forEach((raw, index) => {
     const situation = normalizeImportedSituation(raw, index);
-    const courseKey = situation.course || state.course;
+    const courseKey = situation.course || state.course || "eso4";
+
     if (!customSituations[courseKey]) customSituations[courseKey] = [];
+
     const existingIndex = customSituations[courseKey].findIndex(item => item.id === situation.id);
-    if (existingIndex >= 0) {
-      customSituations[courseKey][existingIndex] = situation;
-    } else {
-      customSituations[courseKey].push(situation);
-    }
-    const importedRubric = raw.rubric || raw.rubrica || raw.rúbrica || data.rubrics?.[raw.id] || data.rubrics?.[situation.id];
+    if (existingIndex >= 0) customSituations[courseKey][existingIndex] = situation;
+    else customSituations[courseKey].push(situation);
+
+    const importedRubric = raw.rubric || raw.rubrica || raw["rúbrica"] || situation.rubric || data.rubrics?.[raw.id] || data.rubrics?.[situation.id];
     if (Array.isArray(importedRubric) && importedRubric.length) {
       customRubrics[situation.id] = importedRubric.map(row => normalizeRubricRow(row, (situation.criteria || []).join(", ")));
     }
+
     if (!firstImported) firstImported = situation;
   });
+
   saveCustomData();
+
   if (firstImported) {
     state.course = firstImported.course || state.course;
     state.situationId = firstImported.id;
   }
+
   renderCourseSelect();
   renderSituationSelect();
   renderAll();
+
   return rawSituations.length;
 }
 
@@ -1553,11 +1580,24 @@ function fillCreatorFromText(text) {
 
 async function importDocumentAsDraft(file) {
   if (!file) return;
+  const name = (file.name || "").toLowerCase();
+
+  if (name.endsWith(".json")) {
+    try {
+      const text = await file.text();
+      const count = importSituationObjects(JSON.parse(text));
+      showDocumentImportFeedback(`${count} SA importada/des i afegida/des directament al llistat del curs corresponent.`);
+    } catch (err) {
+      showDocumentImportFeedback(err.message || "No s’ha pogut importar el JSON.");
+    }
+    return;
+  }
+
   try {
     const text = await readDocumentFile(file);
     const preview = document.getElementById("importPreview");
-    if (preview) preview.value = normalizeImportedText(text);
-    fillCreatorFromText(text);
+    if (preview) preview.value = text;
+    showDocumentImportFeedback("Text extret. Revisa’l i prem “Converteix text a esborrany”.");
   } catch (err) {
     showDocumentImportFeedback(err.message || "No s’ha pogut llegir el document.");
   }
@@ -1602,7 +1642,7 @@ function openPrintDocument(title, bodyHtml, kind) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${safeTitle}</title>
-  <link rel="stylesheet" href="./styles.css?v=14">
+  <link rel="stylesheet" href="./styles.css?v=17">
   <style>
     html, body { background: #ffffff !important; font-family: ${getPrintFontCss()} !important; }
     body { margin: 0; color: #172016; }
@@ -1819,31 +1859,31 @@ if (document.readyState === "loading") {
 
 
 
-/* v16 · Normalització i edició de situacions importades */
-function v16CleanText(value) {
+/* v17 · Normalització i edició de situacions importades */
+function v17CleanText(value) {
   if (Array.isArray(value)) return value.filter(Boolean).join(" · ").trim();
   if (value && typeof value === "object") return Object.values(value).filter(Boolean).join(" · ").trim();
   return String(value || "").trim();
 }
 
-function v16NormalizeImportedSA(raw) {
+function v17NormalizeImportedSA(raw) {
   const sa = Object.assign({}, raw || {});
-  const title = v16CleanText(sa.title || sa.titol || sa["títol"] || sa.name || sa.nom);
-  const challenge = v16CleanText(sa.challenge || sa.repte || sa.descripcio || sa["descripció"] || sa.short);
-  const product = v16CleanText(sa.product || sa.producte || sa["producte final"]);
-  sa.id = v16CleanText(sa.id) || ("sa-importada-" + Date.now());
+  const title = v17CleanText(sa.title || sa.titol || sa["títol"] || sa.name || sa.nom);
+  const challenge = v17CleanText(sa.challenge || sa.repte || sa.descripcio || sa["descripció"] || sa.short);
+  const product = v17CleanText(sa.product || sa.producte || sa["producte final"]);
+  sa.id = v17CleanText(sa.id) || ("sa-importada-" + Date.now());
   sa.title = title || "SA importada pendent de títol";
-  sa.short = v16CleanText(sa.short) || challenge || "Situació d’aprenentatge importada.";
+  sa.short = v17CleanText(sa.short) || challenge || "Situació d’aprenentatge importada.";
   sa.challenge = challenge || "Repte pendent de concretar.";
   sa.product = product || "Producte final pendent de concretar.";
-  sa.course = v16CleanText(sa.course || sa.curs) || "eso4";
-  sa.subject = v16CleanText(sa.subject || sa.materia || sa["matèria"]) || (sa.course === "eso4" ? "Tecnologia" : "Tecnologia i Digitalització");
-  sa.competencies = Array.isArray(sa.competencies) ? sa.competencies : v16CleanText(sa.competencies || sa.ce).split(/[,; ]+/).filter(Boolean);
-  sa.criteria = Array.isArray(sa.criteria) ? sa.criteria : v16CleanText(sa.criteria || sa.ca).split(/[,;]+/).map(s => s.trim()).filter(Boolean);
-  sa.blocks = Array.isArray(sa.blocks) ? sa.blocks : v16CleanText(sa.blocks).split(/[,;]+/).map(s => s.trim()).filter(Boolean);
-  sa.knowledge = Array.isArray(sa.knowledge) ? sa.knowledge : v16CleanText(sa.knowledge || sa.sabers).split(/\n|;/).map(s => s.trim()).filter(Boolean);
-  sa.objectives = Array.isArray(sa.objectives) ? sa.objectives : v16CleanText(sa.objectives || sa.objectius).split(/\n|;/).map(s => s.trim()).filter(Boolean);
-  sa.transversal = Array.isArray(sa.transversal) ? sa.transversal : v16CleanText(sa.transversal).split(/\n|;/).map(s => s.trim()).filter(Boolean);
+  sa.course = v17CleanText(sa.course || sa.curs) || "eso4";
+  sa.subject = v17CleanText(sa.subject || sa.materia || sa["matèria"]) || (sa.course === "eso4" ? "Tecnologia" : "Tecnologia i Digitalització");
+  sa.competencies = Array.isArray(sa.competencies) ? sa.competencies : v17CleanText(sa.competencies || sa.ce).split(/[,; ]+/).filter(Boolean);
+  sa.criteria = Array.isArray(sa.criteria) ? sa.criteria : v17CleanText(sa.criteria || sa.ca).split(/[,;]+/).map(s => s.trim()).filter(Boolean);
+  sa.blocks = Array.isArray(sa.blocks) ? sa.blocks : v17CleanText(sa.blocks).split(/[,;]+/).map(s => s.trim()).filter(Boolean);
+  sa.knowledge = Array.isArray(sa.knowledge) ? sa.knowledge : v17CleanText(sa.knowledge || sa.sabers).split(/\n|;/).map(s => s.trim()).filter(Boolean);
+  sa.objectives = Array.isArray(sa.objectives) ? sa.objectives : v17CleanText(sa.objectives || sa.objectius).split(/\n|;/).map(s => s.trim()).filter(Boolean);
+  sa.transversal = Array.isArray(sa.transversal) ? sa.transversal : v17CleanText(sa.transversal).split(/\n|;/).map(s => s.trim()).filter(Boolean);
   if (!sa.activities || typeof sa.activities !== "object") {
     sa.activities = {
       initial: "",
@@ -1856,7 +1896,7 @@ function v16NormalizeImportedSA(raw) {
   return sa;
 }
 
-function v16GetCustomSAs() {
+function v17GetCustomSAs() {
   try {
     return JSON.parse(localStorage.getItem("customSituations") || localStorage.getItem("customSAs") || "[]");
   } catch (e) {
@@ -1864,42 +1904,42 @@ function v16GetCustomSAs() {
   }
 }
 
-function v16SaveCustomSAs(list) {
+function v17SaveCustomSAs(list) {
   localStorage.setItem("customSituations", JSON.stringify(list));
   localStorage.setItem("customSAs", JSON.stringify(list));
 }
 
-function v16UpsertCustomSA(sa) {
-  const normalized = v16NormalizeImportedSA(sa);
-  const list = v16GetCustomSAs();
+function v17UpsertCustomSA(sa) {
+  const normalized = v17NormalizeImportedSA(sa);
+  const list = v17GetCustomSAs();
   const idx = list.findIndex(item => item.id === normalized.id);
   if (idx >= 0) list[idx] = normalized;
   else list.push(normalized);
-  v16SaveCustomSAs(list);
+  v17SaveCustomSAs(list);
   return normalized;
 }
 
-function v16OpenEditCurrentSA() {
+function v17OpenEditCurrentSA() {
   const s = (typeof currentSituation === "function") ? currentSituation() : null;
   if (!s) {
     alert("No hi ha cap situació seleccionada per editar.");
     return;
   }
-  const title = prompt("Títol de la situació d’aprenentatge:", v16CleanText(s.title));
+  const title = prompt("Títol de la situació d’aprenentatge:", v17CleanText(s.title));
   if (title === null) return;
-  const challenge = prompt("Repte o pregunta guia:", v16CleanText(s.challenge || s.short));
+  const challenge = prompt("Repte o pregunta guia:", v17CleanText(s.challenge || s.short));
   if (challenge === null) return;
-  const product = prompt("Producte final:", v16CleanText(s.product));
+  const product = prompt("Producte final:", v17CleanText(s.product));
   if (product === null) return;
 
   const updated = Object.assign({}, s, {
-    title: v16CleanText(title) || "SA importada pendent de títol",
-    challenge: v16CleanText(challenge) || "Repte pendent de concretar.",
-    short: v16CleanText(challenge) || s.short || "Situació d’aprenentatge importada.",
-    product: v16CleanText(product) || "Producte final pendent de concretar."
+    title: v17CleanText(title) || "SA importada pendent de títol",
+    challenge: v17CleanText(challenge) || "Repte pendent de concretar.",
+    short: v17CleanText(challenge) || s.short || "Situació d’aprenentatge importada.",
+    product: v17CleanText(product) || "Producte final pendent de concretar."
   });
 
-  v16UpsertCustomSA(updated);
+  v17UpsertCustomSA(updated);
 
   if (typeof loadCustomSituations === "function") loadCustomSituations();
   if (typeof renderSituationSelect === "function") renderSituationSelect();
@@ -1908,7 +1948,7 @@ function v16OpenEditCurrentSA() {
   alert("SA actualitzada i desada al llistat.");
 }
 
-function v16InstallEditButton() {
+function v17InstallEditButton() {
   if (document.getElementById("editCurrentSABtn")) return;
   const tabs = document.getElementById("tabs") || document.querySelector(".tabs");
   const target = tabs || document.querySelector("main") || document.body;
@@ -1916,48 +1956,15 @@ function v16InstallEditButton() {
   btn.id = "editCurrentSABtn";
   btn.type = "button";
   btn.textContent = "Edita SA";
-  btn.addEventListener("click", v16OpenEditCurrentSA);
+  btn.addEventListener("click", v17OpenEditCurrentSA);
   target.appendChild(btn);
 }
-document.addEventListener("DOMContentLoaded", () => setTimeout(v16InstallEditButton, 600));
+document.addEventListener("DOMContentLoaded", () => setTimeout(v17InstallEditButton, 600));
 
 
 
-/* v16 · Importació JSON directa robusta */
-document.addEventListener("change", async function(ev) {
-  const input = ev.target;
-  if (!input || input.type !== "file" || !input.files || !input.files[0]) return;
-  const file = input.files[0];
-  if (!/\.json$/i.test(file.name)) return;
-
-  // Només actuem en inputs relacionats amb importació, per no interferir amb altres usos.
-  const idName = ((input.id || "") + " " + (input.name || "") + " " + (input.className || "")).toLowerCase();
-  if (!idName.includes("import") && !idName.includes("json") && !idName.includes("sa")) return;
-
-  try {
-    const text = await file.text();
-    const parsed = JSON.parse(text);
-    const items = Array.isArray(parsed) ? parsed : [parsed];
-    const normalized = items.map(v16NormalizeImportedSA);
-    normalized.forEach(v16UpsertCustomSA);
-    if (typeof loadCustomSituations === "function") loadCustomSituations();
-    if (normalized[0] && typeof state === "object") {
-      state.course = normalized[0].course || state.course;
-      state.situationId = normalized[0].id || state.situationId;
-    }
-    if (typeof renderCourseSelect === "function") renderCourseSelect();
-    if (typeof renderSituationSelect === "function") renderSituationSelect();
-    if (typeof renderAll === "function") renderAll();
-    alert("SA importada i afegida al llistat. Ja la pots seleccionar al curs corresponent.");
-  } catch (err) {
-    console.warn("No s'ha pogut importar el JSON amb el gestor v16:", err);
-  }
-}, true);
-
-
-
-/* v16 · Correcció visual de títols buits o mal importats */
-function v16FixBrokenDisplayedTitles() {
+/* v17 · Correcció visual de títols buits o mal importats */
+function v17FixBrokenDisplayedTitles() {
   document.querySelectorAll("h1,h2,h3,option,.situation-item,strong").forEach(el => {
     const txt = (el.textContent || "").trim();
     if (txt === "[" || txt === "[]" || txt === "undefined" || txt === "null") {
@@ -1965,5 +1972,140 @@ function v16FixBrokenDisplayedTitles() {
     }
   });
 }
-document.addEventListener("DOMContentLoaded", () => setInterval(v16FixBrokenDisplayedTitles, 1000));
+document.addEventListener("DOMContentLoaded", () => setInterval(v17FixBrokenDisplayedTitles, 1000));
+
+
+
+/* v17 · Gestió real de SA importades i edició */
+function v17CleanTitle(value) {
+  const text = String(value || "").trim();
+  return (!text || text === "[" || text === "]" || text === "undefined" || text === "null") ? "SA importada pendent de títol" : text;
+}
+
+function v17MigrateLooseCustomStores() {
+  const keys = ["customSituations", "customSAs"];
+  let changed = false;
+
+  keys.forEach(key => {
+    try {
+      const raw = localStorage.getItem(key);
+      if (!raw) return;
+      const parsed = JSON.parse(raw);
+      const list = Array.isArray(parsed) ? parsed : Object.values(parsed).flat();
+
+      list.forEach((item, index) => {
+        if (!item || typeof item !== "object") return;
+        const situation = normalizeImportedSituation(item, index);
+        const courseKey = situation.course || "eso4";
+        if (!customSituations[courseKey]) customSituations[courseKey] = [];
+        const exists = customSituations[courseKey].some(existing => existing.id === situation.id);
+        if (!exists) {
+          customSituations[courseKey].push(situation);
+          changed = true;
+        }
+        if (Array.isArray(item.rubric) && item.rubric.length && !customRubrics[situation.id]) {
+          customRubrics[situation.id] = item.rubric.map(row => normalizeRubricRow(row, (situation.criteria || []).join(", ")));
+          changed = true;
+        }
+      });
+    } catch (err) {
+      console.warn("No s'ha pogut migrar", key, err);
+    }
+  });
+
+  Object.keys(customSituations).forEach(courseKey => {
+    customSituations[courseKey] = (customSituations[courseKey] || []).map((s, index) => {
+      const normalized = normalizeImportedSituation(s, index);
+      normalized.title = v17CleanTitle(normalized.title);
+      return normalized;
+    });
+  });
+
+  if (changed) saveCustomData();
+}
+
+function currentSituations() {
+  v17MigrateLooseCustomStores();
+  const base = (currentCourse() && currentCourse().situations) || [];
+  const custom = customSituations[state.course] || [];
+  return [...base, ...custom];
+}
+
+function v17FindSituationEverywhere(id) {
+  if (!id) return null;
+  for (const courseKey of Object.keys(COURSES)) {
+    const base = COURSES[courseKey].situations || [];
+    const foundBase = base.find(s => s.id === id);
+    if (foundBase) return { situation: foundBase, courseKey, isCustom: false };
+
+    const custom = customSituations[courseKey] || [];
+    const foundCustom = custom.find(s => s.id === id);
+    if (foundCustom) return { situation: foundCustom, courseKey, isCustom: true };
+  }
+  return null;
+}
+
+function v16OpenEditCurrentSA() {
+  v17MigrateLooseCustomStores();
+
+  const found = v17FindSituationEverywhere(state.situationId);
+  const s = found ? found.situation : currentSituation();
+
+  if (!s) {
+    alert("No hi ha cap situació seleccionada per editar.");
+    return;
+  }
+
+  const title = prompt("Títol de la situació d’aprenentatge:", v17CleanTitle(s.title));
+  if (title === null) return;
+
+  const challenge = prompt("Repte o pregunta guia:", String(s.challenge || s.short || "").trim());
+  if (challenge === null) return;
+
+  const product = prompt("Producte final:", String(s.product || "").trim());
+  if (product === null) return;
+
+  const courseKey = (found && found.courseKey) || state.course || s.course || "eso4";
+  const updated = normalizeImportedSituation(Object.assign({}, s, {
+    title: v17CleanTitle(title),
+    challenge: String(challenge || "").trim() || "Repte pendent de concretar.",
+    short: String(challenge || "").trim() || s.short || "Situació d’aprenentatge importada.",
+    product: String(product || "").trim() || "Producte final pendent de concretar.",
+    course: courseKey
+  }));
+
+  if (!customSituations[courseKey]) customSituations[courseKey] = [];
+  const idx = customSituations[courseKey].findIndex(item => item.id === updated.id);
+
+  if (idx >= 0) {
+    customSituations[courseKey][idx] = updated;
+  } else if (found && found.isCustom) {
+    customSituations[courseKey].push(updated);
+  } else {
+    const copy = Object.assign({}, updated, {
+      id: `custom-edit-${Date.now()}-${makeSlug(updated.title)}`,
+      custom: true
+    });
+    customSituations[courseKey].push(copy);
+    state.situationId = copy.id;
+  }
+
+  saveCustomData();
+  state.course = courseKey;
+  renderCourseSelect();
+  renderSituationSelect();
+  renderAll();
+  alert("SA actualitzada i desada al llistat.");
+}
+
+function v17RefreshAfterLoad() {
+  v17MigrateLooseCustomStores();
+  renderCourseSelect();
+  renderSituationSelect();
+  renderAll();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  setTimeout(v17RefreshAfterLoad, 700);
+});
 
